@@ -1,5 +1,7 @@
 # nestjs typeorm pagination
 
+<a href="https://travis-ci.org/bashleigh/nestjs-pagination"><img src="https://travis-ci.org/bashleigh/nestjs-pagination.svg?branch=master"/></a>
+
 I made this quick package to limit the amout of times I was implementing this functionality. 
 
 ## Install 
