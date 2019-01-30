@@ -33,11 +33,17 @@ export class SomeService {
 
 ```json
 {
-  "items": [], // Array of SomeEntity
-  "itemCount": 0, // total in items array
-  "total": 0, // total count of SomeEntity,
-  "pageCount": 0, // total number of pages 
-  "next": "http://somepath.com?page=3", // next url to call with page=page++ || blank if no next
-  "previous": "", // previous page to call with page=page--  || blank if no previous
+  "items": [],
+  "itemCount": 0, 
+  "total": 0, 
+  "pageCount": 0, 
+  "next": "http://somepath.com?page=2",
+  "previous": "", 
 }
 ```
+`items` An array of SomeEntity  
+`itemCount` Length of items array  
+`total` The total amount of SomeEntity  
+`pageCount` total number of pages (total / limit)  
+`next` a url for the next page to call | Blank if no page to call  
+`previous` a url for the previous page to call | Blank if no previous to call  
