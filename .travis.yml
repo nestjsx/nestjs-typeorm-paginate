@@ -1,0 +1,17 @@
+sudo: required
+
+language: node_js
+node_js:
+  - "9"
+  - "10"
+  - "node"
+services:
+  - docker
+before_install:
+  - npm i -g npm@latest
+  - npm i -g yarn
+install:
+  - yarn
+script:
+  - yarn run test
+# after_success: yarn run coveralls
