@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@nestjs/common": "^5.6.2",
+    "@nestjs/core": "^5.6.2",
+    "@nestjs/testing": "^5.6.2",
+    "prettier": "^1.16.2"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.ts\""
+  },
+  "peerDependencies": {
+    "typeorm": "^0.2.12"
+  }
+}
