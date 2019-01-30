@@ -1,19 +1,22 @@
-import {Repository} from 'typeorm';
-import { Pagination } from 'pagination';
-import { PaginationOptionsInterface } from 'interfaces';
+import { Repository } from "typeorm";
+import { Pagination } from "./pagination";
+import { PaginationOptionsInterface } from "./interfaces";
 
-export default async <T>(repository: Repository<T>, options: PaginationOptionsInterface): Promise<Pagination<T>> => {
+export async function paginate<T>(
+  repository: Repository<T>,
+  options: PaginationOptionsInterface
+): Promise<Pagination<T>> {
   const [items, total] = await repository.findAndCount({
     take: options.limit,
-    skip: options.page,
+    skip: options.page
   });
 
   let routes = {
-    next: '',
-    previous: '',
+    next: "",
+    previous: ""
   };
   if (options.route) {
-    if ((total / options.limit) >= options.page) {
+    if (total / options.limit >= options.page) {
       routes.next = `${options.route}?page=${options.page++}`;
     }
 
@@ -22,5 +25,12 @@ export default async <T>(repository: Repository<T>, options: PaginationOptionsIn
     }
   }
 
-  return new Pagination(items, items.length, total, total / options.limit, routes.next, routes.previous);
-};
+  return new Pagination(
+    items,
+    items.length,
+    total,
+    Math.round(total / options.limit),
+    routes.next,
+    routes.previous
+  );
+}

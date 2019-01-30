@@ -3,12 +3,33 @@
     "@nestjs/common": "^5.6.2",
     "@nestjs/core": "^5.6.2",
     "@nestjs/testing": "^5.6.2",
-    "prettier": "^1.16.2"
+    "@nestjs/typeorm": "^5.2.2",
+    "@types/jest": "^23.3.13",
+    "jest": "^24.0.0",
+    "prettier": "^1.16.2",
+    "ts-jest": "^23.10.5",
+    "typeorm": "^0.2.12",
+    "typescript": "^3.2.4"
   },
   "scripts": {
-    "format": "prettier --write \"**/*.ts\""
+    "format": "prettier --write \"**/*.ts\"",
+    "test": "jest",
+    "test:cov": "jest --coverage"
   },
   "peerDependencies": {
     "typeorm": "^0.2.12"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage"
   }
 }
