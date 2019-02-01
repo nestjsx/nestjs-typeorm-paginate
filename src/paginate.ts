@@ -1,6 +1,6 @@
-import { Repository, FindConditions } from "typeorm";
-import { Pagination } from "./pagination";
-import { PaginationOptionsInterface } from "./interfaces";
+import { Repository, FindConditions } from 'typeorm';
+import { Pagination } from './pagination';
+import { PaginationOptionsInterface } from './interfaces';
 
 export async function paginate<T>(
   repository: Repository<T>,
@@ -26,12 +26,12 @@ export async function paginate<T>(
     previous: ""
   };
   if (route) {
-    if (total / limit >= page) {
-      routes.next = `${route}?page=${page + 1}`;
+    if (total / limit >= (page + 1)) {
+      routes.next = `${route}?page=${page + 2}`;
     }
 
-    if (page > 1) {
-      routes.previous = `${route}?page=${page - 1}`;
+    if (page > 0) {
+      routes.previous = `${route}?page=${page}`;
     }
   }
 
