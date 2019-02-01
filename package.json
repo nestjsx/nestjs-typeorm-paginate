@@ -1,4 +1,10 @@
 {
+  "name": "nestjs-typeorm-paginate",
+  "author": {
+    "name": "Ashleigh Simonelli",
+    "email": "ashleighsimonelli@gmail.com",
+    "url": "http://ashleighsimonelli.co.uk"
+  },
   "devDependencies": {
     "@nestjs/common": "^5.6.2",
     "@nestjs/core": "^5.6.2",
