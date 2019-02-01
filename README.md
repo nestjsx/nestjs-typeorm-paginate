@@ -7,7 +7,7 @@ I made this quick package to limit the amout of times I was implementing this fu
 ## Install 
 
 ```bash
-$ yarn add somepackageIhaventdeployedyet
+$ yarn add nestjs-typeorm-pagination
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ import {Injectable} from '@nestjs/common';
 import {Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {CatEntity} from './entities';
-import {paginate, Pagination, PaginationOptionsInterface} from 'somepackageIhaventdeployedyet';
+import {paginate, Pagination, PaginationOptionsInterface} from 'nestjs-typeorm-pagination';
 
 @Injectable()
 export class CatService {
