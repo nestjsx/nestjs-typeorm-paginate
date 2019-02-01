@@ -148,5 +148,23 @@ describe("Test paginate function", () => {
     expect(results.previous).toBe('http://example.com/something?page=2');
   });
 
+  it('Can pass FindConditions', async () => {
+    const mockRepository = createMockRepository([
+      new Entity(),
+      new Entity(),
+    ]);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 1,
+    }, {
+      where: {
+        test: 1,
+      },
+    });
+
+    expect(results).toBeTruthy();
+  });
+
   // TODO add more functionality mocks
 });
