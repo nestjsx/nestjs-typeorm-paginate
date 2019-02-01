@@ -21,7 +21,7 @@ export async function paginate<T>(
     ...(searchOptions as object),
   });
 
-  const isNext = route && total / limit >= (page + 1);
+  const isNext = route && (total / limit >= (page + 1));
   const isPrevious = route && page > 0;
   let routes = {
     next: isNext ? `${route}?page=${page + 2}` : '',
