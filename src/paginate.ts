@@ -18,7 +18,7 @@ export async function paginate<T>(
   const [items, total] = await repository.findAndCount({
     skip: page,
     take: limit,
-    ...searchOptions,
+    ...(searchOptions as object),
   });
 
   let routes = {

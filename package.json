@@ -25,7 +25,8 @@
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
     "test": "jest",
-    "test:cov": "jest --coverage"
+    "test:cov": "jest --coverage",
+    "build": "tsc -p ."
   },
   "peerDependencies": {
     "typeorm": "^0.2.12"
