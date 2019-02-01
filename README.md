@@ -66,3 +66,22 @@ export class CatsController {
 `pageCount` total number of pages (total / limit)  
 `next` a url for the next page to call | Blank if no page to call  
 `previous` a url for the previous page to call | Blank if no previous to call  
+
+## Find Parameters
+
+```ts
+@Injectable()
+export class CatService {
+  constructor (
+    @InjectRepository(CatEntity) private readonly repository: Repository<CatEntity>,
+  ) {}
+
+  async paginate(options: PaginationOptions): Promise<Pagination<CatEntity>> {
+    return await paginate<CatEntity>(this.repository, options, {
+      where: {
+        lives: 9,
+      },
+    });
+  }
+}
+```
