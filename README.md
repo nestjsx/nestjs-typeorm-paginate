@@ -12,24 +12,40 @@ $ yarn add somepackageIhaventdeployedyet
 
 ## Usage
 
+##### Service
 ```ts
 import {Injectable} from '@nestjs/common';
 import {Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
-import {SomeEntity} from './entities';
+import {CatEntity} from './entities';
 import {paginate, Pagination, PaginationOptionsInterface} from 'somepackageIhaventdeployedyet';
 
 @Injectable()
-export class SomeService {
+export class CatService {
   constructor (
-    @InjectRepository(SomeEntity) private readonly repository: Repository<SomeEntity>,
+    @InjectRepository(CatEntity) private readonly repository: Repository<CatEntity>,
   ) {}
 
-  async paginate(options: PaginationOptions): Promise<Pagination<SomeEntity>> {
+  async paginate(options: PaginationOptions): Promise<Pagination<CatEntity>> {
     return await paginate(this.repository, options);
   }
 }
 ```
+
+##### Controller
+```ts
+import {Controller, Get, Query} from '@nestjs/common';
+import {CatService} from './cat.service';
+
+@Controller('cats')
+export class CatsController {
+  constructor(private readonly catService: CatService) {}
+  @Get('')
+  async index(@Query('page') page: number = 0, @Query('limit') limit: number = 10) {
+    limit = limit > 100 ? 100 : limit;
+    return await this.catService.paginate({page, limit, route: 'http://cats.com/cats/',});
+  }
+}
 
 ### Example response
 
@@ -39,8 +55,8 @@ export class SomeService {
   "itemCount": 0, 
   "total": 0, 
   "pageCount": 0, 
-  "next": "http://somepath.com?page=2",
-  "previous": "", 
+  "next": "http://cats.com/cats/?page=3",
+  "previous": "http://cats.com/cats?page=1", 
 }
 ```
 `items` An array of SomeEntity  
