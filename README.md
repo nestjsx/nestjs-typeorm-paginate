@@ -27,7 +27,7 @@ export class CatService {
   ) {}
 
   async paginate(options: PaginationOptions): Promise<Pagination<CatEntity>> {
-    return await paginate(this.repository, options);
+    return await paginate<CatEntity>(this.repository, options);
   }
 }
 ```
@@ -46,6 +46,7 @@ export class CatsController {
     return await this.catService.paginate({page, limit, route: 'http://cats.com/cats/',});
   }
 }
+```
 
 ### Example response
 
