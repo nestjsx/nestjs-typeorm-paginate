@@ -43,7 +43,7 @@ export class CatsController {
   @Get('')
   async index(@Query('page') page: number = 0, @Query('limit') limit: number = 10) {
     limit = limit > 100 ? 100 : limit;
-    return await this.catService.paginate({page, limit, route: 'http://cats.com/cats/',});
+    return await this.catService.paginate({page, limit, route: 'http://cats.com/cats',});
   }
 }
 ```
@@ -52,12 +52,39 @@ export class CatsController {
 
 ```json
 {
-  "items": [],
-  "itemCount": 0, 
-  "total": 0, 
-  "pageCount": 0, 
-  "next": "http://cats.com/cats/?page=3",
-  "previous": "http://cats.com/cats?page=1", 
+  "items": [
+    {
+      "lives": 9,
+      "type": "tabby",
+      "name": "Bobby"
+    },
+    {
+      "lives": 2,
+      "type": "Ginger",
+      "name": "Garfield"
+    },
+    {
+      "lives": 6,
+      "type": "Black",
+      "name": "Witch's mate"
+    },
+    {
+      "lives": 7,
+      "type": "Purssian Grey",
+      "name": "Alisdaya"
+    },
+    {
+      "lives": 1,
+      "type": "Alistair",
+      "name": "ali"
+    },
+    ...
+  ],
+  "itemCount": 10, 
+  "total": 20,
+  "pageCount": 2, 
+  "next": "http://cats.com/cats?page=2",
+  "previous": "", 
 }
 ```
 `items` An array of SomeEntity  
