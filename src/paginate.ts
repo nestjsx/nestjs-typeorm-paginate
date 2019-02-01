@@ -21,7 +21,7 @@ export async function paginate<T>(
     ...(searchOptions as object),
   });
 
-  let routes = {
+  const routes = {
     next: "",
     previous: ""
   };
