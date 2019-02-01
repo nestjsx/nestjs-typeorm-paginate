@@ -39,7 +39,7 @@ export async function paginate<T>(
     items,
     items.length,
     total,
-    Math.round(total / options.limit),
+    Math.round(total / limit),
     routes.next,
     routes.previous
   );
