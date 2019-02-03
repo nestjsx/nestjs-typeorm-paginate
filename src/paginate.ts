@@ -21,19 +21,12 @@ export async function paginate<T>(
     ...(searchOptions as object),
   });
 
+  const isNext = route && (total / limit >= (page + 1));
+  const isPrevious = route && page > 0;
   let routes = {
-    next: "",
-    previous: ""
+    next: isNext ? `${route}?page=${page + 2}` : '',
+    previous: isPrevious ? `${route}?page=${page}` : '',
   };
-  if (route) {
-    if (total / limit >= (page + 1)) {
-      routes.next = `${route}?page=${page + 2}`;
-    }
-
-    if (page > 0) {
-      routes.previous = `${route}?page=${page}`;
-    }
-  }
 
   return new Pagination(
     items,
