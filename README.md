@@ -1,6 +1,7 @@
 # nestjs typeorm pagination
 
 <a href="https://travis-ci.org/bashleigh/nestjs-typeorm-pagination"><img src="https://travis-ci.org/bashleigh/nestjs-typeorm-pagination.svg?branch=master"/></a>
+<a href="https://www.npmjs.com/package/nestjs-typeorm-paginate"><img src="https://img.shields.io/npm/v/nestjs-typeorm-paginate.svg"/></a>
 
 I made this quick package to limit the amout of times I was implementing this functionality. 
 
