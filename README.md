@@ -84,7 +84,7 @@ export class CatsController {
   "total": 20,
   "pageCount": 2, 
   "next": "http://cats.com/cats?page=2",
-  "previous": "", 
+  "previous": ""
 }
 ```
 `items` An array of SomeEntity  
