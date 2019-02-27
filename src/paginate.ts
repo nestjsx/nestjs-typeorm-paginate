@@ -1,10 +1,10 @@
 import { Repository, FindConditions } from 'typeorm';
 import { Pagination } from './pagination';
-import { PaginationOptionsInterface } from './interfaces';
+import { IPaginationOptions } from './interfaces';
 
 export async function paginate<T>(
   repository: Repository<T>,
-  options: PaginationOptionsInterface,
+  options: IPaginationOptions,
   searchOptions?: FindConditions<T>,
 ): Promise<Pagination<T>> {
   const page = options.page > 0 ? options.page - 1 : options.page < 0 ? 0 : options.page;

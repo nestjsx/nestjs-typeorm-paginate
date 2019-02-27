@@ -1,4 +1,4 @@
-export interface PaginationOptionsInterface {
+export interface IPaginationOptions {
   limit: number;
   page: number;
   route?: string;

@@ -19,7 +19,7 @@ import {Injectable} from '@nestjs/common';
 import {Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {CatEntity} from './entities';
-import {paginate, Pagination, PaginationOptionsInterface} from 'nestjs-typeorm-pagination';
+import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-pagination';
 
 @Injectable()
 export class CatService {
@@ -27,7 +27,7 @@ export class CatService {
     @InjectRepository(CatEntity) private readonly repository: Repository<CatEntity>,
   ) {}
 
-  async paginate(options: PaginationOptions): Promise<Pagination<CatEntity>> {
+  async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
     return await paginate<CatEntity>(this.repository, options);
   }
 }
@@ -104,7 +104,7 @@ export class CatService {
     @InjectRepository(CatEntity) private readonly repository: Repository<CatEntity>,
   ) {}
 
-  async paginate(options: PaginationOptions): Promise<Pagination<CatEntity>> {
+  async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
     return await paginate<CatEntity>(this.repository, options, {
       where: {
         lives: 9,
