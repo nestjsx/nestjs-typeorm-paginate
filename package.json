@@ -5,10 +5,12 @@
     "email": "ashleighsimonelli@gmail.com",
     "url": "http://ashleighsimonelli.co.uk"
   },
+  "main":"./src/index.ts",
   "keywords": [
     "nestjs",
     "typeorm",
-    "pagination"
+    "pagination",
+    "paginate"
   ],
   "devDependencies": {
     "@nestjs/common": "^5.6.2",

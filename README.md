@@ -8,7 +8,7 @@ I made this quick package to limit the amout of times I was implementing this fu
 ## Install 
 
 ```bash
-$ yarn add nestjs-typeorm-pagination
+$ yarn add nestjs-typeorm-paginate
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ import {Injectable} from '@nestjs/common';
 import {Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {CatEntity} from './entities';
-import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-pagination';
+import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class CatService {
@@ -106,9 +106,7 @@ export class CatService {
 
   async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
     return await paginate<CatEntity>(this.repository, options, {
-      where: {
         lives: 9,
-      },
     });
   }
 }

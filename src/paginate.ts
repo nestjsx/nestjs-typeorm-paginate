@@ -23,7 +23,7 @@ export async function paginate<T>(
 
   const isNext = route && (total / limit >= (page + 1));
   const isPrevious = route && page > 0;
-  let routes = {
+  const routes = {
     next: isNext ? `${route}?page=${page + 2}` : '',
     previous: isPrevious ? `${route}?page=${page}` : '',
   };
