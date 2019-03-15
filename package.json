@@ -6,6 +6,10 @@
     "url": "http://ashleighsimonelli.co.uk"
   },
   "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bashleigh/nestjs-typeorm-paginate"
+  },
   "keywords": [
     "nestjs",
     "typeorm",
