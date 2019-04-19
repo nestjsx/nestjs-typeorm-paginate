@@ -76,6 +76,23 @@ describe("Test paginate function", () => {
     expect(results.pageCount).toBe(3);
   });
 
+  it("Particular page count should be correct", async () => {
+    const mockRepository = createMockRepository([
+      new Entity(),
+      new Entity(),
+      new Entity(),
+      new Entity(),
+      new Entity()
+    ]);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 1,
+    });
+
+    expect(results.pageCount).toBe(2);
+  });
+
   it('Routes return successfully', async () => {
     const mockRepository = createMockRepository([
       new Entity(),
