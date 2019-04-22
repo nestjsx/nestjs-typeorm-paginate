@@ -2,26 +2,27 @@ import { paginate } from "./../index";
 import { Repository, FindManyOptions } from "typeorm";
 import { Pagination } from "../pagination";
 
-class MockRepository extends Repository<any> {}
+class MockRepository extends Repository<any> {
 
-class Entity {}
+  items = [];
+  constructor(entityAmount: number) {
+    super();
+    for (let i = 0; i < entityAmount; i++)
+      this.items.push(new Entity());
 
-// TODO need a better way of mocking
-const createMockRepository = (items: any[]): MockRepository => {
-  const mock = new MockRepository();
-  mock.findAndCount = async (
-    options?: FindManyOptions<any>
-  ): Promise<[any[], number]> => {
-    const localItems = items.slice(0, options.take);
-    return [localItems, items.length];
+  }
+
+  findAndCount = async (options?: FindManyOptions<any>): Promise<[any[], number]> => {
+    const localItems = this.items.slice(0, options.take);
+    return [localItems, this.items.length];
   };
+}
 
-  return mock;
-};
+class Entity { }
 
 describe("Test paginate function", () => {
   it("Can call method", async () => {
-    const mockRepository = createMockRepository([]);
+    const mockRepository = new MockRepository(0);
 
     const results = await paginate<any>(mockRepository, {
       limit: 10,
@@ -32,18 +33,7 @@ describe("Test paginate function", () => {
   });
 
   it("Item length should be correct", async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -55,18 +45,7 @@ describe("Test paginate function", () => {
   });
 
   it("Page count should be correct", async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -77,13 +56,7 @@ describe("Test paginate function", () => {
   });
 
   it("Particular page count should be correct", async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity()
-    ]);
+    const mockRepository = new MockRepository(5);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -94,18 +67,7 @@ describe("Test paginate function", () => {
   });
 
   it('Routes return successfully', async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -118,18 +80,7 @@ describe("Test paginate function", () => {
   });
 
   it('Route previous return successfully blank', async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -142,18 +93,7 @@ describe("Test paginate function", () => {
   });
 
   it('Route next return successfully blank', async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
@@ -166,19 +106,16 @@ describe("Test paginate function", () => {
   });
 
   it('Can pass FindConditions', async () => {
-    const mockRepository = createMockRepository([
-      new Entity(),
-      new Entity(),
-    ]);
+    const mockRepository = new MockRepository(2);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 1,
     }, {
-      where: {
-        test: 1,
-      },
-    });
+        where: {
+          test: 1,
+        },
+      });
 
     expect(results).toBeTruthy();
   });
