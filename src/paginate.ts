@@ -1,13 +1,14 @@
-import { Repository, FindConditions } from 'typeorm';
-import { Pagination } from './pagination';
-import { IPaginationOptions } from './interfaces';
+import { Repository, FindConditions } from "typeorm";
+import { Pagination } from "./pagination";
+import { IPaginationOptions } from "./interfaces";
 
 export async function paginate<T>(
   repository: Repository<T>,
   options: IPaginationOptions,
-  searchOptions?: FindConditions<T>,
+  searchOptions?: FindConditions<T>
 ): Promise<Pagination<T>> {
-  const page = options.page > 0 ? options.page - 1 : options.page < 0 ? 0 : options.page;
+  const page =
+    options.page > 0 ? options.page - 1 : options.page < 0 ? 0 : options.page;
   const limit = options.limit;
   const route = options.route;
 
@@ -18,14 +19,14 @@ export async function paginate<T>(
   const [items, total] = await repository.findAndCount({
     skip: page * limit,
     take: limit,
-    ...(searchOptions as object),
+    ...(searchOptions as object)
   });
 
-  const isNext = route && (total / limit >= (page + 1));
+  const isNext = route && total / limit >= page + 1;
   const isPrevious = route && page > 0;
   const routes = {
-    next: isNext ? `${route}?page=${page + 2}` : '',
-    previous: isPrevious ? `${route}?page=${page}` : '',
+    next: isNext ? `${route}?page=${page + 2}` : "",
+    previous: isPrevious ? `${route}?page=${page}` : ""
   };
 
   return new Pagination(
