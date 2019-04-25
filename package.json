@@ -23,6 +23,7 @@
     "@nestjs/testing": "^6.1.1",
     "@nestjs/typeorm": "^5.2.2",
     "@types/jest": "^24.0.11",
+    "coveralls": "^3.0.3",
     "jest": "^24.7.1",
     "prettier": "^1.16.2",
     "ts-jest": "^24.0.2",
@@ -32,6 +33,7 @@
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
     "test": "jest",
+    "coveralls": "yarn run test:cov --coverageReporters=text-lcov | coveralls",
     "test:cov": "jest --coverage",
     "build": "tsc -p ."
   },

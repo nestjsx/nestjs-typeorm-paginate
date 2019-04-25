@@ -13,4 +13,4 @@ install:
   - yarn
 script:
   - yarn run test
-# after_success: yarn run coveralls
+after_success: yarn run coveralls
