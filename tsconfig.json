@@ -1,27 +1,30 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "declaration": false,
-      "noImplicitAny": false,
-      "removeComments": true,
-      "noLib": false,
-      "allowSyntheticDefaultImports": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "target": "es2017",
-      "sourceMap": true,
-      "allowJs": true,
-      "outDir": "./dist",
-      "baseUrl": "./src"
-    },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules",
-      "**/*.spec.ts",
-      "./index.ts",
-      "./index.d.ts",
-      "src/__tests__"
-    ]
-  }
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "declaration": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "removeComments": false,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2017",
+    "sourceMap": false,
+    "allowJs": false,
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "outDir": "./dist",
+  },
+  "include": [
+    "*.ts",
+    "**/*.ts"
+  ],
+  "exclude": [
+    "./index.ts",
+    "./index.d.ts",
+    "node_modules",
+    "./**/*.spec.ts",
+    "__tests__"
+  ]
+}
