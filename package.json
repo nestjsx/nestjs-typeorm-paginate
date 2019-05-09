@@ -54,5 +54,5 @@
     },
     "coverageDirectory": "../coverage"
   },
-  "version": "0.1.7-beta"
+  "version": "0.1.7-alpha"
 }
