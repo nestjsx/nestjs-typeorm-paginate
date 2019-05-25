@@ -25,8 +25,8 @@ export async function paginate<T>(
   const isNext = route && total / limit >= page + 1;
   const isPrevious = route && page > 0;
   const routes = {
-    next: isNext ? `${route}?page=${page + 2}` : "",
-    previous: isPrevious ? `${route}?page=${page}` : ""
+    next: isNext ? `${route}?page=${page + 2}&limit=${limit}` : "",
+    previous: isPrevious ? `${route}?page=${page}&limit=${limit}` : ""
   };
 
   return new Pagination(
