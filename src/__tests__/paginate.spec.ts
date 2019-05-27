@@ -74,8 +74,8 @@ describe("Test paginate function", () => {
       route: "http://example.com/something"
     });
 
-    expect(results.next).toBe("http://example.com/something?page=3");
-    expect(results.previous).toBe("http://example.com/something?page=1");
+    expect(results.next).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.previous).toBe("http://example.com/something?page=1&limit=4");
   });
 
   it("Route previous return successfully blank", async () => {
@@ -87,7 +87,7 @@ describe("Test paginate function", () => {
       route: "http://example.com/something"
     });
 
-    expect(results.next).toBe("http://example.com/something?page=2");
+    expect(results.next).toBe("http://example.com/something?page=2&limit=4");
     expect(results.previous).toBe("");
   });
 
@@ -101,7 +101,7 @@ describe("Test paginate function", () => {
     });
 
     expect(results.next).toBe("");
-    expect(results.previous).toBe("http://example.com/something?page=2");
+    expect(results.previous).toBe("http://example.com/something?page=2&limit=4");
   });
 
   it("Can pass FindConditions", async () => {
