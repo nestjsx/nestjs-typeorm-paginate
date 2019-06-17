@@ -21,7 +21,7 @@
     "@nestjs/common": "^6.3.1",
     "@nestjs/core": "^6.3.1",
     "@nestjs/testing": "^6.3.1",
-    "@nestjs/typeorm": "^5.2.2",
+    "@nestjs/typeorm": "^6.1.2",
     "@types/jest": "^23.3.13",
     "jest": "^24.3.1",
     "prettier": "^1.16.2",
