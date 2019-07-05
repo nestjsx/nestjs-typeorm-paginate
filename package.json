@@ -8,7 +8,7 @@
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bashleigh/nestjs-typeorm-paginate"
+    "url": "https://github.com/nestjsx/nestjs-typeorm-paginate"
   },
   "description": "A simple pagination function to build a pagination object with types",
   "keywords": [
