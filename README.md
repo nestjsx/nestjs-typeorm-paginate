@@ -1,8 +1,8 @@
 # nestjs typeorm paginate
 
-<a href="https://travis-ci.org/bashleigh/nestjs-typeorm-paginate"><img src="https://travis-ci.org/bashleigh/nestjs-typeorm-paginate.svg?branch=master"/></a>
+<a href="https://travis-ci.org/nestjsx/nestjs-typeorm-paginate"><img src="https://travis-ci.org/nestjsx/nestjs-typeorm-paginate.svg?branch=master"/></a>
 <a href="https://www.npmjs.com/package/nestjs-typeorm-paginate"><img src="https://img.shields.io/npm/v/nestjs-typeorm-paginate.svg"/></a>
-<a href='https://coveralls.io/github/bashleigh/nestjs-typeorm-paginate?branch=master'><img src='https://coveralls.io/repos/github/bashleigh/nestjs-typeorm-paginate/badge.svg?branch=master' alt='Coverage Status' /></a>
+<a href='https://coveralls.io/github/nestjsx/nestjs-typeorm-paginate?branch=master'><img src='https://coveralls.io/repos/github/nestjsx/nestjs-typeorm-paginate/badge.svg?branch=master' alt='Coverage Status' /></a>
 
 I made this quick package to limit the amout of times I was implementing this functionality. 
 
