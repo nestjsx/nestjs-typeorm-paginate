@@ -295,13 +295,13 @@
     uuid "3.3.2"
 
 "@nestjs/core@^6.3.1":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.3.1.tgz#e32e76a776d0de71f218f5da582ea3ee6524b27e"
-  integrity sha512-GiH64nX5Z/HrHESo0huiSFH894/hzs0qRuSVNSq4MWIgHgTjdFlqu/VcXlPz21pJXhoimegpk1x1wsm2hu+WUw==
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.5.2.tgz#42ff3ce1b1a51055bbc4732e60d1029fb8ca487d"
+  integrity sha512-LTRCl4oaFP43DcPHbvVO0sH72M+N0uGwnqc0UxhJ7ovJMX6xhahSot1QTkBb56V2AIfmzaRbGpuA4qhIgBXj6A==
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.6"
-    iterare "1.1.2"
+    iterare "1.2.0"
     object-hash "1.3.1"
     optional "0.1.4"
     uuid "3.3.2"
@@ -1885,10 +1885,10 @@ istanbul-reports@^2.1.1:
   dependencies:
     handlebars "^4.1.2"
 
-iterare@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/iterare/-/iterare-1.1.2.tgz#32e65fe03c72f727b1ae5fd002ed6a215f523ae8"
-  integrity sha512-25rVYmj/dDvTR6zOa9jY1Ihd6USLa0J508Ub2iy7Aga+xu9JMbjDds2Uh03ReDGbva/YN3s3Ybi+Do0nOX6wAg==
+iterare@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/iterare/-/iterare-1.2.0.tgz#7427f5ed45986e4b73e2fea903579f1117f3dd15"
+  integrity sha512-RxMV9p/UzdK0Iplnd8mVgRvNdXlsTOiuDrqMRnDi3wIhbT+JP4xDquAX9ay13R3CH72NBzQ91KWe0+C168QAyQ==
 
 jest-changed-files@^24.8.0:
   version "24.8.0"
