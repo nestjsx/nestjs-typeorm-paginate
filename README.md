@@ -34,6 +34,30 @@ export class CatService {
 }
 ```
 
+###### QueryBuilder
+
+```ts
+import {Injectable} from '@nestjs/common';
+import {Repository} from 'typeorm';
+import {InjectRepository} from '@nestjs/typeorm';
+import {CatEntity} from './entities';
+import {paginate, Pagination, IPaginationOptions} from 'nestjs-typeorm-paginate';
+
+@Injectable()
+export class CatService {
+  constructor (
+    @InjectRepository(CatEntity) private readonly repository: Repository<CatEntity>,
+  ) {}
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
+    const queryBuilder = this.repository.createQueryBuilder('c');
+    queryBuilder.order('c.name', 'DESC'); // Or whatever you need to do
+
+    return await paginate<CatEntity>(quertBuilder, options);
+  }
+}
+```
+
 ##### Controller
 ```ts
 import {Controller, Get, Query} from '@nestjs/common';
