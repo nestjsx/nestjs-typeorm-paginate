@@ -19,13 +19,17 @@ describe("Paginate with queryBuilder", () => {
           port: 3306,
           type: "mysql",
           username: "root",
-          password: "root",
+          password: "",
           database: "test"
         })
       ]
     }).compile();
     connection = app.get(getConnectionToken());
     queryBuilder = connection.createQueryBuilder(TestEntity, "t");
+  });
+
+  afterEach(() => {
+    app.close();
   });
 
   it("Can call paginate", async () => {
