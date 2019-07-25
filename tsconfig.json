@@ -9,12 +9,13 @@
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2017",
+    "target": "es6",
     "sourceMap": false,
     "allowJs": false,
     "rootDir": "./src",
     "baseUrl": "./",
     "outDir": "./dist",
+    "lib": ["es2017"]
   },
   "include": [
     "*.ts",
@@ -25,6 +26,7 @@
     "./index.d.ts",
     "node_modules",
     "./**/*.spec.ts",
-    "__tests__"
+    "examples",
+    "src/__tests__"
   ]
 }
