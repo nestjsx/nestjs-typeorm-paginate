@@ -5,12 +5,14 @@ node_js:
   - "10"
   - "node"
 services:
-  - docker
+  - mysql
 before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
   - npm i -g npm@latest
   - npm i -g yarn
 install:
   - yarn
+  - yarn setup:test
 script:
   - yarn run test
 after_success: yarn run coveralls
