@@ -1,2 +1,5 @@
 src
 .idea
+.env.dist
+docker-compose.yml
+.travis.yml
