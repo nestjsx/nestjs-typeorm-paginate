@@ -113,11 +113,13 @@ export class CatsController {
     },
     ...
   ],
-  "itemCount": 10, 
-  "totalItems": 20,
-  "itemsPerPage": 10,
-  "totalPages": 5,
-  "currentPage": 2,
+  "meta": {
+    "itemCount": 10, 
+    "totalItems": 20,
+    "itemsPerPage": 10,
+    "totalPages": 5,
+    "currentPage": 2
+  },
   "links" : {
     "first": "http://cats.com/cats?limit=10",
     "previous": "http://cats.com/cats?page=1&limit=10",
@@ -128,12 +130,12 @@ export class CatsController {
 ```
 `items`: An array of SomeEntity
 
-`itemCount`: The length of items array (i.e., the amount of items on this page)
-`totalItems`: The total amount of SomeEntity matching the filter conditions
-`itemsPerPage`: The requested items per page (i.e., the `limit` parameter)
+`meta.itemCount`: The length of items array (i.e., the amount of items on this page)
+`meta.totalItems`: The total amount of SomeEntity matching the filter conditions
+`meta.itemsPerPage`: The requested items per page (i.e., the `limit` parameter)
 
-`totalPages`: The total amount of pages (based on the `limit`)
-`currentPage`: The current page this paginator "points" to
+`meta.totalPages`: The total amount of pages (based on the `limit`)
+`meta.currentPage`: The current page this paginator "points" to
 
 `links.first`: A URL for the first page to call | `""` (blank) if no `route` is defined
 `links.previous`: A URL for the previous page to call | `""` (blank) if no previous to call  

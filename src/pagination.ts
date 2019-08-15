@@ -1,4 +1,4 @@
-import { IPaginationLinks } from "./interfaces";
+import { IPaginationLinks, IPaginationMeta } from "./interfaces";
 
 export class Pagination<PaginationObject> {
   constructor(
@@ -7,28 +7,12 @@ export class Pagination<PaginationObject> {
      */
     public readonly items: PaginationObject[],
     /**
-     * the amount of items on this specific page
+     * associated meta information (e.g., counts)
      */
-    public readonly itemCount: number,
-    /**
-     * the total amount of items
-     */
-    public readonly totalItems: number,
-    /**
-     * the amount of items that were requested per page
-     */
-    public readonly itemsPerPage: number,
-    /**
-     * the total amount of pages in this paginator
-     */
-    public readonly totalPages: number,
-    /**
-     * the current page this paginator "points" to
-     */
-    public readonly currentPage: number,
+    public readonly meta: IPaginationMeta,
     /**
      * associated links
      */
-    public readonly links: IPaginationLinks
+    public readonly links: IPaginationLinks,
   ) {}
 }

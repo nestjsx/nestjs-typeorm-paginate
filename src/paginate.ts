@@ -51,12 +51,14 @@ function createPaginationObject<T>(
   return new Pagination(
     items,
 
-    items.length,
-    totalItems,
-    limit,
+    {
+      totalItems: totalItems,
+      itemCount: items.length,
+      itemsPerPage: limit,
 
-    totalPages,
-    currentPage,
+      totalPages: totalPages,
+      currentPage: currentPage,
+    },
 
     routes,
   );

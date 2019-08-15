@@ -44,7 +44,7 @@ describe("Test paginate function", () => {
     });
 
     expect(results.items.length).toBe(4);
-    expect(results.itemCount).toBe(4);
+    expect(results.meta.itemCount).toBe(4);
   });
 
   it("Page count should be correct", async () => {
@@ -55,7 +55,7 @@ describe("Test paginate function", () => {
       page: 1
     });
 
-    expect(results.totalPages).toBe(3);
+    expect(results.meta.totalPages).toBe(3);
   });
 
   it("Particular page count should be correct", async () => {
@@ -66,7 +66,7 @@ describe("Test paginate function", () => {
       page: 1
     });
 
-    expect(results.totalPages).toBe(2);
+    expect(results.meta.totalPages).toBe(2);
   });
 
   it("Routes return successfully", async () => {
@@ -140,25 +140,25 @@ describe("Test paginate function", () => {
     let results = await paginate<Entity>(mockRepository, {
       limit: 4, page: 1
     });
-    expect(results.itemCount).toBe(4);
-    expect(results.currentPage).toBe(1);
-    expect(results.itemsPerPage).toBe(4);
+    expect(results.meta.itemCount).toBe(4);
+    expect(results.meta.currentPage).toBe(1);
+    expect(results.meta.itemsPerPage).toBe(4);
 
     // get second page
     results = await paginate<Entity>(mockRepository, {
       limit: 4, page: 2
     });
-    expect(results.itemCount).toBe(4);
-    expect(results.currentPage).toBe(2);
-    expect(results.itemsPerPage).toBe(4);
+    expect(results.meta.itemCount).toBe(4);
+    expect(results.meta.currentPage).toBe(2);
+    expect(results.meta.itemsPerPage).toBe(4);
 
     // get third page
     results = await paginate<Entity>(mockRepository, {
       limit: 4, page: 3
     });
-    expect(results.itemCount).toBe(2);
-    expect(results.currentPage).toBe(3);
-    expect(results.itemsPerPage).toBe(4);
+    expect(results.meta.itemCount).toBe(2);
+    expect(results.meta.currentPage).toBe(3);
+    expect(results.meta.itemsPerPage).toBe(4);
   });
 
   // TODO add more functionality mocks
