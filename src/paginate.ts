@@ -5,7 +5,7 @@ import {
   SelectQueryBuilder
 } from "typeorm";
 import { Pagination } from "./pagination";
-import { IPaginationOptions } from "./interfaces";
+import { IPaginationOptions, IPaginationLinks } from "./interfaces";
 
 export async function paginate<T>(
   repository: Repository<T>,
@@ -41,7 +41,7 @@ function createPaginationObject<T>(
   const hasNextPage = route && currentPage < totalPages;
   const hasLastPage = route;
 
-  const routes = {
+  const routes: IPaginationLinks = {
     first: hasFirstPage ? `${route}?limit=${limit}` : "",
     previous: hasPreviousPage ? `${route}?page=${currentPage - 1}&limit=${limit}` : "",
     next: hasNextPage ? `${route}?page=${currentPage + 1}&limit=${limit}` : "",
@@ -58,10 +58,7 @@ function createPaginationObject<T>(
     totalPages,
     currentPage,
 
-    routes.first,
-    routes.previous,
-    routes.next,
-    routes.last,
+    routes,
   );
 }
 

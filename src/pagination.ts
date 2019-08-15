@@ -1,3 +1,5 @@
+import { IPaginationLinks } from "./interfaces";
+
 export class Pagination<PaginationObject> {
   constructor(
     /**
@@ -25,20 +27,8 @@ export class Pagination<PaginationObject> {
      */
     public readonly currentPage: number,
     /**
-     * a link to the "first" page
+     * associated links
      */
-    public readonly first?: string,
-    /**
-     * a link to the "previous" page
-     */
-    public readonly previous?: string,
-    /**
-     * a link to the "next" page
-     */
-    public readonly next?: string,
-    /**
-     * a link to the "last" page
-     */
-    public readonly last?: string,
+    public readonly links: IPaginationLinks
   ) {}
 }

@@ -81,7 +81,7 @@ export class CatsController {
 }
 ```
 
-### Example response
+### Example Response
 
 ```json
 {
@@ -118,11 +118,12 @@ export class CatsController {
   "itemsPerPage": 10,
   "totalPages": 5,
   "currentPage": 2,
-  "first": "http://cats.com/cats?limit=10",
-  "previous": "http://cats.com/cats?page=1&limit=10",
-  "next": "http://cats.com/cats?page=3&limit=10",
-  "last": "http://cats.com/cats?page=5&limit=10",
-  
+  "links" : {
+    "first": "http://cats.com/cats?limit=10",
+    "previous": "http://cats.com/cats?page=1&limit=10",
+    "next": "http://cats.com/cats?page=3&limit=10",
+    "last": "http://cats.com/cats?page=5&limit=10"
+  }
 }
 ```
 `items`: An array of SomeEntity
@@ -134,10 +135,10 @@ export class CatsController {
 `totalPages`: The total amount of pages (based on the `limit`)
 `currentPage`: The current page this paginator "points" to
 
-`first`: A URL for the first page to call | `""` (blank) if no `route` is defined
-`previous`: A URL for the previous page to call | `""` (blank) if no previous to call  
-`next`: A URL for the next page to call | `""` (blank) if no page to call  
-`last`: A URL for the last page to call | `""` (blank) if no `route` is defined
+`links.first`: A URL for the first page to call | `""` (blank) if no `route` is defined
+`links.previous`: A URL for the previous page to call | `""` (blank) if no previous to call  
+`links.next`: A URL for the next page to call | `""` (blank) if no page to call  
+`links.last`: A URL for the last page to call | `""` (blank) if no `route` is defined
 
 ## Find Parameters
 

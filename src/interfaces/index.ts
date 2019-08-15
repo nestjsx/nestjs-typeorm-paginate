@@ -12,3 +12,22 @@ export interface IPaginationOptions {
    */
   route?: string;
 }
+
+export interface IPaginationLinks {
+  /**
+   * a link to the "first" page
+   */
+  readonly first?: string,
+  /**
+   * a link to the "previous" page
+   */
+  readonly previous?: string,
+  /**
+   * a link to the "next" page
+   */
+  readonly next?: string,
+  /**
+   * a link to the "last" page
+   */
+  readonly last?: string,
+}

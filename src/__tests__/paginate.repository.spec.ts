@@ -78,10 +78,10 @@ describe("Test paginate function", () => {
       route: "http://example.com/something"
     });
 
-    expect(results.first).toBe("http://example.com/something?limit=4");
-    expect(results.previous).toBe("http://example.com/something?page=1&limit=4");
-    expect(results.next).toBe("http://example.com/something?page=3&limit=4");
-    expect(results.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.first).toBe("http://example.com/something?limit=4");
+    expect(results.links.previous).toBe("http://example.com/something?page=1&limit=4");
+    expect(results.links.next).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
   });
 
   it("Route previous return successfully blank", async () => {
@@ -93,10 +93,10 @@ describe("Test paginate function", () => {
       route: "http://example.com/something"
     });
 
-    expect(results.first).toBe("http://example.com/something?limit=4");
-    expect(results.previous).toBe("");
-    expect(results.next).toBe("http://example.com/something?page=2&limit=4");
-    expect(results.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.first).toBe("http://example.com/something?limit=4");
+    expect(results.links.previous).toBe("");
+    expect(results.links.next).toBe("http://example.com/something?page=2&limit=4");
+    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
   });
 
   it("Route next return successfully blank", async () => {
@@ -108,10 +108,10 @@ describe("Test paginate function", () => {
       route: "http://example.com/something"
     });
 
-    expect(results.first).toBe("http://example.com/something?limit=4");
-    expect(results.previous).toBe("http://example.com/something?page=2&limit=4");
-    expect(results.next).toBe("");
-    expect(results.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.first).toBe("http://example.com/something?limit=4");
+    expect(results.links.previous).toBe("http://example.com/something?page=2&limit=4");
+    expect(results.links.next).toBe("");
+    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
   });
 
   it("Can pass FindConditions", async () => {
