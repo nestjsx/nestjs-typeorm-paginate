@@ -327,9 +327,9 @@
     uuid "3.3.3"
 
 "@nestjs/testing@^6.3.1":
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-6.6.2.tgz#e6f614d5735b3f94325ebfb51ef4857b80d947ff"
-  integrity sha512-GRsCPMR+R6k2lVgcyvos+AKm6u5eERZwTlg7Qq7LYNKVK7ckrE/bjcU2FzZn5QYVcSJzUHyT3eV8LbyK9qHj3g==
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-6.6.3.tgz#bd219ce283ef689f4f959f9b653290d5cc891c8d"
+  integrity sha512-8NiIvopoLGs4Pjb44XBrEpqxizDf/wf/7TzC/tijDWY9utK4f6UseMGijOcVGpQNvS8FFUFX/UTKJG/LgS0nsw==
   dependencies:
     optional "0.1.4"
 
