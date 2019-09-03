@@ -60,7 +60,7 @@ export class CatService {
     const queryBuilder = this.repository.createQueryBuilder('c');
     queryBuilder.order('c.name', 'DESC'); // Or whatever you need to do
 
-    return await paginate<CatEntity>(quertBuilder, options);
+    return await paginate<CatEntity>(queryBuilder, options);
   }
 }
 ```
