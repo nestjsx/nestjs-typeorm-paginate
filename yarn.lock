@@ -306,9 +306,9 @@
     "@types/yargs" "^13.0.0"
 
 "@nestjs/common@^6.3.1":
-  version "6.8.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.8.0.tgz#b353d07ca6e659899b6bf50e1d2137791424042e"
-  integrity sha512-YNRrlk6VTSDGp/TvrBYZvGx1SQ5l7lF7WYg9O2t+rDS4PtqV73gRNhBIFpelYuMrNkgkc38hHlFxtzPZkaUaMg==
+  version "6.8.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.8.2.tgz#0fe8d79eae91fa0512486023eb1a8621bd5007fd"
+  integrity sha512-dIHT8L6lQbKKPlVdMG/K00o1rZRI8Y9+Tz6vwQi6flBTnbotPerRF7ppcCABvqnpKi3gOzgph8iV7eOCMFdMRw==
   dependencies:
     axios "0.19.0"
     cli-color "1.4.0"
