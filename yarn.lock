@@ -315,14 +315,14 @@
     uuid "3.3.3"
 
 "@nestjs/core@^6.3.1":
-  version "6.8.5"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.8.5.tgz#38e6700f0e954f15892758688748969b3dab24af"
-  integrity sha512-NxRHb+O8g37BmWkK8hxTYJvZljyPpDJY32OyAMNcMIPuXq/LKbF1Itxr5FyNJzFQOJzDXq/Ct1SnZX4KA63fTw==
+  version "6.10.8"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.10.8.tgz#f26c81172702311914cd6d027d31cd111c6e005d"
+  integrity sha512-Tt9xJJDi1KdDiTF+weBjotcc3KPUZwL7aoOdKoItkW/9eft6h16Igz/FLhrU6ceJjx3lTXEjWINyFLW6ttyfuA==
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.7"
     iterare "1.2.0"
-    object-hash "2.0.0"
+    object-hash "2.0.1"
     uuid "3.3.3"
 
 "@nestjs/testing@^6.3.1":
@@ -2860,10 +2860,10 @@ object-copy@^0.1.0:
     define-property "^0.2.5"
     kind-of "^3.0.3"
 
-object-hash@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.0.0.tgz#7c4cc341eb8b53367312a7c546142f00c9e0ea20"
-  integrity sha512-I7zGBH0rDKwVGeGZpZoFaDhIwvJa3l1CZE+8VchylXbInNiCj7sxxea9P5dTM4ftKR5//nrqxrdeGSTWL2VpBA==
+object-hash@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.0.1.tgz#cef18a0c940cc60aa27965ecf49b782cbf101d96"
+  integrity sha512-HgcGMooY4JC2PBt9sdUdJ6PMzpin+YtY3r/7wg0uTifP+HJWW8rammseSEHuyt0UeShI183UGssCJqm1bJR7QA==
 
 object-keys@^1.0.12:
   version "1.1.1"
