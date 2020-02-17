@@ -13,6 +13,6 @@ export class Pagination<PaginationObject> {
     /**
      * associated links
      */
-    public readonly links: IPaginationLinks,
+    public readonly links: IPaginationLinks
   ) {}
 }

@@ -17,40 +17,40 @@ export interface IPaginationMeta {
   /**
    * the amount of items on this specific page
    */
-  itemCount: number,
+  itemCount: number;
   /**
    * the total amount of items
    */
-  totalItems: number,
+  totalItems: number;
   /**
    * the amount of items that were requested per page
    */
-  itemsPerPage: number,
+  itemsPerPage: number;
   /**
    * the total amount of pages in this paginator
    */
-  totalPages: number,
+  totalPages: number;
   /**
    * the current page this paginator "points" to
    */
-  currentPage: number,
+  currentPage: number;
 }
 
 export interface IPaginationLinks {
   /**
    * a link to the "first" page
    */
-  first?: string,
+  first?: string;
   /**
    * a link to the "previous" page
    */
-  previous?: string,
+  previous?: string;
   /**
    * a link to the "next" page
    */
-  next?: string,
+  next?: string;
   /**
    * a link to the "last" page
    */
-  last?: string,
+  last?: string;
 }
