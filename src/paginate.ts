@@ -96,7 +96,7 @@ async function paginateQueryBuilder<T>(
 
   const [items, total] = await queryBuilder
     .take(limit)
-    .offset(limit * (page - 1))
+    .skip((page - 1) * limit)
     .getManyAndCount();
 
   return createPaginationObject<T>(items, total, page, limit, route);
