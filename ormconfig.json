@@ -5,5 +5,9 @@
   "username": "root",
   "password": "",
   "database": "test",
-  "entities": ["*/**/*.entity.ts"]
+  "entities": ["*/**/*.entity.ts"],
+  "migrations": ["*/**/migrations/*.ts"],
+  "cli": {
+    "migrationsDir": "migrations"
+  }
 }
