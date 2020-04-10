@@ -12,7 +12,6 @@ class MockRepository extends Repository<any> {
   findAndCount = async (
     options?: FindManyOptions<any>
   ): Promise<[any[], number]> => {
-    
     const startIndex = options.skip;
     const endIndex = startIndex + options.take;
 
@@ -29,7 +28,7 @@ describe("Test paginate function", () => {
 
     const results = await paginate<any>(mockRepository, {
       limit: 10,
-      page: 1
+      page: 1,
     });
 
     expect(results).toBeInstanceOf(Pagination);
@@ -40,7 +39,7 @@ describe("Test paginate function", () => {
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: 1
+      page: 1,
     });
 
     expect(results.items.length).toBe(4);
@@ -52,7 +51,7 @@ describe("Test paginate function", () => {
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: 1
+      page: 1,
     });
 
     expect(results.meta.totalPages).toBe(3);
@@ -79,9 +78,15 @@ describe("Test paginate function", () => {
     });
 
     expect(results.links.first).toBe("http://example.com/something?limit=4");
-    expect(results.links.previous).toBe("http://example.com/something?page=1&limit=4");
-    expect(results.links.next).toBe("http://example.com/something?page=3&limit=4");
-    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.previous).toBe(
+      "http://example.com/something?page=1&limit=4"
+    );
+    expect(results.links.next).toBe(
+      "http://example.com/something?page=3&limit=4"
+    );
+    expect(results.links.last).toBe(
+      "http://example.com/something?page=3&limit=4"
+    );
   });
 
   it("Route previous return successfully blank", async () => {
@@ -95,8 +100,12 @@ describe("Test paginate function", () => {
 
     expect(results.links.first).toBe("http://example.com/something?limit=4");
     expect(results.links.previous).toBe("");
-    expect(results.links.next).toBe("http://example.com/something?page=2&limit=4");
-    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.next).toBe(
+      "http://example.com/something?page=2&limit=4"
+    );
+    expect(results.links.last).toBe(
+      "http://example.com/something?page=3&limit=4"
+    );
   });
 
   it("Route next return successfully blank", async () => {
@@ -109,9 +118,13 @@ describe("Test paginate function", () => {
     });
 
     expect(results.links.first).toBe("http://example.com/something?limit=4");
-    expect(results.links.previous).toBe("http://example.com/something?page=2&limit=4");
+    expect(results.links.previous).toBe(
+      "http://example.com/something?page=2&limit=4"
+    );
     expect(results.links.next).toBe("");
-    expect(results.links.last).toBe("http://example.com/something?page=3&limit=4");
+    expect(results.links.last).toBe(
+      "http://example.com/something?page=3&limit=4"
+    );
   });
 
   it("Can pass FindConditions", async () => {
@@ -126,19 +139,20 @@ describe("Test paginate function", () => {
       {
         where: {
           test: 1,
-        }
-      }
+        },
+      },
     );
 
     expect(results).toBeTruthy();
   });
 
-  it('Correctly paginates through the results', async () => {
+  it("Correctly paginates through the results", async () => {
     const mockRepository = new MockRepository(10);
 
     // get first page
     let results = await paginate<Entity>(mockRepository, {
-      limit: 4, page: 1
+      limit: 4,
+      page: 1,
     });
     expect(results.meta.itemCount).toBe(4);
     expect(results.meta.currentPage).toBe(1);
@@ -146,7 +160,8 @@ describe("Test paginate function", () => {
 
     // get second page
     results = await paginate<Entity>(mockRepository, {
-      limit: 4, page: 2
+      limit: 4,
+      page: 2,
     });
     expect(results.meta.itemCount).toBe(4);
     expect(results.meta.currentPage).toBe(2);
@@ -154,12 +169,23 @@ describe("Test paginate function", () => {
 
     // get third page
     results = await paginate<Entity>(mockRepository, {
-      limit: 4, page: 3
+      limit: 4,
+      page: 3,
     });
     expect(results.meta.itemCount).toBe(2);
     expect(results.meta.currentPage).toBe(3);
     expect(results.meta.itemsPerPage).toBe(4);
   });
 
-  // TODO add more functionality mocks
+  it("Can resolve correct path", async () => {
+    const mockRepository = new MockRepository(10);
+
+    let results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 1,
+      route: "/test?test=test",
+    });
+
+    expect(results.links.next).toBe("/test?test=test&page=2&limit=4");
+  });
 });

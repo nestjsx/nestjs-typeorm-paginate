@@ -41,11 +41,19 @@ function createPaginationObject<T>(
   const hasNextPage = route && currentPage < totalPages;
   const hasLastPage = route;
 
+  const symbol = route && new RegExp(/\?/).test(route) ? "&" : "?";
+
   const routes: IPaginationLinks = {
-    first: hasFirstPage ? `${route}?limit=${limit}` : "",
-    previous: hasPreviousPage ? `${route}?page=${currentPage - 1}&limit=${limit}` : "",
-    next: hasNextPage ? `${route}?page=${currentPage + 1}&limit=${limit}` : "",
-    last: hasLastPage ? `${route}?page=${totalPages}&limit=${limit}` : ""
+    first: hasFirstPage ? `${route}${symbol}limit=${limit}` : "",
+    previous: hasPreviousPage
+      ? `${route}${symbol}page=${currentPage - 1}&limit=${limit}`
+      : "",
+    next: hasNextPage
+      ? `${route}${symbol}page=${currentPage + 1}&limit=${limit}`
+      : "",
+    last: hasLastPage
+      ? `${route}${symbol}page=${totalPages}&limit=${limit}`
+      : ""
   };
 
   return new Pagination(
@@ -57,10 +65,10 @@ function createPaginationObject<T>(
       itemsPerPage: limit,
 
       totalPages: totalPages,
-      currentPage: currentPage,
+      currentPage: currentPage
     },
 
-    routes,
+    routes
   );
 }
 
