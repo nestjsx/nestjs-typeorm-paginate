@@ -73,7 +73,7 @@ function createPaginationObject<T>(
 }
 
 function resolveOptions(options: IPaginationOptions): [number, number, string] {
-  const page = options.page < 1 ? 1 : options.page;
+  const page = options.page;
   const limit = options.limit;
   const route = options.route;
 
@@ -86,6 +86,10 @@ async function paginateRepository<T>(
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
 ): Promise<Pagination<T>> {
   const [page, limit, route] = resolveOptions(options);
+
+  if (page < 1) {
+    return createPaginationObject([], 0, page, limit, route);
+  }
 
   const [items, total] = await repository.findAndCount({
     skip: limit * (page - 1),
