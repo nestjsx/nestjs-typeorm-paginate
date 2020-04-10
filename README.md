@@ -209,7 +209,7 @@ const results = paginate(queryBuilder, {page, limit});
 
 return new Pagination(
   await Promise.all(results.items.map(async (item: SomeEntity) => {
-    const hydrate = this.someRepository.findByEntity(item);
+    const hydrate = await this.someRepository.findByEntity(item);
     item.hydrated = hydrate;
 
     return item;
