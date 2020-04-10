@@ -188,4 +188,16 @@ describe('Test paginate function', () => {
 
     expect(results.links.next).toBe('/test?test=test&page=2&limit=4');
   });
+
+  it('when page is 0, return empty pagination object', async () => {
+    const mockRepository = new MockRepository(10);
+
+    let results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 0,
+      route: '/test?test=test',
+    });
+
+    expect(results.items.length).toBe(0);
+  });
 });
