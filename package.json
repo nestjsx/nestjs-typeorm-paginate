@@ -45,7 +45,7 @@
     "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts"
   },
   "peerDependencies": {
-    "@nestjs/common": "^6.1.1 || ^5.6.2",
+    "@nestjs/common": "^6.1.1 || ^5.6.2 || ^7.0.0",
     "typeorm": "^0.2.12"
   },
   "jest": {
