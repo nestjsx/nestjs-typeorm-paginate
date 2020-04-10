@@ -22,6 +22,9 @@ $ yarn add nestjs-typeorm-paginate
 ## Usage
 
 ##### Service
+
+###### Repository
+
 ```ts
 import {Injectable} from '@nestjs/common';
 import {Repository} from 'typeorm';
@@ -36,7 +39,7 @@ export class CatService {
   ) {}
 
   async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
-    return await paginate<CatEntity>(this.repository, options);
+    return paginate<CatEntity>(this.repository, options);
   }
 }
 ```
@@ -60,7 +63,7 @@ export class CatService {
     const queryBuilder = this.repository.createQueryBuilder('c');
     queryBuilder.order('c.name', 'DESC'); // Or whatever you need to do
 
-    return await paginate<CatEntity>(queryBuilder, options);
+    return paginate<CatEntity>(queryBuilder, options);
   }
 }
 ```
@@ -69,14 +72,23 @@ export class CatService {
 ```ts
 import {Controller, Get, Query} from '@nestjs/common';
 import {CatService} from './cat.service';
+import {CatEntity} from './cat.entity';
+import {Pagination} from 'nestjs-typeorm-paginate';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catService: CatService) {}
   @Get('')
-  async index(@Query('page') page: number = 0, @Query('limit') limit: number = 10) {
+  async index(
+    @Query('page') page: number = 1, 
+    @Query('limit') limit: number = 10,
+  ): Pagination<CatEntity> {
     limit = limit > 100 ? 100 : limit;
-    return await this.catService.paginate({page, limit, route: 'http://cats.com/cats',});
+    return this.catService.paginate({
+      page,
+      limit,
+      route: 'http://cats.com/cats',
+    });
   }
 }
 ```
@@ -152,9 +164,57 @@ export class CatService {
   ) {}
 
   async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
-    return await paginate<CatEntity>(this.repository, options, {
+    return paginate<CatEntity>(this.repository, options, {
         lives: 9,
     });
   }
 }
+```
+
+## Eager loading
+
+Eager loading should work with typeorm's eager property out the box. Like so 
+
+```typescript 
+import {Entity, OneToMany} from 'typeorm';
+
+@Entity()
+export class CatEntity {
+
+  @OneToMany(t => TigerKingEntity, tigerKing.cats, {
+    eager: true,
+  })
+  tigerKings: TigerKingEntity[];
+}
+
+
+// service 
+class CatService {
+  constructor(
+    private readonly repository: Repository<CatEntity>,
+  ) {}
+
+  async paginate(page: number, limit: number): Promise<Pagination<CatEntity>> {
+   return paginate(this.repository, {page, limit});
+  }
+}
+```
+
+#### QueryBuilder
+
+However, when using the query builder you'll have to hydrate the entities yourself. Here is a crud example that I've used in the past.
+
+```typescript
+const results = paginate(queryBuilder, {page, limit});
+
+return new Pagination(
+  await Promise.all(results.items.map(async (item: SomeEntity) => {
+    const hydrate = this.someRepository.findByEntity(item);
+    item.hydrated = hydrate;
+
+    return item;
+  })),
+  results.meta,
+  results.links,
+);
 ```

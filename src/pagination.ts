@@ -1,4 +1,4 @@
-import { IPaginationLinks, IPaginationMeta } from "./interfaces";
+import { IPaginationLinks, IPaginationMeta } from './interfaces';
 
 export class Pagination<PaginationObject> {
   constructor(
@@ -13,6 +13,6 @@ export class Pagination<PaginationObject> {
     /**
      * associated links
      */
-    public readonly links: IPaginationLinks
+    public readonly links: IPaginationLinks,
   ) {}
 }
