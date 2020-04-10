@@ -29,11 +29,11 @@ describe("Paginate with queryBuilder", () => {
       ]
     }).compile();
     connection = app.get(getConnectionToken());
-  })
+  });
   
   afterAll(()=>{
     app.close();
-  })
+  });
 
   it("Can call paginate", async () => {
     queryBuilder = connection.createQueryBuilder(PostEntity, "post");
@@ -41,14 +41,14 @@ describe("Paginate with queryBuilder", () => {
     expect(result).toBeInstanceOf(Pagination);
   });
   
-  it("Page 1", async () => {
+  it("Query page 1", async () => {
     queryBuilder = connection.createQueryBuilder(PostEntity, "post").leftJoinAndSelect("post.comments", "text").leftJoinAndSelect("post.categories", "name")
     const result = await paginate(queryBuilder, { limit: 10, page: 1 });
     expect(result.meta.totalPages).toEqual(2);
     expect(result.meta.itemCount).toEqual(10);
     expect(result.meta.totalItems).toEqual(15);
   });
-  it("Page 2", async () => {
+  it("Query page 2", async () => {
     queryBuilder = connection.createQueryBuilder(PostEntity, "post").leftJoinAndSelect("post.comments", "text").leftJoinAndSelect("post.categories", "name")
     const result = await paginate(queryBuilder, { limit: 10, page: 2 });
     expect(result.meta.totalPages).toEqual(2);
