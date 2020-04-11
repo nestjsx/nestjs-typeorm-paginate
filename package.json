@@ -37,10 +37,9 @@
   },
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
-    "db:migration": "node_modules/.bin/ts-node node_modules/.bin/typeorm migration:run",
     "db:drop": "node_modules/.bin/ts-node node_modules/.bin/typeorm schema:drop",
     "db:sync": "node_modules/.bin/ts-node node_modules/.bin/typeorm schema:sync",
-    "setup:test": "npm run db:drop && npm run db:sync && npm run db:migration",
+    "setup:test": "npm run db:drop && npm run db:sync",
     "test": "jest",
     "coveralls": "yarn run test:cov --coverageReporters=text-lcov | coveralls",
     "test:cov": "jest --coverage",
