@@ -61,7 +61,7 @@ export class CatService {
 
   async paginate(options: IPaginationOptions): Promise<Pagination<CatEntity>> {
     const queryBuilder = this.repository.createQueryBuilder('c');
-    queryBuilder.order('c.name', 'DESC'); // Or whatever you need to do
+    queryBuilder.orderBy('c.name', 'DESC'); // Or whatever you need to do
 
     return paginate<CatEntity>(queryBuilder, options);
   }
