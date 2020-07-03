@@ -82,7 +82,7 @@ export class CatsController {
   async index(
     @Query('page') page: number = 1, 
     @Query('limit') limit: number = 10,
-  ): Pagination<CatEntity> {
+  ): Promise<Pagination<CatEntity>> {
     limit = limit > 100 ? 100 : limit;
     return this.catService.paginate({
       page,
@@ -202,7 +202,7 @@ class CatService {
 
 #### QueryBuilder
 
-However, when using the query builder you'll have to hydrate the entities yourself. Here is a crud example that I've used in the past.
+However, when using the query builder you'll have to hydrate the entities yourself. Here is a crude example that I've used in the past. It's not great but this is partially what typeORM will do.
 
 ```typescript
 const results = paginate(queryBuilder, {page, limit});
