@@ -42,7 +42,8 @@
     "coveralls": "yarn run test:cov --coverageReporters=text-lcov | coveralls",
     "test:cov": "jest --coverage",
     "build": "rm -rf ./dist && tsc && npm run build:index",
-    "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts"
+    "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts",
+    "prepublish": "npm run format && npm run build"
   },
   "peerDependencies": {
     "@nestjs/common": "^6.1.1 || ^5.6.2 || ^7.0.0",
@@ -61,5 +62,5 @@
     },
     "coverageDirectory": "../coverage"
   },
-  "version": "2.1.0"
+  "version": "2.1.1"
 }
