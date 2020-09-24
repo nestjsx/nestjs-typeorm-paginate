@@ -27,6 +27,23 @@ export async function paginate<T>(
     : paginateQueryBuilder(repositoryOrQueryBuilder, options);
 }
 
+export async function paginateRaw<T>(
+  queryBuilder: SelectQueryBuilder<any>,
+  options: IPaginationOptions,
+): Promise<Pagination<T>> {
+  const [page, limit, route] = resolveOptions(options);
+
+  const totalQueryBuilder = queryBuilder.clone();
+  const items = await queryBuilder
+    .limit(limit)
+    .offset((page - 1) * limit)
+    .getRawMany<T>();
+
+  const total = await totalQueryBuilder.getCount();
+
+  return createPaginationObject<T>(items, total, page, limit, route);
+}
+
 function createPaginationObject<T>(
   items: T[],
   totalItems: number,
