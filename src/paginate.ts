@@ -28,7 +28,7 @@ export async function paginate<T>(
 }
 
 export async function paginateRaw<T>(
-  queryBuilder: SelectQueryBuilder<any>,
+  queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions,
 ): Promise<Pagination<T>> {
   const [page, limit, route] = resolveOptions(options);
