@@ -234,11 +234,11 @@ return new Pagination(
 
 ```typescript
 const queryBuilder = this.repository
-  .createQueryBuilder('c')
+  .createQueryBuilder<{ type: string; totalLives: string }>('c')
   .select('c.type', 'type')
   .addSelect('SUM(c.lives)', 'totalLives')
   .groupBy('c.type')
   .orderBy('c.type', 'DESC'); // Or whatever you need to do
 
-return paginateRaw<{ type: string: totalLives: string }>(queryBuilder, options);
+return paginateRaw(queryBuilder, options);
 ```

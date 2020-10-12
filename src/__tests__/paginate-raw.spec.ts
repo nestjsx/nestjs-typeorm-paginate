@@ -13,7 +13,7 @@ interface RawQueryResult {
 describe('Test paginateRaw function', () => {
   let app: TestingModule;
   let connection: Connection;
-  let queryBuilder: SelectQueryBuilder<TestEntity>;
+  let queryBuilder: SelectQueryBuilder<RawQueryResult>;
 
   let results: Pagination<RawQueryResult>;
 
@@ -36,7 +36,10 @@ describe('Test paginateRaw function', () => {
       ],
     }).compile();
     connection = app.get(getConnectionToken());
-    queryBuilder = connection.createQueryBuilder(TestEntity, 't');
+    queryBuilder = connection.createQueryBuilder<RawQueryResult>(
+      TestEntity,
+      't',
+    );
 
     // Insert some registries on database
     for (let i = 1; i <= totalItems; i++) {
@@ -96,7 +99,7 @@ describe('Test paginateRaw function', () => {
           .addSelect('SUM(t.id)', 'sum')
           .groupBy('t.id');
 
-        results = await paginateRaw<RawQueryResult>(queryBuilder, {
+        results = await paginateRaw(queryBuilder, {
           ...options,
           route: 'http://example.com/something',
         });
