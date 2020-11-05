@@ -14,5 +14,9 @@ export class Pagination<PaginationObject> {
      * associated links
      */
     public readonly links: IPaginationLinks,
+    /**
+    * a list of raw items when queried raw with entities
+    */
+    public readonly rawItems?: any[],
   ) {}
 }

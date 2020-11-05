@@ -44,13 +44,31 @@ export async function paginateRaw<T>(
   return createPaginationObject<T>(items, total, page, limit, route);
 }
 
+export async function paginateRawAndEntities<T>(
+  queryBuilder: SelectQueryBuilder<T>,
+  options: IPaginationOptions,
+): Promise<Pagination<T>> {
+  const [page, limit, route] = resolveOptions(options);
+
+  const totalQueryBuilder = queryBuilder.clone();
+  const itemObject = await queryBuilder
+    .limit(limit)
+    .offset((page - 1) * limit)
+    .getRawAndEntities<T>();
+
+  const total = await totalQueryBuilder.getCount();
+
+  return createPaginationObject<T>(itemObject.entities, total, page, limit, route, itemObject.raw);
+}
+
 function createPaginationObject<T>(
   items: T[],
   totalItems: number,
   currentPage: number,
   limit: number,
   route?: string,
-) {
+  rawItems?: any[],
+): Pagination<T> {
   const totalPages = Math.ceil(totalItems / limit);
 
   const hasFirstPage = route;
@@ -86,6 +104,7 @@ function createPaginationObject<T>(
     },
 
     routes,
+    rawItems
   );
 }
 
