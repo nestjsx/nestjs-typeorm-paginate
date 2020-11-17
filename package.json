@@ -20,7 +20,7 @@
   "devDependencies": {
     "@nestjs/common": "^6.3.1",
     "@nestjs/core": "^6.3.1",
-    "@nestjs/testing": "^6.3.1",
+    "@nestjs/testing": "^7.0.0",
     "@nestjs/typeorm": "^7.1.0",
     "@types/jest": "^26.0.5",
     "@types/node": "^14.0.23",

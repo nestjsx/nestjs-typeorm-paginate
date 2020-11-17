@@ -378,10 +378,10 @@
     tslib "1.11.1"
     uuid "7.0.1"
 
-"@nestjs/testing@^6.3.1":
-  version "6.11.11"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-6.11.11.tgz#c9858e6516cccf923289919764ed9039376d9b3c"
-  integrity sha512-Mqu4IWZhnLdIFfVfueAFFCm3jPfQoWg+YmDLBsFS2kpab3az5gsRCZQv9R9CCHGa1hHKYWqM1lMcz1IQc70kww==
+"@nestjs/testing@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-7.0.0.tgz#b81610a4220b5a8c3f58089696640688d8664da6"
+  integrity sha512-Mk2dMJNC8zGTM/BIK9dE7yrDoB8ZLLLquMT1XqjhYC0hZ4SgC/3myAX8truag8xDAd6lJHOQug9ySbsyE7oxTQ==
   dependencies:
     optional "0.1.4"
     tslib "1.11.1"
