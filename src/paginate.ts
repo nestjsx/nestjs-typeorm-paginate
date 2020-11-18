@@ -84,7 +84,8 @@ function createPaginationObject<T>(
       totalPages: totalPages,
       currentPage: currentPage,
     },
-    !!route && routes,
+
+    route && routes,
   );
 }
 
