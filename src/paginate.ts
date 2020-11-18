@@ -85,7 +85,7 @@ function createPaginationObject<T>(
       currentPage: currentPage,
     },
 
-    routes,
+    route && routes,
   );
 }
 
