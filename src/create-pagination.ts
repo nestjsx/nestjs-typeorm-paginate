@@ -42,6 +42,6 @@ export function createPaginationObject<T>(
   };
 
   return raw_items
-    ? new PaginationWithRaw(items, raw_items, meta, routes)
+    ? new PaginationWithRaw(items, raw_items, meta, route && routes)
     : new Pagination(items, meta, routes);
 }

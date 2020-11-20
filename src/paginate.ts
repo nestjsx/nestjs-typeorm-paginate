@@ -68,7 +68,7 @@ export async function paginateRawAndEntities<T>(
     page,
     limit,
     route,
-    itemObject.raw,
+    itemObject.raw
   );
 }
 

@@ -20,20 +20,20 @@
   "devDependencies": {
     "@nestjs/common": "^6.3.1",
     "@nestjs/core": "^6.3.1",
-    "@nestjs/testing": "^6.3.1",
+    "@nestjs/testing": "^7.0.0",
     "@nestjs/typeorm": "^7.1.0",
     "@types/jest": "^26.0.5",
     "@types/node": "^14.0.23",
     "coveralls": "^3.0.5",
     "jest": "^24.3.1",
     "mysql": "^2.17.1",
-    "prettier": "^1.16.2",
+    "prettier": "^2.1.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2",
     "ts-jest": "^24.0.2",
-    "ts-node": "^8.3.0",
+    "ts-node": "^9.0.0",
     "typeorm": "^0.2.12",
-    "typescript": "^3.2.4"
+    "typescript": "^4.0.5"
   },
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
@@ -62,5 +62,5 @@
     },
     "coverageDirectory": "../coverage"
   },
-  "version": "2.2.1"
+  "version": "2.2.2"
 }
