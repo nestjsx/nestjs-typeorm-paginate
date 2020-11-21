@@ -242,3 +242,117 @@ const queryBuilder = this.repository
 
 return paginateRaw(queryBuilder, options);
 ```
+
+### Raw and Entities
+
+A similar approach is used for TypeORM's `getRawAndEntities`
+
+Let's assume there's a joined table that matches each cat with its cat toys.
+And we want to bring how many toys each cat has.
+
+```typescript
+
+const queryBuilder = this.repository
+  .createQueryBuilder<{ type: string; totalLives: string }>('cat')
+    .leftJoinAndSelect('cat.toys', 'toys')
+    .addSelect('COUNT(toys)::INTEGER', 'toyCount')
+    .groupBy('cat.name');
+```
+
+This will allow us to get the paginated cat's with the additional raw query.
+The return object will look something like
+
+### Example Response
+
+```json
+{
+  "items": [
+    {
+      "lives": 9,
+      "type": "tabby",
+      "name": "Bobby"
+    },
+    {
+      "lives": 2,
+      "type": "Ginger",
+      "name": "Garfield"
+    },
+    {
+      "lives": 6,
+      "type": "Black",
+      "name": "Witch's mate"
+    },
+    {
+      "lives": 7,
+      "type": "Purssian Grey",
+      "name": "Alisdaya"
+    },
+    {
+      "lives": 1,
+      "type": "Alistair",
+      "name": "ali"
+    },
+    ...
+  ],
+  "rawItems": [
+    {
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 2,
+      "cat_type": "Ginger",
+      "cat_name": "Garfield",
+      "toyCount": 1
+    },
+    ...
+  ],
+  "meta": {
+    "itemCount": 10,
+    "totalItems": 20,
+    "itemsPerPage": 10,
+    "totalPages": 5,
+    "currentPage": 2
+  },
+  "links" : {
+    "first": "http://cats.com/cats?limit=10",
+    "previous": "http://cats.com/cats?page=1&limit=10",
+    "next": "http://cats.com/cats?page=3&limit=10",
+    "last": "http://cats.com/cats?page=5&limit=10"
+  },
+}
+```
+
+Where it all stays just like before, but with the addition of
+
+`rawItems`: An array of raw values from the query
+
+The items array will match with the meta pagination info.\
+This can be used to then map or handle the results and return a new paginated response like so:
+
+```typescript
+const results = await paginateRawAndEntities(query, options);
+
+// we can do what we need with the items and raw items
+const newArray = DoSomethingHere(results.items, results.rawItems),
+
+return new Pagination(
+  newArray,
+  results.meta,
+  results.links,
+);
+```

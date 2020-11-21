@@ -20,7 +20,7 @@ export class PaginationWithRaw<PaginationObject> extends Pagination<
     /**
      * associated links
      */
-    public readonly links: IPaginationLinks,
+    public readonly links?: IPaginationLinks,
   ) {
     super(items, meta, links);
   }
