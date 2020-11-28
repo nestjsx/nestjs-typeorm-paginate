@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, SelectQueryBuilder } from 'typeorm';
+import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRawAndEntities } from '../paginate';
-import { PaginationWithRaw } from '../pagination-with-raw';
+import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
 
 describe('Test paginateRawAndEntities function', () => {
@@ -12,9 +12,11 @@ describe('Test paginateRawAndEntities function', () => {
 
   let app: TestingModule;
   let connection: Connection;
+  let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
 
-  let results: PaginationWithRaw<TestEntity>;
+  let results: Pagination<TestEntity>;
+  let rawResults: Partial<TestEntity>[];
 
   const totalItems = 10;
 
@@ -35,7 +37,10 @@ describe('Test paginateRawAndEntities function', () => {
       ],
     }).compile();
     connection = app.get(getConnectionToken());
-    queryBuilder = connection.createQueryBuilder(TestEntity, 't');
+    runner = connection.createQueryRunner();
+    await runner.startTransaction();
+
+    queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
 
     // Insert some registries on database
     for (let i = 1; i <= totalItems; i++) {
@@ -50,6 +55,7 @@ describe('Test paginateRawAndEntities function', () => {
   });
 
   afterAll(() => {
+    runner.rollbackTransaction();
     app.close();
   });
 
@@ -92,14 +98,14 @@ describe('Test paginateRawAndEntities function', () => {
       beforeAll(async () => {
         queryBuilder.addSelect('SUM(t.id)', RAW_SUM_LABEL).groupBy('t.id');
 
-        results = (await paginateRawAndEntities(queryBuilder, {
+        [results, rawResults] = await paginateRawAndEntities(queryBuilder, {
           ...options,
           route: TEST_ROUTE,
-        })) as PaginationWithRaw<TestEntity>;
+        });
       });
 
       it('can call method and get results', () => {
-        expect(results).toBeInstanceOf(PaginationWithRaw);
+        expect(results).toBeInstanceOf(Pagination);
       });
 
       it('shows correct meta object', () => {
@@ -112,7 +118,7 @@ describe('Test paginateRawAndEntities function', () => {
 
       it('gets items and raw items', async () => {
         expect(results.items[0]).toBeInstanceOf(TestEntity);
-        expect(Object.keys(results.rawItems[0])).toEqual(
+        expect(Object.keys(rawResults[0])).toEqual(
           expect.arrayContaining([
             RAW_ID_LABEL.replace('.', '_'),
             RAW_SUM_LABEL,

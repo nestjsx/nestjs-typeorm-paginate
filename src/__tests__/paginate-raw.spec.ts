@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, SelectQueryBuilder } from 'typeorm';
+import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRaw } from '../paginate';
 import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
@@ -13,6 +13,7 @@ interface RawQueryResult {
 describe('Test paginateRaw function', () => {
   let app: TestingModule;
   let connection: Connection;
+  let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<RawQueryResult>;
 
   let results: Pagination<RawQueryResult>;
@@ -36,7 +37,9 @@ describe('Test paginateRaw function', () => {
       ],
     }).compile();
     connection = app.get(getConnectionToken());
-    queryBuilder = connection.createQueryBuilder<RawQueryResult>(
+    runner = connection.createQueryRunner();
+    await runner.startTransaction();
+    queryBuilder = runner.manager.createQueryBuilder<RawQueryResult>(
       TestEntity,
       't',
     );
@@ -54,6 +57,7 @@ describe('Test paginateRaw function', () => {
   });
 
   afterAll(() => {
+    runner.rollbackTransaction();
     app.close();
   });
 

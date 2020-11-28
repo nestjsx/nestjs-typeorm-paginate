@@ -49,7 +49,7 @@ export async function paginateRaw<T>(
 export async function paginateRawAndEntities<T>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions,
-): Promise<Pagination<T>> {
+): Promise<[Pagination<T>, Partial<T>[]]> {
   const [page, limit, route] = resolveOptions(options);
 
   const totalQueryBuilder = queryBuilder.clone();
@@ -62,14 +62,10 @@ export async function paginateRawAndEntities<T>(
     totalQueryBuilder.getCount(),
   ]);
 
-  return createPaginationObject<T>(
-    itemObject.entities,
-    total,
-    page,
-    limit,
-    route,
-    itemObject.raw
-  );
+  return [
+    createPaginationObject<T>(itemObject.entities, total, page, limit, route),
+    itemObject.raw,
+  ];
 }
 
 function resolveOptions(options: IPaginationOptions): [number, number, string] {

@@ -1,6 +1,5 @@
 import { IPaginationLinks, IPaginationMeta } from './interfaces';
 import { Pagination } from './pagination';
-import { PaginationWithRaw } from './pagination-with-raw';
 
 export function createPaginationObject<T>(
   items: T[],
@@ -8,7 +7,6 @@ export function createPaginationObject<T>(
   currentPage: number,
   limit: number,
   route?: string,
-  raw_items?: any[],
 ): Pagination<T> {
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -41,7 +39,5 @@ export function createPaginationObject<T>(
     currentPage: currentPage,
   };
 
-  return raw_items
-    ? new PaginationWithRaw(items, raw_items, meta, route && routes)
-    : new Pagination(items, meta, routes);
+  return new Pagination(items, meta, route && routes);
 }
