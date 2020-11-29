@@ -263,16 +263,12 @@ This will allow us to get the paginated cats information with the additional raw
 The return pagination object will be the same, but you're now able to handle or map the results and the raw objects as needed.
 
 ```typescript
-const [results, rawResults] = await paginateRawAndEntities(query, options);
-
-// we can do what we need with the items and raw results
-const newArray = doSomethingHere(results.items, rawResults),
-
-return new Pagination(
-  newArray,
-  results.meta,
-  results.links,
-);
+const [pagination, rawResults] = await paginateRawAndEntities(query, options);
+pagination.items.map((item, index) => {
+  // we can do what we need with the items and raw results here
+  // change your items using rawResults.find(raw => raw.id === item.id)
+});
+return pagination;
 ```
 
 #### Note about joined tables and raw values
@@ -283,7 +279,7 @@ The rawResults array will look something like this:
 
 ```typescript
 [
-    {
+    { // Bobby appears 3 times due to the joined query
       "cat_lives": 9,
       "cat_type": "tabby",
       "cat_name": "Bobby",
@@ -308,4 +304,5 @@ The rawResults array will look something like this:
       "toyCount": 1
     },
     ...
+]
 ```
