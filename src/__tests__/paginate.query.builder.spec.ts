@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
-import { Connection, SelectQueryBuilder } from 'typeorm';
+import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginate } from './../paginate';
 import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
@@ -8,6 +8,7 @@ import { TestEntity } from './test.entity';
 describe('Paginate with queryBuilder', () => {
   let app: TestingModule;
   let connection: Connection;
+  let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
 
   beforeEach(async () => {
@@ -25,10 +26,14 @@ describe('Paginate with queryBuilder', () => {
       ],
     }).compile();
     connection = app.get(getConnectionToken());
-    queryBuilder = connection.createQueryBuilder(TestEntity, 't');
+    runner = connection.createQueryRunner();
+    await runner.startTransaction();
+
+    queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
   });
 
   afterEach(() => {
+    runner.rollbackTransaction();
     app.close();
   });
 

@@ -242,3 +242,67 @@ const queryBuilder = this.repository
 
 return paginateRaw(queryBuilder, options);
 ```
+
+### Raw and Entities
+
+A similar approach is used for TypeORM's `getRawAndEntities`
+
+Let's assume there's a joined table that matches each cat with its cat toys.
+And we want to bring how many toys each cat has.
+
+```typescript
+
+const queryBuilder = this.repository
+  .createQueryBuilder<{ type: string; totalLives: string }>('cat')
+    .leftJoinAndSelect('cat.toys', 'toys')
+    .addSelect('COUNT(toys)::INTEGER', 'toyCount')
+    .groupBy('cat.name');
+```
+
+This will allow us to get the paginated cats information with the additional raw query to build our actual response value.
+The return pagination object will be the same, but you're now able to handle or map the results and the raw objects as needed.
+
+```typescript
+const [pagination, rawResults] = await paginateRawAndEntities(query, options);
+pagination.items.map((item, index) => {
+  // we can do what we need with the items and raw results here
+  // change your items using rawResults.find(raw => raw.id === item.id)
+});
+return pagination;
+```
+
+#### Note about joined tables and raw values
+
+Since the values of the raw results will include all the joined table items as queried, you must make sure to handle the items as needed for your use case. Refer to TypeORM's [getRawAndEntities](https://github.com/typeorm/typeorm/blob/920e7812cd9d405df921f9ae9ce52ba0a9743bea/src/query-builder/SelectQueryBuilder.ts#L1047) implementation as needed.
+
+The rawResults array will look something like this:
+
+```typescript
+[
+    { // Bobby appears 3 times due to the joined query
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 9,
+      "cat_type": "tabby",
+      "cat_name": "Bobby",
+      "toyCount": 3
+    },
+    {
+      "cat_lives": 2,
+      "cat_type": "Ginger",
+      "cat_name": "Garfield",
+      "toyCount": 1
+    },
+    ...
+]
+```

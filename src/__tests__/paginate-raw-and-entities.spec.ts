@@ -1,22 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
-import { paginateRaw } from '../paginate';
+import { paginateRawAndEntities } from '../paginate';
 import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
 
-interface RawQueryResult {
-  id: string;
-  sum: string;
-}
+describe('Test paginateRawAndEntities function', () => {
+  const TEST_ROUTE = 'https://testing.this/api/v1';
+  const RAW_ID_LABEL = 't_id';
+  const RAW_SUM_LABEL = 'sum';
 
-describe('Test paginateRaw function', () => {
   let app: TestingModule;
   let connection: Connection;
   let runner: QueryRunner;
-  let queryBuilder: SelectQueryBuilder<RawQueryResult>;
+  let queryBuilder: SelectQueryBuilder<TestEntity>;
 
-  let results: Pagination<RawQueryResult>;
+  let results: Pagination<TestEntity>;
+  let rawResults: Partial<TestEntity>[];
 
   const totalItems = 10;
 
@@ -39,10 +39,8 @@ describe('Test paginateRaw function', () => {
     connection = app.get(getConnectionToken());
     runner = connection.createQueryRunner();
     await runner.startTransaction();
-    queryBuilder = runner.manager.createQueryBuilder<RawQueryResult>(
-      TestEntity,
-      't',
-    );
+
+    queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
 
     // Insert some registries on database
     for (let i = 1; i <= totalItems; i++) {
@@ -72,10 +70,10 @@ describe('Test paginateRaw function', () => {
         currentPage: 1,
       },
       {
-        first: 'http://example.com/something?limit=10',
+        first: `${TEST_ROUTE}?limit=10`,
         previous: '',
         next: '',
-        last: 'http://example.com/something?page=1&limit=10',
+        last: `${TEST_ROUTE}?page=1&limit=10`,
       },
     ],
     [
@@ -88,37 +86,44 @@ describe('Test paginateRaw function', () => {
         currentPage: 2,
       },
       {
-        first: 'http://example.com/something?limit=3',
-        previous: 'http://example.com/something?page=1&limit=3',
-        next: 'http://example.com/something?page=3&limit=3',
-        last: 'http://example.com/something?page=4&limit=3',
+        first: `${TEST_ROUTE}?limit=3`,
+        previous: `${TEST_ROUTE}?page=1&limit=3`,
+        next: `${TEST_ROUTE}?page=3&limit=3`,
+        last: `${TEST_ROUTE}?page=4&limit=3`,
       },
     ],
   ])(
-    'For options %j should return meta %j and links %j',
+    'For options \n%j\n should return meta \n%j\n and links \n%j',
     (options, meta, links) => {
       beforeAll(async () => {
-        queryBuilder
-          .select('t.id', 'id')
-          .addSelect('SUM(t.id)', 'sum')
-          .groupBy('t.id');
+        queryBuilder.addSelect('SUM(t.id)', RAW_SUM_LABEL).groupBy('t.id');
 
-        results = await paginateRaw(queryBuilder, {
+        [results, rawResults] = await paginateRawAndEntities(queryBuilder, {
           ...options,
-          route: 'http://example.com/something',
+          route: TEST_ROUTE,
         });
       });
 
-      it('should return results', () => {
+      it('can call method and get results', () => {
         expect(results).toBeInstanceOf(Pagination);
       });
 
-      it('should return meta', () => {
+      it('shows correct meta object', () => {
         expect(results.meta).toStrictEqual(meta);
       });
 
-      it('should return links', () => {
+      it('shows correct links object', () => {
         expect(results.links).toStrictEqual(links);
+      });
+
+      it('gets items and raw items', async () => {
+        expect(results.items[0]).toBeInstanceOf(TestEntity);
+        expect(Object.keys(rawResults[0])).toEqual(
+          expect.arrayContaining([
+            RAW_ID_LABEL.replace('.', '_'),
+            RAW_SUM_LABEL,
+          ]),
+        );
       });
     },
   );
