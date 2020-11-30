@@ -380,12 +380,12 @@
     uuid "8.3.1"
 
 "@nestjs/testing@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-7.0.0.tgz#b81610a4220b5a8c3f58089696640688d8664da6"
-  integrity sha512-Mk2dMJNC8zGTM/BIK9dE7yrDoB8ZLLLquMT1XqjhYC0hZ4SgC/3myAX8truag8xDAd6lJHOQug9ySbsyE7oxTQ==
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-7.5.5.tgz#510198af70e4d260907687ee7c9c98642ecfbb75"
+  integrity sha512-6CrDiwtFcMS4kjFFS1pm/0f00ji+32xOlKmojPaNLhmhPw39l5W/5R78iW9g6tFY/Qvm5zpbWz/FKaHxFJYOpQ==
   dependencies:
     optional "0.1.4"
-    tslib "1.11.1"
+    tslib "2.0.3"
 
 "@nestjs/typeorm@^7.1.0":
   version "7.1.5"
@@ -3685,11 +3685,6 @@ ts-node@^9.0.0:
     make-error "^1.1.1"
     source-map-support "^0.5.17"
     yn "3.1.1"
-
-tslib@1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
-  integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
 
 tslib@2.0.3:
   version "2.0.3"
