@@ -357,14 +357,14 @@
     chalk "^4.0.0"
 
 "@nestjs/common@^7.5.5":
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-7.5.5.tgz#9c8bfcbe32ef7768d87cb458084271f7e38cc32e"
-  integrity sha512-dubDHjashfARGV8zhcANTsL5o0ZPm2xTB/BI12wgwTjCnM8WkaFqXpSCngqJyB3/XTFwllkP2g1ok6TwAZcSJw==
+  version "7.6.5"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-7.6.5.tgz#d6e9435453eef2d1b492384ca27fa23358744949"
+  integrity sha512-WvBJd71ktaCRm9KTURVqn1YMyUzsOIkvezjP7WEpP9DVqQUOFVvn6/osJGZky/qL+zE4P7NBNyoXM94bpYvMwQ==
   dependencies:
-    axios "0.21.0"
+    axios "0.21.1"
     iterare "1.2.1"
     tslib "2.0.3"
-    uuid "8.3.1"
+    uuid "8.3.2"
 
 "@nestjs/core@^7.5.5":
   version "7.5.5"
@@ -695,10 +695,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.1.tgz#7e33d8f7d449b3f673cd72deb9abdc552dbe528e"
   integrity sha512-wMHVg2EOHaMRxbzgFJ9gtjOOCrI80OHLG14rxi28XwOW8ux6IiEbRCGGGqCtdAIg4FQCbW20k9RsT4y3gJlFug==
 
-axios@0.21.0:
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.0.tgz#26df088803a2350dff2c27f96fef99fe49442aca"
-  integrity sha512-fmkJBknJKoZwem3/IKSSLpkdNXZeBu5Q7GA/aRsr2btgrptmSCxi2oFjZHqGdK9DoTil9PIHlPIZw2EcRJXRvw==
+axios@0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
 
@@ -3802,6 +3802,11 @@ uuid@8.3.1:
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
   integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
+
+uuid@8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 uuid@^3.3.2:
   version "3.4.0"
