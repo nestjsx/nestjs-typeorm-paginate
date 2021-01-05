@@ -127,6 +127,57 @@ describe('Test paginate function', () => {
     );
   });
 
+  it('returns page 2 as the next one for a input page of "1"', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: "4" as any,
+      page: "1" as any,
+      route: 'http://example.com/something',
+    });
+
+    expect(results.links.first).toBe('http://example.com/something?limit=4');
+    expect(results.links.previous).toBe(
+      '',
+    );
+    expect(results.links.next).toBe('http://example.com/something?page=11&limit=4'); // TODO
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+  });
+
+  it('replaces a bad limit with the default of 10', async () => {
+    const mockRepository = new MockRepository(15);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: "x" as any,
+      page: 2,
+      route: 'http://example.com/something',
+    });
+
+    expect(results.items.length).toBe(0); // TODO
+    expect(results.links.first).toBe('http://example.com/something?limit=x'); // TODO
+    expect(results.links.previous).toBe('http://example.com/something?page=1&limit=x'); // TODO
+    expect(results.links.next).toBe('');
+    expect(results.links.last).toBe('http://example.com/something?page=NaN&limit=x'); // TODO
+  });
+
+  it('replaces a bad page with the default of 1', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: "x" as any,
+      route: 'http://example.com/something',
+    });
+
+    expect(results.items.length).toBe(0); // TODO
+    expect(results.links.first).toBe('http://example.com/something?limit=4');
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe(''); // TODO
+    expect(results.links.last).toBe('http://example.com/something?page=3&limit=4');
+  });
+
   it('Can pass FindConditions', async () => {
     const mockRepository = new MockRepository(2);
 
@@ -199,5 +250,9 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(0);
+    expect(results.links.first).toBe('/test?test=test&limit=4');
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe('');
+    expect(results.links.last).toBe('/test?test=test&page=0&limit=4'); // TODO
   });
 });
