@@ -2,11 +2,11 @@ export interface IPaginationOptions {
   /**
    * the amount of items to be requested per page
    */
-  limit: number;
+  limit: number | string;
   /**
    * the page that is requested
    */
-  page: number;
+  page: number | string;
   /**
    * a babasesic route for generating links (i.e., WITHOUT query params)
    */

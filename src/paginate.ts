@@ -69,11 +69,33 @@ export async function paginateRawAndEntities<T>(
 }
 
 function resolveOptions(options: IPaginationOptions): [number, number, string] {
-  const page = options.page;
-  const limit = options.limit;
+  const page = resolvePage(options.page);
+  const limit = resolveLimit(options.limit);
   const route = options.route;
 
   return [page, limit, route];
+}
+
+function resolvePage(page: number | string): number {
+  const resolvedPage = Number(page);
+
+  if (isNaN(resolvedPage)) {
+    // TODO: console.log
+    return 1;
+  } 
+
+  return resolvedPage;
+}
+
+function resolveLimit(limit: number | string): number {
+  const resolvedLimit = Number(limit);
+
+  if (isNaN(resolvedLimit)) {
+    // TODO: console.log
+    return 10;
+  } 
+
+  return resolvedLimit;
 }
 
 async function paginateRepository<T>(

@@ -131,8 +131,8 @@ describe('Test paginate function', () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
-      limit: "4" as any,
-      page: "1" as any,
+      limit: "4",
+      page: "1",
       route: 'http://example.com/something',
     });
 
@@ -140,7 +140,7 @@ describe('Test paginate function', () => {
     expect(results.links.previous).toBe(
       '',
     );
-    expect(results.links.next).toBe('http://example.com/something?page=11&limit=4'); // TODO
+    expect(results.links.next).toBe('http://example.com/something?page=2&limit=4');
     expect(results.links.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
@@ -150,16 +150,16 @@ describe('Test paginate function', () => {
     const mockRepository = new MockRepository(15);
 
     const results = await paginate<Entity>(mockRepository, {
-      limit: "x" as any,
+      limit: "x",
       page: 2,
       route: 'http://example.com/something',
     });
 
-    expect(results.items.length).toBe(0); // TODO
-    expect(results.links.first).toBe('http://example.com/something?limit=x'); // TODO
-    expect(results.links.previous).toBe('http://example.com/something?page=1&limit=x'); // TODO
+    expect(results.items.length).toBe(5);
+    expect(results.links.first).toBe('http://example.com/something?limit=10');
+    expect(results.links.previous).toBe('http://example.com/something?page=1&limit=10');
     expect(results.links.next).toBe('');
-    expect(results.links.last).toBe('http://example.com/something?page=NaN&limit=x'); // TODO
+    expect(results.links.last).toBe('http://example.com/something?page=2&limit=10');
   });
 
   it('replaces a bad page with the default of 1', async () => {
@@ -167,14 +167,14 @@ describe('Test paginate function', () => {
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: "x" as any,
+      page: "x",
       route: 'http://example.com/something',
     });
 
-    expect(results.items.length).toBe(0); // TODO
+    expect(results.items.length).toBe(4);
     expect(results.links.first).toBe('http://example.com/something?limit=4');
     expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(''); // TODO
+    expect(results.links.next).toBe('http://example.com/something?page=2&limit=4');
     expect(results.links.last).toBe('http://example.com/something?page=3&limit=4');
   });
 
@@ -253,6 +253,6 @@ describe('Test paginate function', () => {
     expect(results.links.first).toBe('/test?test=test&limit=4');
     expect(results.links.previous).toBe('');
     expect(results.links.next).toBe('');
-    expect(results.links.last).toBe('/test?test=test&page=0&limit=4'); // TODO
+    expect(results.links.last).toBe('');
   });
 });
