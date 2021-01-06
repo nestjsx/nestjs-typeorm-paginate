@@ -72,39 +72,29 @@ export async function paginateRawAndEntities<T>(
 }
 
 function resolveOptions(options: IPaginationOptions): [number, number, string] {
-  const page = resolvePage(options.page);
-  const limit = resolveLimit(options.limit);
+  const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
+  const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
 
   return [page, limit, route];
 }
 
-function resolvePage(page: number | string): number {
-  const resolvedPage = Number(page);
+function resolveNumericOption(
+  options: IPaginationOptions,
+  key: 'page' | 'limit',
+  defaultValue: number,
+): number {
+  const value = options[key];
+  const resolvedValue = Number(value);
 
-  if (isNaN(resolvedPage)) {
+  if (isNaN(resolvedValue)) {
     console.warn(
-      'Provided page query parameter was processed as NaN, please validate your query input! Falling back to default = ',
-      DEFAULT_PAGE,
+      `Query parameter "${key}" with value "${value}" was resolved as "${resolvedValue}", please validate your query input! Falling back to default "${defaultValue}".`,
     );
-    return DEFAULT_PAGE;
+    return defaultValue;
   }
 
-  return resolvedPage;
-}
-
-function resolveLimit(limit: number | string): number {
-  const resolvedLimit = Number(limit);
-
-  if (isNaN(resolvedLimit)) {
-    console.warn(
-      'Provided limit query parameter was processed as NaN, please validate your query input! Falling back to default = ',
-      DEFAULT_LIMIT,
-    );
-    return DEFAULT_LIMIT;
-  }
-
-  return resolvedLimit;
+  return resolvedValue;
 }
 
 async function paginateRepository<T>(

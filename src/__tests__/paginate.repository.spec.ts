@@ -169,8 +169,7 @@ describe('Test paginate function', () => {
       'http://example.com/something?page=2&limit=10',
     );
     expect(consoleMock).toHaveBeenCalledWith(
-      'Provided limit query parameter was processed as NaN, please validate your query input! Falling back to default = ',
-      10,
+      'Query parameter "limit" with value "x" was resolved as "NaN", please validate your query input! Falling back to default "10".',
     );
   });
 
@@ -197,8 +196,7 @@ describe('Test paginate function', () => {
       'http://example.com/something?page=3&limit=4',
     );
     expect(consoleMock).toHaveBeenCalledWith(
-      'Provided page query parameter was processed as NaN, please validate your query input! Falling back to default = ',
-      1,
+      'Query parameter "page" with value "x" was resolved as "NaN", please validate your query input! Falling back to default "1".',
     );
   });
 
