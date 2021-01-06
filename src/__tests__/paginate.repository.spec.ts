@@ -131,16 +131,16 @@ describe('Test paginate function', () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
-      limit: "4",
-      page: "1",
+      limit: '4',
+      page: '1',
       route: 'http://example.com/something',
     });
 
     expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe(
-      '',
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe(
+      'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.next).toBe('http://example.com/something?page=2&limit=4');
     expect(results.links.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
@@ -149,33 +149,57 @@ describe('Test paginate function', () => {
   it('replaces a bad limit with the default of 10', async () => {
     const mockRepository = new MockRepository(15);
 
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
     const results = await paginate<Entity>(mockRepository, {
-      limit: "x",
+      limit: 'x',
       page: 2,
       route: 'http://example.com/something',
     });
 
     expect(results.items.length).toBe(5);
     expect(results.links.first).toBe('http://example.com/something?limit=10');
-    expect(results.links.previous).toBe('http://example.com/something?page=1&limit=10');
+    expect(results.links.previous).toBe(
+      'http://example.com/something?page=1&limit=10',
+    );
     expect(results.links.next).toBe('');
-    expect(results.links.last).toBe('http://example.com/something?page=2&limit=10');
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=2&limit=10',
+    );
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Provided limit query parameter was processed as NaN, please validate your query input! Falling back to default = ',
+      10,
+    );
   });
 
   it('replaces a bad page with the default of 1', async () => {
     const mockRepository = new MockRepository(10);
 
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: "x",
+      page: 'x',
       route: 'http://example.com/something',
     });
 
     expect(results.items.length).toBe(4);
     expect(results.links.first).toBe('http://example.com/something?limit=4');
     expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe('http://example.com/something?page=2&limit=4');
-    expect(results.links.last).toBe('http://example.com/something?page=3&limit=4');
+    expect(results.links.next).toBe(
+      'http://example.com/something?page=2&limit=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Provided page query parameter was processed as NaN, please validate your query input! Falling back to default = ',
+      1,
+    );
   });
 
   it('Can pass FindConditions', async () => {

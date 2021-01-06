@@ -8,6 +8,9 @@ import { Pagination } from './pagination';
 import { IPaginationOptions } from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
+const DEFAULT_LIMIT = 10;
+const DEFAULT_PAGE = 1;
+
 export async function paginate<T>(
   repository: Repository<T>,
   options: IPaginationOptions,
@@ -80,9 +83,12 @@ function resolvePage(page: number | string): number {
   const resolvedPage = Number(page);
 
   if (isNaN(resolvedPage)) {
-    // TODO: console.log
-    return 1;
-  } 
+    console.warn(
+      'Provided page query parameter was processed as NaN, please validate your query input! Falling back to default = ',
+      DEFAULT_PAGE,
+    );
+    return DEFAULT_PAGE;
+  }
 
   return resolvedPage;
 }
@@ -91,9 +97,12 @@ function resolveLimit(limit: number | string): number {
   const resolvedLimit = Number(limit);
 
   if (isNaN(resolvedLimit)) {
-    // TODO: console.log
-    return 10;
-  } 
+    console.warn(
+      'Provided limit query parameter was processed as NaN, please validate your query input! Falling back to default = ',
+      DEFAULT_LIMIT,
+    );
+    return DEFAULT_LIMIT;
+  }
 
   return resolvedLimit;
 }
