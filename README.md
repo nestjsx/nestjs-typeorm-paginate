@@ -81,7 +81,7 @@ export class CatService {
 ##### Controller
 
 ```ts
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatEntity } from './cat.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -91,8 +91,8 @@ export class CatsController {
   constructor(private readonly catService: CatService) {}
   @Get('')
   async index(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
   ): Promise<Pagination<CatEntity>> {
     limit = limit > 100 ? 100 : limit;
     return this.catService.paginate({
