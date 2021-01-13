@@ -87,14 +87,13 @@ function resolveNumericOption(
   const value = options[key];
   const resolvedValue = Number(value);
 
-  if (isNaN(resolvedValue)) {
-    console.warn(
-      `Query parameter "${key}" with value "${value}" was resolved as "${resolvedValue}", please validate your query input! Falling back to default "${defaultValue}".`,
-    );
-    return defaultValue;
-  }
+  if (Number.isInteger(resolvedValue) && resolvedValue >= 0)
+    return resolvedValue;
 
-  return resolvedValue;
+  console.warn(
+    `Query parameter "${key}" with value "${value}" was resolved as "${resolvedValue}", please validate your query input! Falling back to default "${defaultValue}".`,
+  );
+  return defaultValue;
 }
 
 async function paginateRepository<T>(

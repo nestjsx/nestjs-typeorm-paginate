@@ -23,6 +23,10 @@ class MockRepository extends Repository<any> {
 class Entity {}
 
 describe('Test paginate function', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('Can call method', async () => {
     const mockRepository = new MockRepository(0);
 
@@ -173,7 +177,7 @@ describe('Test paginate function', () => {
     );
   });
 
-  it('replaces a bad page with the default of 1', async () => {
+  it('replaces an alphabetic page with the default of 1', async () => {
     const mockRepository = new MockRepository(10);
 
     const consoleMock = jest
@@ -197,6 +201,60 @@ describe('Test paginate function', () => {
     );
     expect(consoleMock).toHaveBeenCalledWith(
       'Query parameter "page" with value "x" was resolved as "NaN", please validate your query input! Falling back to default "1".',
+    );
+  });
+
+  it('replaces a decimal page with the default of 1', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 2.2,
+      route: 'http://example.com/something',
+    });
+
+    expect(results.items.length).toBe(4);
+    expect(results.links.first).toBe('http://example.com/something?limit=4');
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe(
+      'http://example.com/something?page=2&limit=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Query parameter "page" with value "2.2" was resolved as "2.2", please validate your query input! Falling back to default "1".',
+    );
+  });
+
+  it('replaces a negative page with the default of 1', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: '-2',
+      route: 'http://example.com/something',
+    });
+
+    expect(results.items.length).toBe(4);
+    expect(results.links.first).toBe('http://example.com/something?limit=4');
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe(
+      'http://example.com/something?page=2&limit=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Query parameter "page" with value "-2" was resolved as "-2", please validate your query input! Falling back to default "1".',
     );
   });
 
