@@ -84,8 +84,8 @@ export async function paginateRawAndEntities<T>(
 function resolveOptions(
   options: PaginationOptionsInterface,
 ): [number, number, string] {
-  const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
-  const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
+  const page = resolveNumericOption(options, 'page', options.defaultPaginationValues ? options.defaultPaginationValues.page : DEFAULT_PAGE);
+  const limit = resolveNumericOption(options, 'limit', options.defaultPaginationValues ? options.defaultPaginationValues.limit : DEFAULT_LIMIT);
   const route = options.route;
 
   return [page, limit, route];

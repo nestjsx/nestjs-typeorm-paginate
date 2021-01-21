@@ -13,6 +13,11 @@ export interface PaginationOptionsInterface {
    * a babasesic route for generating links (i.e., WITHOUT query params)
    */
   route?: string;
+
+  defaultPaginationValues?: {
+    page: number;
+    limit: number;
+  },
 }
 
 export interface RepositoryPaginationOptionsInterface<T>
