@@ -1,6 +1,6 @@
 <p align="center"><img src="https://avatars1.githubusercontent.com/u/43827489?s=400&u=45ac0ac47d40b6d8f277c96bdf00244c10508aef&v=4"/></p>
 <p align="center">
-  <a href="https://travis-ci.org/nestjsx/nestjs-typeorm-paginate"><img src="https://travis-ci.org/nestjsx/nestjs-typeorm-paginate.svg?branch=master"/></a>
+  <img src="https://github.com/nestjsx/nestjs-typeorm-paginate/workflows/Tests/badge.svg"/>
   <a href="https://www.npmjs.com/package/nestjs-typeorm-paginate"><img src="https://img.shields.io/npm/v/nestjs-typeorm-paginate.svg"/></a>
   <a href='https://coveralls.io/github/nestjsx/nestjs-typeorm-paginate?branch=master'><img src='https://coveralls.io/repos/github/nestjsx/nestjs-typeorm-paginate/badge.svg?branch=master' alt='Coverage Status' /></a>
   <img src="https://flat.badgen.net/dependabot/nestjsx/nestjs-config?icon=dependabot" />
