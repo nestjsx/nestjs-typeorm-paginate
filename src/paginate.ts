@@ -5,35 +5,45 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { Pagination } from './pagination';
-import { IPaginationOptions } from './interfaces';
+import {
+  PaginationOptionsInterface,
+  RepositoryPaginationOptionsInterface,
+} from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 
+const isRepositoryOptions = <T>(
+  options: RepositoryPaginationOptionsInterface<T> | PaginationOptionsInterface,
+): options is RepositoryPaginationOptionsInterface<T> =>
+  options.hasOwnProperty('searchOptions');
+
 export async function paginate<T>(
   repository: Repository<T>,
-  options: IPaginationOptions,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  options: RepositoryPaginationOptionsInterface<T>,
 ): Promise<Pagination<T>>;
 export async function paginate<T>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
 ): Promise<Pagination<T>>;
 
 export async function paginate<T>(
   repositoryOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
-  options: IPaginationOptions,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  options: PaginationOptionsInterface | RepositoryPaginationOptionsInterface<T>,
 ) {
   return repositoryOrQueryBuilder instanceof Repository
-    ? paginateRepository<T>(repositoryOrQueryBuilder, options, searchOptions)
+    ? paginateRepository<T>(
+        repositoryOrQueryBuilder,
+        options,
+        isRepositoryOptions(options) && options.searchOptions,
+      )
     : paginateQueryBuilder(repositoryOrQueryBuilder, options);
 }
 
 export async function paginateRaw<T>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
 ): Promise<Pagination<T>> {
   const [page, limit, route] = resolveOptions(options);
 
@@ -51,7 +61,7 @@ export async function paginateRaw<T>(
 
 export async function paginateRawAndEntities<T>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
 ): Promise<[Pagination<T>, Partial<T>[]]> {
   const [page, limit, route] = resolveOptions(options);
 
@@ -71,7 +81,9 @@ export async function paginateRawAndEntities<T>(
   ];
 }
 
-function resolveOptions(options: IPaginationOptions): [number, number, string] {
+function resolveOptions(
+  options: PaginationOptionsInterface,
+): [number, number, string] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
@@ -80,7 +92,7 @@ function resolveOptions(options: IPaginationOptions): [number, number, string] {
 }
 
 function resolveNumericOption(
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
   key: 'page' | 'limit',
   defaultValue: number,
 ): number {
@@ -98,7 +110,7 @@ function resolveNumericOption(
 
 async function paginateRepository<T>(
   repository: Repository<T>,
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
 ): Promise<Pagination<T>> {
   const [page, limit, route] = resolveOptions(options);
@@ -118,7 +130,7 @@ async function paginateRepository<T>(
 
 async function paginateQueryBuilder<T>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
+  options: PaginationOptionsInterface,
 ): Promise<Pagination<T>> {
   const [page, limit, route] = resolveOptions(options);
 

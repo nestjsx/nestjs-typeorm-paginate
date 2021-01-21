@@ -1,4 +1,6 @@
-export interface IPaginationOptions {
+import { FindConditions, FindManyOptions } from 'typeorm';
+
+export interface PaginationOptionsInterface {
   /**
    * the amount of items to be requested per page
    */
@@ -11,6 +13,11 @@ export interface IPaginationOptions {
    * a babasesic route for generating links (i.e., WITHOUT query params)
    */
   route?: string;
+}
+
+export interface RepositoryPaginationOptionsInterface<T>
+  extends PaginationOptionsInterface {
+  searchOptions?: FindConditions<T> | FindManyOptions<T>;
 }
 
 export interface IPaginationMeta {

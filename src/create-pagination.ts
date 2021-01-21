@@ -1,13 +1,13 @@
 import { IPaginationLinks, IPaginationMeta } from './interfaces';
 import { Pagination } from './pagination';
 
-export function createPaginationObject<T>(
+export const createPaginationObject = <T>(
   items: T[],
   totalItems: number,
   currentPage: number,
   limit: number,
   route?: string,
-): Pagination<T> {
+): Pagination<T> => {
   const totalPages = Math.ceil(totalItems / limit);
 
   const hasFirstPage = route;
@@ -40,4 +40,4 @@ export function createPaginationObject<T>(
   };
 
   return new Pagination(items, meta, route && routes);
-}
+};

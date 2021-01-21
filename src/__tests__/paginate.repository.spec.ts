@@ -261,18 +261,15 @@ describe('Test paginate function', () => {
   it('Can pass FindConditions', async () => {
     const mockRepository = new MockRepository(2);
 
-    const results = await paginate<Entity>(
-      mockRepository,
-      {
-        limit: 4,
-        page: 1,
-      },
-      {
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 1,
+      searchOptions: {
         where: {
           test: 1,
         },
       },
-    );
+    });
 
     expect(results).toBeTruthy();
   });
