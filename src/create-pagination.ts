@@ -13,7 +13,7 @@ export function createPaginationObject<T>(
   const hasFirstPage = route;
   const hasPreviousPage = route && currentPage > 1;
   const hasNextPage = route && currentPage < totalPages;
-  const hasLastPage = route;
+  const hasLastPage = route && totalPages > 0;
 
   const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
 

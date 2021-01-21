@@ -8,6 +8,9 @@ import { Pagination } from './pagination';
 import { IPaginationOptions } from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
+const DEFAULT_LIMIT = 10;
+const DEFAULT_PAGE = 1;
+
 export async function paginate<T>(
   repository: Repository<T>,
   options: IPaginationOptions,
@@ -69,11 +72,28 @@ export async function paginateRawAndEntities<T>(
 }
 
 function resolveOptions(options: IPaginationOptions): [number, number, string] {
-  const page = options.page;
-  const limit = options.limit;
+  const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
+  const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
 
   return [page, limit, route];
+}
+
+function resolveNumericOption(
+  options: IPaginationOptions,
+  key: 'page' | 'limit',
+  defaultValue: number,
+): number {
+  const value = options[key];
+  const resolvedValue = Number(value);
+
+  if (Number.isInteger(resolvedValue) && resolvedValue >= 0)
+    return resolvedValue;
+
+  console.warn(
+    `Query parameter "${key}" with value "${value}" was resolved as "${resolvedValue}", please validate your query input! Falling back to default "${defaultValue}".`,
+  );
+  return defaultValue;
 }
 
 async function paginateRepository<T>(
