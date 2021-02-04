@@ -646,9 +646,9 @@
     chalk "^4.0.0"
 
 "@nestjs/common@^7.5.5":
-  version "7.6.8"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-7.6.8.tgz#1c74636c7ede1b7b006d3f9869d49aea716bb4e2"
-  integrity sha512-w3c0T0kfPSkWf5QDYn2FHrItyBT/vxCohrppK/LmFqcUQ6pXG8Yj1MKqgpG94LFsLMJgAvlYfhQ4dHOu72i0LQ==
+  version "7.6.11"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-7.6.11.tgz#56b98265a96217e5adad1f3a39cce198592e86cd"
+  integrity sha512-DPBqoORDJC9xO/c83ZXNdUk9rIOLZ1Joqt8hYVtGROMIt7+s4zdbiUOWbNLPhUwluIVczYt4bFjhoU6HWoePgA==
   dependencies:
     axios "0.21.1"
     iterare "1.2.1"
