@@ -44,7 +44,7 @@ jobs:
         run: docker-compose up -d
 
       - name: docker logs
-        run: docker logs && docker ps
+        run: docker-compose logs && docker-compose ps
 
       # Runs a set of commands using the runners shell
       - name: tests
