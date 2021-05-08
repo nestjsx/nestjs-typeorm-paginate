@@ -306,3 +306,28 @@ The rawResults array will look something like this:
     ...
 ]
 ```
+
+## Custom meta data transformer
+
+If you wanted to alter the meta data that is returned from the pagination object. Then use the `metaTransformer` in the options like so
+
+```ts
+
+class CustomPaginationMeta {
+  constructor(
+    public readonly count: number,
+    public readonly total: number,
+  ) {}
+}
+
+return paginate<MyEntity, CustomPaginationMeta>(this.repository, { 
+  page,
+  limit,
+  metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta => new CustomPaginationMeta(
+    meta.itemCount,
+    meta.totalItems,
+  ),
+ });
+```
+
+This will result in the above returning `CustomPaginationMeta` in the `meta` property instead of the default `IPaginationMeta`.
