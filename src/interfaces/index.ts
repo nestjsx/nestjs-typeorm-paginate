@@ -1,4 +1,4 @@
-export interface IPaginationOptions {
+export interface IPaginationOptions<CustomMetaType> {
   /**
    * the amount of items to be requested per page
    */
@@ -11,9 +11,15 @@ export interface IPaginationOptions {
    * a babasesic route for generating links (i.e., WITHOUT query params)
    */
   route?: string;
+
+  metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 }
 
-export interface IPaginationMeta {
+export interface ObjectLiteral {
+  [s: string]: any;
+};
+
+export interface IPaginationMeta extends ObjectLiteral {
   /**
    * the amount of items on this specific page
    */

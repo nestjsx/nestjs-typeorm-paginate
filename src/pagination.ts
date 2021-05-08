@@ -1,6 +1,6 @@
-import { IPaginationLinks, IPaginationMeta } from './interfaces';
+import { IPaginationLinks, IPaginationMeta, ObjectLiteral } from './interfaces';
 
-export class Pagination<PaginationObject> {
+export class Pagination<PaginationObject, T extends ObjectLiteral = IPaginationMeta> {
   constructor(
     /**
      * a list of items to be returned
@@ -9,7 +9,7 @@ export class Pagination<PaginationObject> {
     /**
      * associated meta information (e.g., counts)
      */
-    public readonly meta: IPaginationMeta,
+    public readonly meta: T,
     /**
      * associated links
      */

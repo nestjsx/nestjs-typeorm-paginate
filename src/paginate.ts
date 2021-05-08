@@ -3,38 +3,39 @@ import {
   FindConditions,
   FindManyOptions,
   SelectQueryBuilder,
+  ObjectLiteral,
 } from 'typeorm';
 import { Pagination } from './pagination';
-import { IPaginationOptions } from './interfaces';
+import { IPaginationMeta, IPaginationOptions } from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 
-export async function paginate<T>(
+export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
-  options: IPaginationOptions,
+  options: IPaginationOptions<CustomMetaType>,
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
-): Promise<Pagination<T>>;
-export async function paginate<T>(
+): Promise<Pagination<T, CustomMetaType>>;
+export async function paginate<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
-): Promise<Pagination<T>>;
+  options: IPaginationOptions<CustomMetaType>,
+): Promise<Pagination<T, CustomMetaType>>;
 
-export async function paginate<T>(
+export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repositoryOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
-  options: IPaginationOptions,
+  options: IPaginationOptions<CustomMetaType>,
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
 ) {
   return repositoryOrQueryBuilder instanceof Repository
-    ? paginateRepository<T>(repositoryOrQueryBuilder, options, searchOptions)
-    : paginateQueryBuilder(repositoryOrQueryBuilder, options);
+    ? paginateRepository<T, CustomMetaType>(repositoryOrQueryBuilder, options, searchOptions)
+    : paginateQueryBuilder<T, CustomMetaType>(repositoryOrQueryBuilder, options);
 }
 
-export async function paginateRaw<T>(
+export async function paginateRaw<T, CustomMetaType extends ObjectLiteral = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
-): Promise<Pagination<T>> {
+  options: IPaginationOptions<CustomMetaType>,
+): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route] = resolveOptions(options);
 
   const totalQueryBuilder = queryBuilder.clone();
@@ -46,13 +47,20 @@ export async function paginateRaw<T>(
     totalQueryBuilder.getCount(),
   ]);
 
-  return createPaginationObject<T>(items, total, page, limit, route);
+  return createPaginationObject<T, CustomMetaType>({
+    items,
+    totalItems: total,
+    currentPage: page,
+    limit,
+    route,
+    metaTransformer: options.metaTransformer,
+  });
 }
 
-export async function paginateRawAndEntities<T>(
+export async function paginateRawAndEntities<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
-): Promise<[Pagination<T>, Partial<T>[]]> {
+  options: IPaginationOptions<CustomMetaType>,
+): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
   const [page, limit, route] = resolveOptions(options);
 
   const totalQueryBuilder = queryBuilder.clone();
@@ -66,12 +74,19 @@ export async function paginateRawAndEntities<T>(
   ]);
 
   return [
-    createPaginationObject<T>(itemObject.entities, total, page, limit, route),
+    createPaginationObject<T, CustomMetaType>({
+      items: itemObject.entities,
+      totalItems: total,
+      currentPage: page,
+      limit,
+      route,
+      metaTransformer: options.metaTransformer,
+    }),
     itemObject.raw,
   ];
 }
 
-function resolveOptions(options: IPaginationOptions): [number, number, string] {
+function resolveOptions(options: IPaginationOptions<any>): [number, number, string] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
@@ -80,7 +95,7 @@ function resolveOptions(options: IPaginationOptions): [number, number, string] {
 }
 
 function resolveNumericOption(
-  options: IPaginationOptions,
+  options: IPaginationOptions<any>,
   key: 'page' | 'limit',
   defaultValue: number,
 ): number {
@@ -96,15 +111,22 @@ function resolveNumericOption(
   return defaultValue;
 }
 
-async function paginateRepository<T>(
+async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
-  options: IPaginationOptions,
+  options: IPaginationOptions<CustomMetaType>,
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
-): Promise<Pagination<T>> {
+): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route] = resolveOptions(options);
 
   if (page < 1) {
-    return createPaginationObject([], 0, page, limit, route);
+    return createPaginationObject<T, CustomMetaType>({
+      items: [],
+      totalItems: 0,
+      currentPage: page,
+      limit,
+      route,
+      metaTransformer: options.metaTransformer,
+    });
   }
 
   const [items, total] = await repository.findAndCount({
@@ -113,13 +135,20 @@ async function paginateRepository<T>(
     ...searchOptions,
   });
 
-  return createPaginationObject<T>(items, total, page, limit, route);
+  return createPaginationObject<T, CustomMetaType>({
+    items,
+    totalItems: total,
+    currentPage: page,
+    limit,
+    route,
+    metaTransformer: options.metaTransformer,
+  });
 }
 
-async function paginateQueryBuilder<T>(
+async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions,
-): Promise<Pagination<T>> {
+  options: IPaginationOptions<CustomMetaType>,
+): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route] = resolveOptions(options);
 
   const [items, total] = await queryBuilder
@@ -127,5 +156,12 @@ async function paginateQueryBuilder<T>(
     .skip((page - 1) * limit)
     .getManyAndCount();
 
-  return createPaginationObject<T>(items, total, page, limit, route);
+  return createPaginationObject<T, CustomMetaType>({
+    items,
+    totalItems: total,
+    currentPage: page,
+    limit,
+    route,
+    metaTransformer: options.metaTransformer,
+  });
 }
