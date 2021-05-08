@@ -43,6 +43,9 @@ jobs:
       - name: check docker
         run: docker-compose up -d
 
+      - name: docker logs
+        run: docker logs && docker ps
+
       # Runs a set of commands using the runners shell
       - name: tests
         run: yarn test --coverage
