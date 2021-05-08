@@ -28,7 +28,7 @@ describe('Test paginateRaw function', () => {
           host: 'localhost',
           port: 3306,
           type: 'mysql',
-          username: 'test',
+          username: 'root',
           password: '',
           database: 'test',
           dropSchema: true,
