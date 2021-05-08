@@ -17,7 +17,7 @@ export interface IPaginationOptions<CustomMetaType> {
 
 export interface ObjectLiteral {
   [s: string]: any;
-};
+}
 
 export interface IPaginationMeta extends ObjectLiteral {
   /**

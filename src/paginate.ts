@@ -28,11 +28,21 @@ export async function paginate<T, CustomMetaType = IPaginationMeta>(
   searchOptions?: FindConditions<T> | FindManyOptions<T>,
 ) {
   return repositoryOrQueryBuilder instanceof Repository
-    ? paginateRepository<T, CustomMetaType>(repositoryOrQueryBuilder, options, searchOptions)
-    : paginateQueryBuilder<T, CustomMetaType>(repositoryOrQueryBuilder, options);
+    ? paginateRepository<T, CustomMetaType>(
+        repositoryOrQueryBuilder,
+        options,
+        searchOptions,
+      )
+    : paginateQueryBuilder<T, CustomMetaType>(
+        repositoryOrQueryBuilder,
+        options,
+      );
 }
 
-export async function paginateRaw<T, CustomMetaType extends ObjectLiteral = IPaginationMeta>(
+export async function paginateRaw<
+  T,
+  CustomMetaType extends ObjectLiteral = IPaginationMeta
+>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
@@ -57,7 +67,10 @@ export async function paginateRaw<T, CustomMetaType extends ObjectLiteral = IPag
   });
 }
 
-export async function paginateRawAndEntities<T, CustomMetaType = IPaginationMeta>(
+export async function paginateRawAndEntities<
+  T,
+  CustomMetaType = IPaginationMeta
+>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
@@ -86,7 +99,9 @@ export async function paginateRawAndEntities<T, CustomMetaType = IPaginationMeta
   ];
 }
 
-function resolveOptions(options: IPaginationOptions<any>): [number, number, string] {
+function resolveOptions(
+  options: IPaginationOptions<any>,
+): [number, number, string] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;

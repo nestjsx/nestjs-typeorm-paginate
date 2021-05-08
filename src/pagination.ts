@@ -1,6 +1,9 @@
 import { IPaginationLinks, IPaginationMeta, ObjectLiteral } from './interfaces';
 
-export class Pagination<PaginationObject, T extends ObjectLiteral = IPaginationMeta> {
+export class Pagination<
+  PaginationObject,
+  T extends ObjectLiteral = IPaginationMeta
+> {
   constructor(
     /**
      * a list of items to be returned

@@ -1,21 +1,23 @@
 import { IPaginationLinks, IPaginationMeta, ObjectLiteral } from './interfaces';
 import { Pagination } from './pagination';
 
-
-export function createPaginationObject<T, CustomMetaType extends ObjectLiteral = IPaginationMeta>({
+export function createPaginationObject<
+  T,
+  CustomMetaType extends ObjectLiteral = IPaginationMeta
+>({
   items,
   totalItems,
   currentPage,
   limit,
   route,
   metaTransformer,
-} :{
-  items: T[],
-  totalItems: number,
-  currentPage: number,
-  limit: number,
-  route?: string,
-  metaTransformer?: (meta: IPaginationMeta) => CustomMetaType,
+}: {
+  items: T[];
+  totalItems: number;
+  currentPage: number;
+  limit: number;
+  route?: string;
+  metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 }): Pagination<T, CustomMetaType> {
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -48,7 +50,12 @@ export function createPaginationObject<T, CustomMetaType extends ObjectLiteral =
     currentPage: currentPage,
   };
 
-  if (metaTransformer) return new Pagination<T, CustomMetaType>(items, metaTransformer(meta), route && routes);
+  if (metaTransformer)
+    return new Pagination<T, CustomMetaType>(
+      items,
+      metaTransformer(meta),
+      route && routes,
+    );
 
   // @ts-ignore
   return new Pagination<T, CustomMetaType>(items, meta, route && routes);

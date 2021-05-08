@@ -1,6 +1,6 @@
-import { FindManyOptions, Repository } from "typeorm";
-import { paginate } from "../paginate";
-import { Pagination } from "../pagination";
+import { FindManyOptions, Repository } from 'typeorm';
+import { paginate } from '../paginate';
+import { Pagination } from '../pagination';
 
 class MockRepository extends Repository<any> {
   items = [];
@@ -35,15 +35,24 @@ describe('Custom Pagination Transformer', () => {
         public readonly count: number,
         public readonly total: number,
         public readonly perPage: number,
-        public readonly currentPage: number, 
+        public readonly currentPage: number,
       ) {}
     }
 
-    const results = await paginate<any, TestPaginationMetaClass>(mockRepository, {
-      limit: 10,
-      page: 1,
-      metaTransformer: (meta): TestPaginationMetaClass => new TestPaginationMetaClass(meta.itemCount, meta.totalItems, meta.itemsPerPage, meta.currentPage),
-    });
+    const results = await paginate<any, TestPaginationMetaClass>(
+      mockRepository,
+      {
+        limit: 10,
+        page: 1,
+        metaTransformer: (meta): TestPaginationMetaClass =>
+          new TestPaginationMetaClass(
+            meta.itemCount,
+            meta.totalItems,
+            meta.itemsPerPage,
+            meta.currentPage,
+          ),
+      },
+    );
 
     expect(results).toBeInstanceOf(Pagination);
     expect(results.meta).toBeInstanceOf(TestPaginationMetaClass);
