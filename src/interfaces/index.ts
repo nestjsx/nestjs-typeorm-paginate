@@ -1,4 +1,4 @@
-export interface IPaginationOptions<CustomMetaType> {
+export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   /**
    * the amount of items to be requested per page
    */
