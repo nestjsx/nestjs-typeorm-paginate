@@ -3,7 +3,7 @@ import { Pagination } from './pagination';
 
 export function createPaginationObject<
   T,
-  CustomMetaType extends ObjectLiteral = IPaginationMeta
+  CustomMetaType extends ObjectLiteral = IPaginationMeta,
 >({
   items,
   totalItems,

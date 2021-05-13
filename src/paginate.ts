@@ -41,7 +41,7 @@ export async function paginate<T, CustomMetaType = IPaginationMeta>(
 
 export async function paginateRaw<
   T,
-  CustomMetaType extends ObjectLiteral = IPaginationMeta
+  CustomMetaType extends ObjectLiteral = IPaginationMeta,
 >(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
@@ -69,7 +69,7 @@ export async function paginateRaw<
 
 export async function paginateRawAndEntities<
   T,
-  CustomMetaType = IPaginationMeta
+  CustomMetaType = IPaginationMeta,
 >(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
