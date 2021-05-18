@@ -4,6 +4,7 @@ import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginate } from './../paginate';
 import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
+import { PaginationTypeEnum } from '../interfaces';
 
 describe('Paginate with queryBuilder', () => {
   let app: TestingModule;
@@ -39,6 +40,11 @@ describe('Paginate with queryBuilder', () => {
 
   it('Can call paginate', async () => {
     const result = await paginate(queryBuilder, { limit: 10, page: 1 });
+    expect(result).toBeInstanceOf(Pagination);
+  });
+
+  it('Can use paginationType take', async () => {
+    const result = await paginate(queryBuilder, { limit: 10, page: 1, paginationType: PaginationTypeEnum.TAKE });
     expect(result).toBeInstanceOf(Pagination);
   });
 });
