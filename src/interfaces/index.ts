@@ -1,3 +1,8 @@
+export enum PaginationTypeEnum {
+  LIMIT = 'limit',
+  TAKE = 'take',
+}
+
 export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   /**
    * the amount of items to be requested per page
@@ -12,12 +17,20 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    */
   route?: string;
 
+  /**
+   * For transforming the default meta data to a custom type
+   */
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 
   /**
    * routingLabels for append in links (limit or/and page)
    */
   routingLabels?: IPaginationOptionsRoutingLabels;
+  
+  /**
+   * Used for changing query method to take/skip
+   */
+  paginationType?: PaginationTypeEnum;
 }
 
 export interface ObjectLiteral {
