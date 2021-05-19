@@ -93,6 +93,83 @@ describe('Test paginate function', () => {
     );
   });
 
+  it('Routes return successfully using custom pageLabel and limitLabel', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 2,
+      route: 'http://example.com/something',
+      configuration: {
+        limitLabel: 'page-size',
+        pageLabel: 'current-page',
+      },
+    });
+
+    expect(results.links.first).toBe(
+      'http://example.com/something?page-size=4',
+    );
+    expect(results.links.previous).toBe(
+      'http://example.com/something?current-page=1&page-size=4',
+    );
+    expect(results.links.next).toBe(
+      'http://example.com/something?current-page=3&page-size=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?current-page=3&page-size=4',
+    );
+  });
+
+  it('Routes return successfully using custom pageLabel', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 2,
+      route: 'http://example.com/something',
+      configuration: {
+        pageLabel: 'current-page',
+      },
+    });
+
+    expect(results.links.first).toBe('http://example.com/something?limit=4');
+    expect(results.links.previous).toBe(
+      'http://example.com/something?current-page=1&limit=4',
+    );
+    expect(results.links.next).toBe(
+      'http://example.com/something?current-page=3&limit=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?current-page=3&limit=4',
+    );
+  });
+
+  it('Routes return successfully using custom limitLabel', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 2,
+      route: 'http://example.com/something',
+      configuration: {
+        limitLabel: 'page-size',
+      },
+    });
+
+    expect(results.links.first).toBe(
+      'http://example.com/something?page-size=4',
+    );
+    expect(results.links.previous).toBe(
+      'http://example.com/something?page=1&page-size=4',
+    );
+    expect(results.links.next).toBe(
+      'http://example.com/something?page=3&page-size=4',
+    );
+    expect(results.links.last).toBe(
+      'http://example.com/something?page=3&page-size=4',
+    );
+  });
+
   it('Route previous return successfully blank', async () => {
     const mockRepository = new MockRepository(10);
 

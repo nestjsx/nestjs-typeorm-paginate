@@ -94,6 +94,58 @@ describe('Test paginateRaw function', () => {
         last: 'http://example.com/something?page=4&limit=3',
       },
     ],
+    [
+      {
+        limit: 3,
+        page: 2,
+        configuration: { limitLabel: 'page-size', pageLabel: 'current-page' },
+      },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: 'http://example.com/something?page-size=3',
+        previous: 'http://example.com/something?current-page=1&page-size=3',
+        next: 'http://example.com/something?current-page=3&page-size=3',
+        last: 'http://example.com/something?current-page=4&page-size=3',
+      },
+    ],
+    [
+      { limit: 3, page: 2, configuration: { limitLabel: 'page-size' } },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: 'http://example.com/something?page-size=3',
+        previous: 'http://example.com/something?page=1&page-size=3',
+        next: 'http://example.com/something?page=3&page-size=3',
+        last: 'http://example.com/something?page=4&page-size=3',
+      },
+    ],
+    [
+      { limit: 3, page: 2, configuration: { pageLabel: 'current-page' } },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: 'http://example.com/something?limit=3',
+        previous: 'http://example.com/something?current-page=1&limit=3',
+        next: 'http://example.com/something?current-page=3&limit=3',
+        last: 'http://example.com/something?current-page=4&limit=3',
+      },
+    ],
   ])(
     'For options %j should return meta %j and links %j',
     (options, meta, links) => {
