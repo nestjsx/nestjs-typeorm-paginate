@@ -335,14 +335,14 @@ This will result in the above returning `CustomPaginationMeta` in the `meta` pro
 
 ## Custom links query params labels
 
-If you want to alter the `limit` and/or `page` labels in meta links, then use extra `configuration` in the options like so
+If you want to alter the `limit` and/or `page` labels in meta links, then use `routingLabels` in the options like so
 
 ```ts
 
 return paginate<MyEntity>(this.repository, { 
   page,
   limit,
-  configuration: {
+  routingLabels: {
     limitLabel: 'page-size', // default: limit
     pageLabel: 'current-page', //default: page
   }
