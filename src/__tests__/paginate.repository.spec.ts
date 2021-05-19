@@ -100,7 +100,7 @@ describe('Test paginate function', () => {
       limit: 4,
       page: 2,
       route: 'http://example.com/something',
-      configuration: {
+      routingLabels: {
         limitLabel: 'page-size',
         pageLabel: 'current-page',
       },
@@ -127,7 +127,7 @@ describe('Test paginate function', () => {
       limit: 4,
       page: 2,
       route: 'http://example.com/something',
-      configuration: {
+      routingLabels: {
         pageLabel: 'current-page',
       },
     });
@@ -151,7 +151,7 @@ describe('Test paginate function', () => {
       limit: 4,
       page: 2,
       route: 'http://example.com/something',
-      configuration: {
+      routingLabels: {
         limitLabel: 'page-size',
       },
     });

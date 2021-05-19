@@ -96,7 +96,7 @@ describe('Test paginateRawAndEntities function', () => {
       {
         limit: 3,
         page: 2,
-        configuration: { limitLabel: 'page-size', pageLabel: 'current-page' },
+        routingLabels: { limitLabel: 'page-size', pageLabel: 'current-page' },
       },
       {
         itemCount: 3,
@@ -113,7 +113,7 @@ describe('Test paginateRawAndEntities function', () => {
       },
     ],
     [
-      { limit: 3, page: 2, configuration: { limitLabel: 'page-size' } },
+      { limit: 3, page: 2, routingLabels: { limitLabel: 'page-size' } },
       {
         itemCount: 3,
         totalItems: 10,
@@ -129,7 +129,7 @@ describe('Test paginateRawAndEntities function', () => {
       },
     ],
     [
-      { limit: 3, page: 2, configuration: { pageLabel: 'current-page' } },
+      { limit: 3, page: 2, routingLabels: { pageLabel: 'current-page' } },
       {
         itemCount: 3,
         totalItems: 10,

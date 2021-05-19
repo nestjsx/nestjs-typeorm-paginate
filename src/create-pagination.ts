@@ -1,7 +1,7 @@
 import {
   IPaginationLinks,
   IPaginationMeta,
-  IPaginationOptionsConfiguration,
+  IPaginationOptionsRoutingLabels,
   ObjectLiteral,
 } from './interfaces';
 import { Pagination } from './pagination';
@@ -16,7 +16,7 @@ export function createPaginationObject<
   limit,
   route,
   metaTransformer,
-  configuration,
+  routingLabels,
 }: {
   items: T[];
   totalItems: number;
@@ -24,7 +24,7 @@ export function createPaginationObject<
   limit: number;
   route?: string;
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
-  configuration?: IPaginationOptionsConfiguration;
+  routingLabels?: IPaginationOptionsRoutingLabels;
 }): Pagination<T, CustomMetaType> {
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -36,12 +36,12 @@ export function createPaginationObject<
   const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
 
   const limitLabel =
-    configuration && configuration.limitLabel
-      ? configuration.limitLabel
+    routingLabels && routingLabels.limitLabel
+      ? routingLabels.limitLabel
       : 'limit';
 
   const pageLabel =
-    configuration && configuration.pageLabel ? configuration.pageLabel : 'page';
+    routingLabels && routingLabels.pageLabel ? routingLabels.pageLabel : 'page';
 
   const routes: IPaginationLinks = {
     first: hasFirstPage ? `${route}${symbol}${limitLabel}=${limit}` : '',

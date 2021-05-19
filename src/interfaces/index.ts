@@ -15,9 +15,9 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 
   /**
-   * Others configurations
+   * routingLabels for append in links (limit or/and page)
    */
-  configuration?: IPaginationOptionsConfiguration;
+  routingLabels?: IPaginationOptionsRoutingLabels;
 }
 
 export interface ObjectLiteral {
@@ -66,7 +66,7 @@ export interface IPaginationLinks {
   last?: string;
 }
 
-export interface IPaginationOptionsConfiguration {
+export interface IPaginationOptionsRoutingLabels {
   /**
    * the limit text to append in router string
    */
