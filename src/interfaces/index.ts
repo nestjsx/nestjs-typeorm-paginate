@@ -13,6 +13,11 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   route?: string;
 
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
+
+  /**
+   * routingLabels for append in links (limit or/and page)
+   */
+  routingLabels?: IPaginationOptionsRoutingLabels;
 }
 
 export interface ObjectLiteral {
@@ -59,4 +64,16 @@ export interface IPaginationLinks {
    * a link to the "last" page
    */
   last?: string;
+}
+
+export interface IPaginationOptionsRoutingLabels {
+  /**
+   * the limit text to append in router string
+   */
+  limitLabel?: string;
+
+  /**
+   * the page text to append in router string
+   */
+  pageLabel?: string;
 }

@@ -92,6 +92,58 @@ describe('Test paginateRawAndEntities function', () => {
         last: `${TEST_ROUTE}?page=4&limit=3`,
       },
     ],
+    [
+      {
+        limit: 3,
+        page: 2,
+        routingLabels: { limitLabel: 'page-size', pageLabel: 'current-page' },
+      },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: `${TEST_ROUTE}?page-size=3`,
+        previous: `${TEST_ROUTE}?current-page=1&page-size=3`,
+        next: `${TEST_ROUTE}?current-page=3&page-size=3`,
+        last: `${TEST_ROUTE}?current-page=4&page-size=3`,
+      },
+    ],
+    [
+      { limit: 3, page: 2, routingLabels: { limitLabel: 'page-size' } },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: `${TEST_ROUTE}?page-size=3`,
+        previous: `${TEST_ROUTE}?page=1&page-size=3`,
+        next: `${TEST_ROUTE}?page=3&page-size=3`,
+        last: `${TEST_ROUTE}?page=4&page-size=3`,
+      },
+    ],
+    [
+      { limit: 3, page: 2, routingLabels: { pageLabel: 'current-page' } },
+      {
+        itemCount: 3,
+        totalItems: 10,
+        itemsPerPage: 3,
+        totalPages: 4,
+        currentPage: 2,
+      },
+      {
+        first: `${TEST_ROUTE}?limit=3`,
+        previous: `${TEST_ROUTE}?current-page=1&limit=3`,
+        next: `${TEST_ROUTE}?current-page=3&limit=3`,
+        last: `${TEST_ROUTE}?current-page=4&limit=3`,
+      },
+    ],
   ])(
     'For options \n%j\n should return meta \n%j\n and links \n%j',
     (options, meta, links) => {
