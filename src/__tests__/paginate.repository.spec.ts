@@ -344,7 +344,7 @@ describe('Test paginate function', () => {
       limit: 4,
       page: 0,
       route: '/test?test=test',
-      paginationType: PaginationTypeEnum.TAKE,
+      paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     });
 
     expect(results.items.length).toBe(0);

@@ -44,7 +44,7 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can use paginationType take', async () => {
-    const result = await paginate(queryBuilder, { limit: 10, page: 1, paginationType: PaginationTypeEnum.TAKE });
+    const result = await paginate(queryBuilder, { limit: 10, page: 1, paginationType: PaginationTypeEnum.TAKE_AND_SKIP });
     expect(result).toBeInstanceOf(Pagination);
   });
 });
