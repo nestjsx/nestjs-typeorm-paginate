@@ -13,7 +13,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    */
   page: number | string;
   /**
-   * a babasesic route for generating links (i.e., WITHOUT query params)
+   * a basic route for generating links (i.e., WITHOUT query params)
    */
   route?: string;
 
