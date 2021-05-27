@@ -1,6 +1,6 @@
 export enum PaginationTypeEnum {
-  LIMIT = 'limit',
-  TAKE = 'take',
+  LIMIT_AND_OFFSET = 'limit',
+  TAKE_AND_SKIP = 'take',
 }
 
 export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
@@ -23,7 +23,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 
   /**
-   * Used for changing query method to take/skip
+   * Used for changing query method to limit/offset (defaults to take/skip if no argument supplied)
    */
   paginationType?: PaginationTypeEnum;
 }
