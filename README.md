@@ -11,7 +11,7 @@
 
 <h1 align="center">Nestjs Typeorm paginate</h1>
 
-Pagination helper method for TypeORM repostiories or queryBuilders with strict typings
+Pagination helper method for TypeORM repositories or queryBuilders with strict typings
 
 ## Install
 
@@ -108,9 +108,9 @@ export class CatsController {
 }
 ```
 
-<sup>*<sub> If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/517) for more info.</sub></sup>
+> If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/517) for more info.
 
-<sup>*<sub>the `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats` </sub></sup> 
+> the `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats`
 
 ### Example Response
 
@@ -175,7 +175,7 @@ export class CatsController {
 `links.last`: A URL for the last page to call | `""` (blank) if no `route` is defined
 
 
-<sup>*<sub> Do note that `links.first` may not have the 'page' query param defined</sub></sup> 
+> Do note that `links.first` may not have the 'page' query param defined
 
 ## Find Parameters
 
