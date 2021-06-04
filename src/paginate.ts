@@ -109,7 +109,7 @@ function resolveOptions(
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
-  const paginationType = options.paginationType || PaginationTypeEnum.TAKE_AND_SKIP;
+  const paginationType = options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
 
   return [page, limit, route, paginationType];
 }
