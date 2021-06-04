@@ -4044,9 +4044,9 @@ typedarray-to-buffer@^3.1.5:
     is-typedarray "^1.0.0"
 
 typeorm@^0.2.12:
-  version "0.2.33"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.33.tgz#0ed0253bc0d5bbe3575bd53672d83d8e8fec0bca"
-  integrity sha512-JjF8Y5gZxbLL1A4ARENgn+GegM4EyqUmQ7VKD7cBcQU0g3snGcOfUnFh7X5pS9I6KfBhRlvwamvjK1zlLg8+ug==
+  version "0.2.34"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.34.tgz#637b3cec2de54ee7f423012b813a2022c0aacc8b"
+  integrity sha512-FZAeEGGdSGq7uTH3FWRQq67JjKu0mgANsSZ04j3kvDYNgy9KwBl/6RFgMVgiSgjf7Rqd7NrhC2KxVT7I80qf7w==
   dependencies:
     "@sqltools/formatter" "^1.2.2"
     app-root-path "^3.0.0"
