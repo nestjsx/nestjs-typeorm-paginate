@@ -6,7 +6,11 @@ import {
   ObjectLiteral,
 } from 'typeorm';
 import { Pagination } from './pagination';
-import { IPaginationMeta, IPaginationOptions } from './interfaces';
+import {
+  IPaginationMeta,
+  IPaginationOptions,
+  PaginationTypeEnum,
+} from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
 const DEFAULT_LIMIT = 10;
@@ -46,14 +50,14 @@ export async function paginateRaw<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route] = resolveOptions(options);
+  const [page, limit, route, paginationType] = resolveOptions(options);
 
   const totalQueryBuilder = queryBuilder.clone();
   const [items, total] = await Promise.all([
-    queryBuilder
-      .limit(limit)
-      .offset((page - 1) * limit)
-      .getRawMany<T>(),
+    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+    ).getRawMany<T>(),
     totalQueryBuilder.getCount(),
   ]);
 
@@ -75,15 +79,15 @@ export async function paginateRawAndEntities<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
-  const [page, limit, route] = resolveOptions(options);
+  const [page, limit, route, paginationType] = resolveOptions(options);
 
   const totalQueryBuilder = queryBuilder.clone();
 
   const [itemObject, total] = await Promise.all([
-    queryBuilder
-      .limit(limit)
-      .offset((page - 1) * limit)
-      .getRawAndEntities<T>(),
+    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+    ).getRawAndEntities<T>(),
     totalQueryBuilder.getCount(),
   ]);
 
@@ -103,12 +107,13 @@ export async function paginateRawAndEntities<
 
 function resolveOptions(
   options: IPaginationOptions<any>,
-): [number, number, string] {
+): [number, number, string, PaginationTypeEnum] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
+  const paginationType = options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
 
-  return [page, limit, route];
+  return [page, limit, route, paginationType];
 }
 
 function resolveNumericOption(
@@ -168,12 +173,12 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route] = resolveOptions(options);
+  const [page, limit, route, paginationType] = resolveOptions(options);
 
-  const [items, total] = await queryBuilder
-    .take(limit)
-    .skip((page - 1) * limit)
-    .getManyAndCount();
+  const [items, total] = await (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+    ? queryBuilder.limit(limit).offset((page - 1) * limit)
+    : queryBuilder.take(limit).skip((page - 1) * limit)
+  ).getManyAndCount();
 
   return createPaginationObject<T, CustomMetaType>({
     items,

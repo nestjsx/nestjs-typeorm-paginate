@@ -1,6 +1,7 @@
 import { paginate } from './../index';
 import { Repository, FindManyOptions } from 'typeorm';
 import { Pagination } from '../pagination';
+import { PaginationTypeEnum } from '../interfaces';
 
 class MockRepository extends Repository<any> {
   items = [];
@@ -404,6 +405,23 @@ describe('Test paginate function', () => {
       limit: 4,
       page: 0,
       route: '/test?test=test',
+    });
+
+    expect(results.items.length).toBe(0);
+    expect(results.links.first).toBe('/test?test=test&limit=4');
+    expect(results.links.previous).toBe('');
+    expect(results.links.next).toBe('');
+    expect(results.links.last).toBe('');
+  });
+
+  it('Can use skip and take', async () => {
+    const mockRepository = new MockRepository(10);
+
+    let results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 0,
+      route: '/test?test=test',
+      paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     });
 
     expect(results.items.length).toBe(0);
