@@ -111,7 +111,8 @@ function resolveOptions(
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
-  const paginationType = options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
+  const paginationType =
+    options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
 
   return [page, limit, route, paginationType];
 }
@@ -175,7 +176,8 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
 ): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route, paginationType] = resolveOptions(options);
 
-  const [items, total] = await (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+  const [items, total] = await (paginationType ===
+  PaginationTypeEnum.LIMIT_AND_OFFSET
     ? queryBuilder.limit(limit).offset((page - 1) * limit)
     : queryBuilder.take(limit).skip((page - 1) * limit)
   ).getManyAndCount();

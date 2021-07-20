@@ -26,7 +26,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    * routingLabels for append in links (limit or/and page)
    */
   routingLabels?: IPaginationOptionsRoutingLabels;
-  
+
   /**
    * Used for changing query method to limit/offset (defaults to take/skip if no argument supplied)
    */
