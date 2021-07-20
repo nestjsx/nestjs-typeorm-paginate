@@ -1,6 +1,6 @@
 export enum PaginationTypeEnum {
-  LIMIT = 'limit',
-  TAKE = 'take',
+  LIMIT_AND_OFFSET = 'limit',
+  TAKE_AND_SKIP = 'take',
 }
 
 export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
@@ -13,7 +13,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    */
   page: number | string;
   /**
-   * a babasesic route for generating links (i.e., WITHOUT query params)
+   * a basic route for generating links (i.e., WITHOUT query params)
    */
   route?: string;
 
@@ -28,7 +28,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   routingLabels?: IPaginationOptionsRoutingLabels;
   
   /**
-   * Used for changing query method to take/skip
+   * Used for changing query method to limit/offset (defaults to take/skip if no argument supplied)
    */
   paginationType?: PaginationTypeEnum;
 }
