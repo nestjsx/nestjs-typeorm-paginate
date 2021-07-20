@@ -68,6 +68,7 @@ export async function paginateRaw<
     limit,
     route,
     metaTransformer: options.metaTransformer,
+    routingLabels: options.routingLabels,
   });
 }
 
@@ -98,6 +99,7 @@ export async function paginateRawAndEntities<
       limit,
       route,
       metaTransformer: options.metaTransformer,
+      routingLabels: options.routingLabels,
     }),
     itemObject.raw,
   ];
@@ -146,6 +148,7 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
       limit,
       route,
       metaTransformer: options.metaTransformer,
+      routingLabels: options.routingLabels,
     });
   }
 
@@ -162,6 +165,7 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
     limit,
     route,
     metaTransformer: options.metaTransformer,
+    routingLabels: options.routingLabels,
   });
 }
 
@@ -183,5 +187,6 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
     limit,
     route,
     metaTransformer: options.metaTransformer,
+    routingLabels: options.routingLabels,
   });
 }

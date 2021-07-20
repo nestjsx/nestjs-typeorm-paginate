@@ -11,12 +11,16 @@
 
 <h1 align="center">Nestjs Typeorm paginate</h1>
 
-Pagination helper method for TypeORM repostiories or queryBuilders with strict typings
+Pagination helper method for TypeORM repositories or queryBuilders with strict typings
 
 ## Install
 
 ```bash
 $ yarn add nestjs-typeorm-paginate
+```
+or
+```bash
+$ npm i nestjs-typeorm-paginate
 ```
 
 ## Usage
@@ -81,7 +85,7 @@ export class CatService {
 ##### Controller
 
 ```ts
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatEntity } from './cat.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -91,8 +95,8 @@ export class CatsController {
   constructor(private readonly catService: CatService) {}
   @Get('')
   async index(
-    @Query('page', ParseIntPipe) page: number = 1,
-    @Query('limit', ParseIntPipe) limit: number = 10,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
   ): Promise<Pagination<CatEntity>> {
     limit = limit > 100 ? 100 : limit;
     return this.catService.paginate({
@@ -103,6 +107,10 @@ export class CatsController {
   }
 }
 ```
+
+> If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/517) for more info.
+
+> the `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats`
 
 ### Example Response
 
@@ -165,6 +173,9 @@ export class CatsController {
 `links.previous`: A URL for the previous page to call | `""` (blank) if no previous to call
 `links.next`: A URL for the next page to call | `""` (blank) if no page to call
 `links.last`: A URL for the last page to call | `""` (blank) if no `route` is defined
+
+
+> Do note that `links.first` may not have the 'page' query param defined
 
 ## Find Parameters
 
@@ -331,3 +342,22 @@ return paginate<MyEntity, CustomPaginationMeta>(this.repository, {
 ```
 
 This will result in the above returning `CustomPaginationMeta` in the `meta` property instead of the default `IPaginationMeta`.
+
+
+## Custom links query params labels
+
+If you want to alter the `limit` and/or `page` labels in meta links, then use `routingLabels` in the options like so
+
+```ts
+
+return paginate<MyEntity>(this.repository, { 
+  page,
+  limit,
+  routingLabels: {
+    limitLabel: 'page-size', // default: limit
+    pageLabel: 'current-page', //default: page
+  }
+ });
+```
+
+This will result links like `http://example.com/something?current-page=1&page-size=3`.

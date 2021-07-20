@@ -23,6 +23,11 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
 
   /**
+   * routingLabels for append in links (limit or/and page)
+   */
+  routingLabels?: IPaginationOptionsRoutingLabels;
+  
+  /**
    * Used for changing query method to limit/offset (defaults to take/skip if no argument supplied)
    */
   paginationType?: PaginationTypeEnum;
@@ -72,4 +77,16 @@ export interface IPaginationLinks {
    * a link to the "last" page
    */
   last?: string;
+}
+
+export interface IPaginationOptionsRoutingLabels {
+  /**
+   * the limit text to append in router string
+   */
+  limitLabel?: string;
+
+  /**
+   * the page text to append in router string
+   */
+  pageLabel?: string;
 }
