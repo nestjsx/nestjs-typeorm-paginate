@@ -28,7 +28,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   routingLabels?: IPaginationOptionsRoutingLabels;
 
   /**
-   * Used for changing query method to limit/offset (defaults to take/skip if no argument supplied)
+   * Used for changing query method to take/skip (defaults to limit/offset if no argument supplied)
    */
   paginationType?: PaginationTypeEnum;
 }
