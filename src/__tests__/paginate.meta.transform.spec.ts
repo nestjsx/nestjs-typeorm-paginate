@@ -1,26 +1,6 @@
-import { FindManyOptions, Repository } from 'typeorm';
 import { paginate } from '../paginate';
 import { Pagination } from '../pagination';
-
-class MockRepository extends Repository<any> {
-  items = [];
-  constructor(entityAmount: number) {
-    super();
-    for (let i = 0; i < entityAmount; i++) this.items.push(new Entity());
-  }
-
-  findAndCount = async (
-    options?: FindManyOptions<any>,
-  ): Promise<[any[], number]> => {
-    const startIndex = options.skip;
-    const endIndex = startIndex + options.take;
-
-    const localItems = this.items.slice(startIndex, endIndex);
-    return [localItems, this.items.length];
-  };
-}
-
-class Entity {}
+import { MockRepository } from './mocks';
 
 describe('Custom Pagination Transformer', () => {
   afterEach(() => {
