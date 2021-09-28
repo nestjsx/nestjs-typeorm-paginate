@@ -3,6 +3,7 @@ import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
 import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginate } from './../paginate';
 import { Pagination } from '../pagination';
+import { baseOrmConfigs } from './base-orm-config';
 import { TestEntity } from './test.entity';
 import { PaginationTypeEnum } from '../interfaces';
 
@@ -16,13 +17,7 @@ describe('Paginate with queryBuilder', () => {
     app = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
-          entities: [TestEntity],
-          host: 'localhost',
-          port: 3306,
-          type: 'mysql',
-          username: 'root',
-          password: '',
-          database: 'test',
+          ...baseOrmConfigs,
         }),
       ],
     }).compile();

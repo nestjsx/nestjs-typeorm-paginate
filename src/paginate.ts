@@ -1,6 +1,5 @@
 import {
   Repository,
-  FindConditions,
   FindManyOptions,
   SelectQueryBuilder,
   ObjectLiteral,
@@ -19,7 +18,7 @@ const DEFAULT_PAGE = 1;
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindManyOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>>;
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
@@ -29,7 +28,7 @@ export async function paginate<T, CustomMetaType = IPaginationMeta>(
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repositoryOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindManyOptions<T>,
 ) {
   return repositoryOrQueryBuilder instanceof Repository
     ? paginateRepository<T, CustomMetaType>(
@@ -137,7 +136,7 @@ function resolveNumericOption(
 async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindManyOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route] = resolveOptions(options);
 

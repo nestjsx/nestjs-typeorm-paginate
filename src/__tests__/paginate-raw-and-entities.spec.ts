@@ -3,6 +3,7 @@ import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRawAndEntities } from '../paginate';
 import { Pagination } from '../pagination';
+import { baseOrmConfigs } from './base-orm-config';
 import { TestEntity } from './test.entity';
 
 describe('Test paginateRawAndEntities function', () => {
@@ -24,13 +25,7 @@ describe('Test paginateRawAndEntities function', () => {
     app = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
-          entities: [TestEntity],
-          host: 'localhost',
-          port: 3306,
-          type: 'mysql',
-          username: 'root',
-          password: '',
-          database: 'test',
+          ...baseOrmConfigs,
           dropSchema: true,
           synchronize: true,
         }),
