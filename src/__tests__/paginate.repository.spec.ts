@@ -410,4 +410,19 @@ describe('Test paginate function', () => {
     expect(results.links.next).toBe('');
     expect(results.links.last).toBe('');
   });
+
+  it('Can call paginate with no count queries', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<any>(mockRepository, {
+      limit: 10,
+      page: 1,
+      countQueries: false,
+    });
+
+    expect(results).toBeInstanceOf(Pagination);
+    expect(results.items.length).toBe(10);
+    expect(results.meta.totalItems).toBe(undefined);
+    expect(results.meta.totalPages).toBe(undefined);
+  });
 });
