@@ -26,12 +26,12 @@ export function createPaginationObject<
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
   routingLabels?: IPaginationOptionsRoutingLabels;
 }): Pagination<T, CustomMetaType> {
-  const totalPages = Math.ceil(totalItems / limit);
+  const totalPages = totalItems ? Math.ceil(totalItems / limit) : undefined;
 
   const hasFirstPage = route;
   const hasPreviousPage = route && currentPage > 1;
-  const hasNextPage = route && currentPage < totalPages;
-  const hasLastPage = route && totalPages > 0;
+  const hasNextPage = route && (totalItems && currentPage < totalPages);
+  const hasLastPage = route && (totalItems && totalPages > 0);
 
   const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
 
@@ -43,7 +43,7 @@ export function createPaginationObject<
   const pageLabel =
     routingLabels && routingLabels.pageLabel ? routingLabels.pageLabel : 'page';
 
-  const routes: IPaginationLinks = {
+  const routes: IPaginationLinks = totalItems !== undefined ? {
     first: hasFirstPage ? `${route}${symbol}${limitLabel}=${limit}` : '',
     previous: hasPreviousPage
       ? `${route}${symbol}${pageLabel}=${
@@ -58,7 +58,7 @@ export function createPaginationObject<
     last: hasLastPage
       ? `${route}${symbol}${pageLabel}=${totalPages}&${limitLabel}=${limit}`
       : '',
-  };
+  } : undefined;
 
   const meta: IPaginationMeta = {
     totalItems,
