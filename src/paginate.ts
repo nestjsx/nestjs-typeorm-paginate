@@ -128,7 +128,7 @@ function resolveOptions(
   const route = options.route;
   const paginationType =
     options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
-  const countQueries = options.countQueries || true;
+  const countQueries = typeof options.countQueries !== 'undefined' ? options.countQueries : true;
 
   return [page, limit, route, paginationType, countQueries];
 }
@@ -155,7 +155,7 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
   options: IPaginationOptions<CustomMetaType>,
   searchOptions?: FindManyOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, countQueries] = resolveOptions(options);
+  const [page, limit, route, paginationType, countQueries] = resolveOptions(options);
 
   if (page < 1) {
     return createPaginationObject<T, CustomMetaType>({
@@ -205,7 +205,7 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
     resolveOptions(options);
 
   const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    (PaginationTypeEnum.LIMIT_AND_OFFSET
+    (PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
     ).getMany(),
