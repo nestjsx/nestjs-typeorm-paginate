@@ -56,7 +56,7 @@ export interface IPaginationMeta extends ObjectLiteral {
   /**
    * the total amount of items
    */
-  totalItems: number;
+  totalItems?: number;
   /**
    * the amount of items that were requested per page
    */
@@ -64,7 +64,7 @@ export interface IPaginationMeta extends ObjectLiteral {
   /**
    * the total amount of pages in this paginator
    */
-  totalPages: number;
+  totalPages?: number;
   /**
    * the current page this paginator "points" to
    */
