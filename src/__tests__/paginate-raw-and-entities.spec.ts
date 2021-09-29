@@ -174,4 +174,16 @@ describe('Test paginateRawAndEntities function', () => {
       });
     },
   );
+
+  it('Can call paginate with no count queries', async () => {
+    const [result] = await paginateRawAndEntities(queryBuilder, {
+      limit: 10,
+      page: 1,
+      countQueries: false,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toBe(undefined);
+    expect(result.meta.totalPages).toBe(undefined);
+  });
 });

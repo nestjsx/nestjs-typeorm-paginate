@@ -51,6 +51,7 @@
     "typeorm": "^0.2.12"
   },
   "jest": {
+    "coveragePathIgnorePatterns": ["src/__tests__"],
     "moduleFileExtensions": [
       "js",
       "json",

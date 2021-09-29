@@ -46,4 +46,17 @@ describe('Paginate with queryBuilder', () => {
     });
     expect(result).toBeInstanceOf(Pagination);
   });
+
+  it('Can call paginate with no count queries', async () => {
+    const result = await paginate(queryBuilder, {
+      limit: 10,
+      page: 1,
+      paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
+      countQueries: false,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toBe(undefined);
+    expect(result.meta.totalPages).toBe(undefined);
+  });
 });
