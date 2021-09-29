@@ -49,16 +49,23 @@ export async function paginateRaw<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType] = resolveOptions(options);
+  const [page, limit, route, paginationType, countQueries] =
+    resolveOptions(options);
 
-  const totalQueryBuilder = queryBuilder.clone();
-  const [items, total] = await Promise.all([
+  const promises: [Promise<T[]>, Promise<number> | undefined] = [
     (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
     ).getRawMany<T>(),
-    totalQueryBuilder.getCount(),
-  ]);
+    undefined,
+  ];
+
+  if (countQueries) {
+  const totalQueryBuilder = queryBuilder.clone();
+    promises[1] = totalQueryBuilder.getCount();
+  }
+
+  const [items, total] = await Promise.all(promises);
 
   return createPaginationObject<T, CustomMetaType>({
     items,
@@ -78,17 +85,26 @@ export async function paginateRawAndEntities<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
-  const [page, limit, route, paginationType] = resolveOptions(options);
+  const [page, limit, route, paginationType, countQueries] =
+    resolveOptions(options);
 
-  const totalQueryBuilder = queryBuilder.clone();
-
-  const [itemObject, total] = await Promise.all([
+  const promises: [
+    Promise<{ entities: T[]; raw: T[] }>,
+    Promise<number> | undefined,
+  ] = [
     (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
     ).getRawAndEntities<T>(),
-    totalQueryBuilder.getCount(),
-  ]);
+    undefined,
+  ];
+
+  if (countQueries) {
+    const totalQueryBuilder = queryBuilder.clone();
+    promises[1] = totalQueryBuilder.getCount();
+  }
+
+  const [itemObject, total] = await Promise.all(promises);
 
   return [
     createPaginationObject<T, CustomMetaType>({
@@ -106,14 +122,15 @@ export async function paginateRawAndEntities<
 
 function resolveOptions(
   options: IPaginationOptions<any>,
-): [number, number, string, PaginationTypeEnum] {
+): [number, number, string, PaginationTypeEnum, boolean] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
   const paginationType =
     options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
+  const countQueries = options.countQueries || true;
 
-  return [page, limit, route, paginationType];
+  return [page, limit, route, paginationType, countQueries];
 }
 
 function resolveNumericOption(
@@ -138,7 +155,7 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
   options: IPaginationOptions<CustomMetaType>,
   searchOptions?: FindManyOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route] = resolveOptions(options);
+  const [page, limit, route, countQueries] = resolveOptions(options);
 
   if (page < 1) {
     return createPaginationObject<T, CustomMetaType>({
@@ -152,11 +169,22 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
     });
   }
 
-  const [items, total] = await repository.findAndCount({
-    skip: limit * (page - 1),
-    take: limit,
-    ...searchOptions,
-  });
+  const promises: [Promise<T[]>, Promise<number> | undefined] = [
+    repository.find({
+      skip: limit * (page - 1),
+      take: limit,
+      ...searchOptions,
+    }),
+    undefined,
+  ];
+
+  if (countQueries) {
+    promises[1] = repository.count({
+      ...searchOptions,
+    });
+  }
+
+  const [items, total] = await Promise.all(promises);
 
   return createPaginationObject<T, CustomMetaType>({
     items,
@@ -173,13 +201,23 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType] = resolveOptions(options);
+  const [page, limit, route, paginationType, countQueries] =
+    resolveOptions(options);
 
-  const [items, total] = await (paginationType ===
-  PaginationTypeEnum.LIMIT_AND_OFFSET
-    ? queryBuilder.limit(limit).offset((page - 1) * limit)
-    : queryBuilder.take(limit).skip((page - 1) * limit)
-  ).getManyAndCount();
+  const promises: [Promise<T[]>, Promise<number> | undefined] = [
+    (PaginationTypeEnum.LIMIT_AND_OFFSET
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+    ).getMany(),
+    undefined,
+  ];
+
+  if (countQueries) {
+    const totalQueryBuilder = queryBuilder.clone();
+    promises[1] = totalQueryBuilder.getCount();
+  }
+
+  const [items, total] = await Promise.all(promises);
 
   return createPaginationObject<T, CustomMetaType>({
     items,

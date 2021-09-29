@@ -19,7 +19,7 @@ export function createPaginationObject<
   routingLabels,
 }: {
   items: T[];
-  totalItems: number;
+  totalItems?: number;
   currentPage: number;
   limit: number;
   route?: string;
@@ -61,11 +61,10 @@ export function createPaginationObject<
   };
 
   const meta: IPaginationMeta = {
-    totalItems: totalItems,
+    totalItems,
     itemCount: items.length,
     itemsPerPage: limit,
-
-    totalPages: totalPages,
+    totalPages,
     currentPage: currentPage,
   };
 

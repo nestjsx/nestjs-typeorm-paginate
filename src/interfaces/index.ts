@@ -31,6 +31,12 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    * Used for changing query method to take/skip (defaults to limit/offset if no argument supplied)
    */
   paginationType?: PaginationTypeEnum;
+
+  /**
+   * @default true
+   * Turn off pagination count total queries. itemCount, totalItems, itemsPerPage and totalPages will be undefined
+   */
+  countQueries?: boolean;
 }
 
 export interface ObjectLiteral {

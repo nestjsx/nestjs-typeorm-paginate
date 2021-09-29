@@ -1,3 +1,4 @@
+import { async } from 'rxjs';
 import { Repository, FindManyOptions } from 'typeorm';
 
 export class MockRepository extends Repository<any> {
@@ -10,11 +11,19 @@ export class MockRepository extends Repository<any> {
   findAndCount = async (
     options?: FindManyOptions<any>,
   ): Promise<[any[], number]> => {
+    return [await this.find(options), await this.count(options)];
+  };
+
+  find = async (options?: FindManyOptions<any>): Promise<any[]> => {
     const startIndex = options.skip;
     const endIndex = startIndex + options.take;
 
     const localItems = this.items.slice(startIndex, endIndex);
-    return [localItems, this.items.length];
+    return localItems;
+  };
+
+  count = async (options?: FindManyOptions<any>): Promise<number> => {
+    return this.items.length;
   };
 }
 
