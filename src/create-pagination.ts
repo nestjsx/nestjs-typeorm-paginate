@@ -26,12 +26,14 @@ export function createPaginationObject<
   metaTransformer?: (meta: IPaginationMeta) => CustomMetaType;
   routingLabels?: IPaginationOptionsRoutingLabels;
 }): Pagination<T, CustomMetaType> {
-  const totalPages = totalItems ? Math.ceil(totalItems / limit) : undefined;
+  const totalPages =
+    totalItems !== undefined ? Math.ceil(totalItems / limit) : undefined;
 
   const hasFirstPage = route;
   const hasPreviousPage = route && currentPage > 1;
-  const hasNextPage = route && totalItems && currentPage < totalPages;
-  const hasLastPage = route && totalItems && totalPages > 0;
+  const hasNextPage =
+    route && totalItems !== undefined && currentPage < totalPages;
+  const hasLastPage = route && totalItems !== undefined && totalPages > 0;
 
   const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
 
