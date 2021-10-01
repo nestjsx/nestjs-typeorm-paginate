@@ -51,8 +51,8 @@ describe('Test paginateRaw function', () => {
   });
 
   afterAll(async () => {
-    await app.close();
     await queryBuilder.delete();
+    await app.close();
   });
 
   describe.each([
