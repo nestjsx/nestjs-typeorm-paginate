@@ -33,7 +33,6 @@ describe('Test paginateRawAndEntities function', () => {
     }).compile();
     connection = app.get(getConnectionToken());
     runner = connection.createQueryRunner();
-    await runner.startTransaction();
 
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
 
@@ -49,9 +48,9 @@ describe('Test paginateRawAndEntities function', () => {
     }
   });
 
-  afterAll(() => {
-    runner.rollbackTransaction();
-    app.close();
+  afterAll(async () => {
+    await queryBuilder.delete();
+    await app.close();
   });
 
   describe.each([

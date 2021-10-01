@@ -33,7 +33,6 @@ describe('Test paginateRaw function', () => {
     }).compile();
     connection = app.get(getConnectionToken());
     runner = connection.createQueryRunner();
-    await runner.startTransaction();
     queryBuilder = runner.manager.createQueryBuilder<RawQueryResult>(
       TestEntity,
       't',
@@ -51,9 +50,9 @@ describe('Test paginateRaw function', () => {
     }
   });
 
-  afterAll(() => {
-    runner.rollbackTransaction();
-    app.close();
+  afterAll(async () => {
+    await queryBuilder.delete();
+    await app.close();
   });
 
   describe.each([
@@ -167,18 +166,18 @@ describe('Test paginateRaw function', () => {
       it('should return links', () => {
         expect(results.links).toStrictEqual(links);
       });
-
-      it('Can call paginate with no count queries', async () => {
-        const result = await paginateRaw(queryBuilder, {
-          limit: 10,
-          page: 1,
-          countQueries: false,
-        });
-
-        expect(result).toBeInstanceOf(Pagination);
-        expect(result.meta.totalItems).toBe(undefined);
-        expect(result.meta.totalPages).toBe(undefined);
-      });
     },
   );
+
+  it('Can call paginate with no count queries', async () => {
+    const result = await paginateRaw(queryBuilder, {
+      limit: 10,
+      page: 1,
+      countQueries: false,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toBe(undefined);
+    expect(result.meta.totalPages).toBe(undefined);
+  });
 });

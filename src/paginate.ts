@@ -3,6 +3,7 @@ import {
   FindManyOptions,
   SelectQueryBuilder,
   ObjectLiteral,
+  QueryBuilder,
 } from 'typeorm';
 import { Pagination } from './pagination';
 import {
@@ -61,8 +62,7 @@ export async function paginateRaw<
   ];
 
   if (countQueries) {
-    const totalQueryBuilder = queryBuilder.clone();
-    promises[1] = totalQueryBuilder.getCount();
+    promises[1] = countQuery(queryBuilder);
   }
 
   const [items, total] = await Promise.all(promises);
@@ -100,8 +100,7 @@ export async function paginateRawAndEntities<
   ];
 
   if (countQueries) {
-    const totalQueryBuilder = queryBuilder.clone();
-    promises[1] = totalQueryBuilder.getCount();
+    promises[1] = countQuery(queryBuilder);
   }
 
   const [itemObject, total] = await Promise.all(promises);
@@ -215,8 +214,7 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   ];
 
   if (countQueries) {
-    const totalQueryBuilder = queryBuilder.clone();
-    promises[1] = totalQueryBuilder.getCount();
+    promises[1] = countQuery(queryBuilder);
   }
 
   const [items, total] = await Promise.all(promises);
@@ -231,3 +229,24 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
     routingLabels: options.routingLabels,
   });
 }
+
+const countQuery = async <T>(
+  queryBuilder: SelectQueryBuilder<T>,
+): Promise<number> => {
+  const totalQueryBuilder = queryBuilder.clone();
+
+  totalQueryBuilder
+    .skip(undefined)
+    .limit(undefined)
+    .offset(undefined)
+    .offset(undefined)
+    .select('*');
+
+  const { value } = await queryBuilder.connection
+    .createQueryBuilder()
+    .select('COUNT(*)', 'value')
+    .from(`(${totalQueryBuilder.getSql()})`, 'uniqueTableAlias')
+    .getRawOne<{ value: string }>();
+
+  return Number(value);
+};
