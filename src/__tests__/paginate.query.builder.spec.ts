@@ -61,8 +61,7 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can count with params', async () => {
-
-    queryBuilder.where('id = :id', {id: 1});
+    queryBuilder.where('id = :id', { id: 1 });
 
     const result = await paginate(queryBuilder, {
       limit: 10,
