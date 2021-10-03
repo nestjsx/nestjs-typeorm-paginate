@@ -239,13 +239,14 @@ const countQuery = async <T>(
     .skip(undefined)
     .limit(undefined)
     .offset(undefined)
-    .offset(undefined)
+    .take(undefined)
     .select('*');
 
   const { value } = await queryBuilder.connection
     .createQueryBuilder()
     .select('COUNT(*)', 'value')
-    .from(`(${totalQueryBuilder.getSql()})`, 'uniqueTableAlias')
+    .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
+    .setParameters(queryBuilder.getParameters())
     .getRawOne<{ value: string }>();
 
   return Number(value);

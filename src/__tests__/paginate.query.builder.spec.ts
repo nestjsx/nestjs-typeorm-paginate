@@ -59,4 +59,19 @@ describe('Paginate with queryBuilder', () => {
     expect(result.meta.totalItems).toBe(undefined);
     expect(result.meta.totalPages).toBe(undefined);
   });
+
+  it('Can count with params', async () => {
+
+    queryBuilder.where('id = :id', {id: 1});
+
+    const result = await paginate(queryBuilder, {
+      limit: 10,
+      page: 1,
+      paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toBe(1);
+    expect(result.meta.totalPages).toBe(1);
+  });
 });
