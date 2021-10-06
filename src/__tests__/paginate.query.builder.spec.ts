@@ -73,4 +73,18 @@ describe('Paginate with queryBuilder', () => {
     expect(result.meta.totalItems).toBe(1);
     expect(result.meta.totalPages).toBe(1);
   });
+
+  it('Can count with having', async () => {
+    queryBuilder.having('id > 1');
+
+    const result = await paginate(queryBuilder, {
+      limit: 10,
+      page: 1,
+      paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toBe(9);
+    expect(result.meta.totalPages).toBe(1);
+  });
 });
