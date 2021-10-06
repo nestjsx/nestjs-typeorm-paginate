@@ -142,6 +142,7 @@ describe('Test paginateRawAndEntities function', () => {
     'For options \n%j\n should return meta \n%j\n and links \n%j',
     (options, meta, links) => {
       beforeAll(async () => {
+        const queryBuilder =  runner.manager.createQueryBuilder(TestEntity, 't');
         queryBuilder.addSelect('SUM(t.id)', RAW_SUM_LABEL).groupBy('t.id');
 
         [results, rawResults] = await paginateRawAndEntities(queryBuilder, {
