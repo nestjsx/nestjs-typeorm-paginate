@@ -7,6 +7,9 @@
   <a href="https://github.com/juliandavidmr/awesome-nestjs#components--libraries"><img src="https://raw.githubusercontent.com/nestjsx/crud/master/img/awesome-nest.svg?sanitize=true" alt="Awesome Nest" /></a>
   <a href="https://github.com/nestjs/nest"><img src="https://raw.githubusercontent.com/nestjsx/crud/master/img/nest-powered.svg?sanitize=true" alt="Nest Powered" /></a>
   <a href="https://packagequality.com/#?package=nestjs-typeorm-paginate"><img src="https://packagequality.com/shield/nestjs-typeorm-paginate.svg" /></a>
+  <a href="https://www.npmjs.com/org/nestjsx">
+    <img src="https://img.shields.io/npm/dt/nestjs-typeorm-paginate.svg" alt="npm downloads" />
+  </a>
 </p>
 
 <h1 align="center">Nestjs Typeorm paginate</h1>
