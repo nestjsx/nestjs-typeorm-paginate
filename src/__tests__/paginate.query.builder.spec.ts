@@ -6,6 +6,7 @@ import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
 import { TestEntity } from './test.entity';
 import { PaginationTypeEnum } from '../interfaces';
+import { TestRelatedEntity } from './test-related.entity';
 
 describe('Paginate with queryBuilder', () => {
   let app: TestingModule;
@@ -86,5 +87,29 @@ describe('Paginate with queryBuilder', () => {
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toBe(9);
     expect(result.meta.totalPages).toBe(1);
+  });
+
+  it('Can paginate with joins', async () => {
+    await connection
+      .createQueryBuilder()
+      .insert()
+      .into(TestRelatedEntity)
+      .values([
+        { id: 1, testId: 1 },
+        { id: 2, testId: 1 },
+        { id: 3, testId: 1 },
+      ])
+      .execute();
+
+    const qb = connection
+      .createQueryBuilder(TestEntity, 't')
+      .leftJoin('t.related', 'r');
+
+    const result = await paginate(qb, { limit: 10, page: 1 });
+
+    await connection.manager.delete(TestRelatedEntity, {});
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toEqual(10);
   });
 });
