@@ -105,7 +105,7 @@ describe('Paginate with queryBuilder', () => {
       .createQueryBuilder(TestEntity, 't')
       .leftJoin('t.related', 'r');
 
-    const result = await paginate(qb, { limit: 10, page: 1 });
+    const result = await paginate(qb, { limit: 5, page: 1 });
 
     await connection.manager.delete(TestRelatedEntity, {});
 
