@@ -19,6 +19,43 @@ describe('Test paginate function', () => {
     expect(results).toBeInstanceOf(Pagination);
   });
 
+  it('Calls to `find` & `count` should be correct (with explicit `where` clause)', async () => {
+    const mockRepository = new MockRepository(0);
+    const paginateOpts = {
+        limit: 8,
+        page: 2,
+      };
+      const findCondition = {
+          where: {foo: 'bar'},
+          orderBy: {
+              foo: 'ASC'
+          }
+      }
+
+    paginate<any>(mockRepository, {...paginateOpts}, findCondition);
+
+    expect(mockRepository.find).toHaveBeenCalledTimes(1);
+    expect(mockRepository.find).toHaveBeenCalledWith(expect.objectContaining({skip: 8, take: 8, ...findCondition}));
+    expect(mockRepository.count).toHaveBeenCalledTimes(1);
+    expect(mockRepository.count).toHaveBeenCalledWith(expect.objectContaining(findCondition.where));
+  });
+
+  it('Calls to `find` & `count` should be correct (with implicit `where` clause)', async () => {
+    const mockRepository = new MockRepository(0);
+    const paginateOpts = {
+        limit: 8,
+        page: 2,
+      };
+      const findCondition = {foo: 'bar'};
+
+    paginate<any>(mockRepository, {...paginateOpts}, findCondition);
+
+    expect(mockRepository.find).toHaveBeenCalledTimes(1);
+    expect(mockRepository.find).toHaveBeenCalledWith(expect.objectContaining({skip: 8, take: 8, where: findCondition}));
+    expect(mockRepository.count).toHaveBeenCalledTimes(1);
+    expect(mockRepository.count).toHaveBeenCalledWith(expect.objectContaining(findCondition));
+  });
+
   it('Item length should be correct', async () => {
     const mockRepository = new MockRepository(10);
 

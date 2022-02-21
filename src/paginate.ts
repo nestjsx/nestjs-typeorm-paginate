@@ -1,9 +1,9 @@
 import {
   Repository,
-  FindManyOptions,
   SelectQueryBuilder,
   ObjectLiteral,
   FindConditions,
+  FindOneOptions,
 } from 'typeorm';
 import { Pagination } from './pagination';
 import {
@@ -19,7 +19,7 @@ const DEFAULT_PAGE = 1;
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindConditions<T> | FindOneOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>>;
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
@@ -29,7 +29,7 @@ export async function paginate<T, CustomMetaType = IPaginationMeta>(
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repositoryOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindConditions<T> | FindOneOptions<T>,
 ) {
   return repositoryOrQueryBuilder instanceof Repository
     ? paginateRepository<T, CustomMetaType>(
@@ -150,10 +150,17 @@ function resolveNumericOption(
   return defaultValue;
 }
 
+const normalizeSearchOptions = <T>(searchOptions?: FindConditions<T> | FindOneOptions<T>): FindOneOptions<T> => {
+    if(searchOptions && typeof searchOptions === 'object' && ('where' in searchOptions || 'order' in searchOptions)){
+        return searchOptions;
+    } else {
+        return {where: searchOptions};
+    }
+}
 async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,
   options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindConditions<T> | FindManyOptions<T>,
+  searchOptions?: FindConditions<T> | FindOneOptions<T>,
 ): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route, paginationType, countQueries] =
     resolveOptions(options);
@@ -170,19 +177,18 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
     });
   }
 
+  const normalizedOpts = normalizeSearchOptions(searchOptions);
   const promises: [Promise<T[]>, Promise<number> | undefined] = [
     repository.find({
       skip: limit * (page - 1),
       take: limit,
-      ...searchOptions,
+      ...normalizedOpts,
     }),
     undefined,
   ];
 
   if (countQueries) {
-    promises[1] = repository.count({
-      ...searchOptions,
-    });
+    promises[1] = repository.count(normalizedOpts.where as any);
   }
 
   const [items, total] = await Promise.all(promises);
