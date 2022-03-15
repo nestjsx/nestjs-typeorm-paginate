@@ -425,4 +425,46 @@ describe('Test paginate function', () => {
     expect(results.meta.totalItems).toBe(undefined);
     expect(results.meta.totalPages).toBe(undefined);
   });
+
+  it('Can call paginate with query caching set to true', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<any>(mockRepository, {
+      limit: 10,
+      page: 1,
+      cacheQueries: true,
+    });
+
+    expect(results).toBeInstanceOf(Pagination);
+    expect(results.items.length).toBe(10);
+  });
+
+  it('Can call paginate with query caching set to a number (milliseconds)', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<any>(mockRepository, {
+      limit: 10,
+      page: 1,
+      cacheQueries: 60000, // 1 min
+    });
+
+    expect(results).toBeInstanceOf(Pagination);
+    expect(results.items.length).toBe(10);
+  });
+
+  it('Can call paginate with query caching set to an object', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<any>(mockRepository, {
+      limit: 10,
+      page: 1,
+      cacheQueries: {
+        id: 'test',
+        milliseconds: 60000, // 1 min
+      },
+    });
+
+    expect(results).toBeInstanceOf(Pagination);
+    expect(results.items.length).toBe(10);
+  });
 });
