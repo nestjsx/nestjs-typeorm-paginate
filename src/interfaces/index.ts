@@ -42,7 +42,23 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    * Turn off pagination count total queries. itemCount, totalItems, itemsPerPage and totalPages will be undefined
    */
   countQueries?: boolean;
+
+  /**
+   * @default false
+   * @link https://orkhan.gitbook.io/typeorm/docs/caching
+   *
+   * Enables or disables query result caching.
+   */
+  cacheQueries?: TypeORMCacheType;
 }
+
+export type TypeORMCacheType =
+  | boolean
+  | number
+  | {
+      id: any;
+      milliseconds: number;
+    };
 
 export interface ObjectLiteral {
   [s: string]: any;

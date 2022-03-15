@@ -10,6 +10,7 @@ import {
   IPaginationMeta,
   IPaginationOptions,
   PaginationTypeEnum,
+  TypeORMCacheType,
 } from './interfaces';
 import { createPaginationObject } from './create-pagination';
 
@@ -50,19 +51,21 @@ export async function paginateRaw<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries] =
+  const [page, limit, route, paginationType, countQueries, cacheOption] =
     resolveOptions(options);
 
   const promises: [Promise<T[]>, Promise<number> | undefined] = [
     (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
-    ).getRawMany<T>(),
+    )
+      .cache(cacheOption)
+      .getRawMany<T>(),
     undefined,
   ];
 
   if (countQueries) {
-    promises[1] = countQuery(queryBuilder);
+    promises[1] = countQuery(queryBuilder, cacheOption);
   }
 
   const [items, total] = await Promise.all(promises);
@@ -85,7 +88,7 @@ export async function paginateRawAndEntities<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
-  const [page, limit, route, paginationType, countQueries] =
+  const [page, limit, route, paginationType, countQueries, cacheOption] =
     resolveOptions(options);
 
   const promises: [
@@ -95,12 +98,14 @@ export async function paginateRawAndEntities<
     (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
-    ).getRawAndEntities<T>(),
+    )
+      .cache(cacheOption)
+      .getRawAndEntities<T>(),
     undefined,
   ];
 
   if (countQueries) {
-    promises[1] = countQuery(queryBuilder);
+    promises[1] = countQuery(queryBuilder, cacheOption);
   }
 
   const [itemObject, total] = await Promise.all(promises);
@@ -121,7 +126,7 @@ export async function paginateRawAndEntities<
 
 function resolveOptions(
   options: IPaginationOptions<any>,
-): [number, number, string, PaginationTypeEnum, boolean] {
+): [number, number, string, PaginationTypeEnum, boolean, TypeORMCacheType] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
@@ -129,8 +134,9 @@ function resolveOptions(
     options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
   const countQueries =
     typeof options.countQueries !== 'undefined' ? options.countQueries : true;
+  const cacheQueries = options.cacheQueries;
 
-  return [page, limit, route, paginationType, countQueries];
+  return [page, limit, route, paginationType, countQueries, cacheQueries];
 }
 
 function resolveNumericOption(
@@ -202,19 +208,21 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries] =
+  const [page, limit, route, paginationType, countQueries, cacheOption] =
     resolveOptions(options);
 
   const promises: [Promise<T[]>, Promise<number> | undefined] = [
     (PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
       ? queryBuilder.limit(limit).offset((page - 1) * limit)
       : queryBuilder.take(limit).skip((page - 1) * limit)
-    ).getMany(),
+    )
+      .cache(cacheOption)
+      .getMany(),
     undefined,
   ];
 
   if (countQueries) {
-    promises[1] = countQuery(queryBuilder);
+    promises[1] = countQuery(queryBuilder, cacheOption);
   }
 
   const [items, total] = await Promise.all(promises);
@@ -232,6 +240,7 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
 
 const countQuery = async <T>(
   queryBuilder: SelectQueryBuilder<T>,
+  cacheOption: TypeORMCacheType,
 ): Promise<number> => {
   const totalQueryBuilder = queryBuilder.clone();
 
@@ -245,6 +254,7 @@ const countQuery = async <T>(
     .createQueryBuilder()
     .select('COUNT(*)', 'value')
     .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
+    .cache(cacheOption)
     .setParameters(queryBuilder.getParameters())
     .getRawOne<{ value: string }>();
 
