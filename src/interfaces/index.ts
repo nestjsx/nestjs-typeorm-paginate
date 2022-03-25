@@ -45,7 +45,7 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
 
   /**
    * @default false
-   * @link https://orkhan.gitbook.io/typeorm/docs/caching
+   * @link https://typeorm.io/caching
    *
    * Enables or disables query result caching.
    */
