@@ -363,3 +363,79 @@ return paginate<MyEntity>(this.repository, {
 ```
 
 This will result links like `http://example.com/something?current-page=1&page-size=3`.
+
+## Caching queries
+
+According to the (TypeORM documentation)[https://typeorm.io/caching]:
+
+> You can cache results selected by these `QueryBuilder` methods: `getMany`, `getOne`, `getRawMany`, `getRawOne` and `getCount`.
+>
+> You can also cache results selected by `find*` and `count*` methods of the `Repository` and `EntityManager`.
+
+First, To enable caching you need to explicitly enable it in data source options:
+
+```typescript
+{
+    type: "mysql",
+    host: "localhost",
+    username: "test",
+    ...
+    cache: true
+}
+```
+
+Then in pagination options you can enable query caching:
+
+```typescript
+const queryBuilder = this.usersRepository
+  .createQueryBuilder('t')
+  .where('t.isAdmin = :value', { value: true })
+
+return paginate(queryBuilder, {
+  page: 1,
+  limit: 100,
+  cacheQueries: true,
+});
+```
+
+This will execute a query to fetch all admin users and cache the results.
+
+Next time you execute the same code, it will get all admin users from the cache.
+
+Default cache lifetime is equal to `1000 ms`, e.g., 1 second.
+
+This means the cache will be invalid 1 second after the query builder code is called.
+
+In practice, this means that if users open the user page 150 times within 3 seconds, only three queries will be executed during this period.
+
+Any users inserted during the 1-second cache window won't be returned to the user.
+
+You can change cache time manually via pagination options:
+
+```typescript
+return paginate(queryBuilder, {
+  page: 1,
+  limit: 100,
+  cacheQueries: 60000, // 1 minute
+});
+```
+
+Also, you can set a "cache id" via pagination options:
+
+```typescript
+return paginate(queryBuilder, {
+  page: 1,
+  limit: 100,
+  cacheQueries: {
+    id: "users_admins",
+    milliseconds: 25000,
+  },
+});
+```
+
+This gives you granular control of your cache,
+for example, clearing cached results when you insert a new user:
+
+```typescript
+await dataSource.queryResultCache.remove(["users_admins"])
+```
