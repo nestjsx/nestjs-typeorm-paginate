@@ -34,7 +34,7 @@ $ npm i nestjs-typeorm-paginate
 
 ###### Repository
 
-```ts
+```typescript
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,7 +60,7 @@ export class CatService {
 
 ###### QueryBuilder
 
-```ts
+```typescript
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -89,7 +89,7 @@ export class CatService {
 
 ##### Controller
 
-```ts
+```typescript
 import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatEntity } from './cat.entity';
@@ -115,7 +115,7 @@ export class CatsController {
 
 > If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/517) for more info.
 
-> the `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats`
+> The `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats`
 
 ### Example Response
 
@@ -184,7 +184,7 @@ export class CatsController {
 
 ## Find Parameters
 
-```ts
+```typescript
 @Injectable()
 export class CatService {
   constructor(
@@ -267,12 +267,11 @@ Let's assume there's a joined table that matches each cat with its cat toys.
 And we want to bring how many toys each cat has.
 
 ```typescript
-
 const queryBuilder = this.repository
   .createQueryBuilder<{ type: string; totalLives: string }>('cat')
-    .leftJoinAndSelect('cat.toys', 'toys')
-    .addSelect('COUNT(toys)::INTEGER', 'toyCount')
-    .groupBy('cat.name');
+  .leftJoinAndSelect('cat.toys', 'toys')
+  .addSelect('COUNT(toys)::INTEGER', 'toyCount')
+  .groupBy('cat.name');
 ```
 
 This will allow us to get the paginated cats information with the additional raw query to build our actual response value.
@@ -293,7 +292,7 @@ Since the values of the raw results will include all the joined table items as q
 
 The rawResults array will look something like this:
 
-```typescript
+```json
 [
     { // Bobby appears 3 times due to the joined query
       "cat_lives": 9,
@@ -327,8 +326,7 @@ The rawResults array will look something like this:
 
 If you wanted to alter the meta data that is returned from the pagination object. Then use the `metaTransformer` in the options like so
 
-```ts
-
+```typescript
 class CustomPaginationMeta {
   constructor(
     public readonly count: number,
@@ -353,8 +351,7 @@ This will result in the above returning `CustomPaginationMeta` in the `meta` pro
 
 If you want to alter the `limit` and/or `page` labels in meta links, then use `routingLabels` in the options like so
 
-```ts
-
+```typescript
 return paginate<MyEntity>(this.repository, { 
   page,
   limit,
