@@ -134,7 +134,7 @@ function resolveOptions(
     options.paginationType || PaginationTypeEnum.LIMIT_AND_OFFSET;
   const countQueries =
     typeof options.countQueries !== 'undefined' ? options.countQueries : true;
-  const cacheQueries = options.cacheQueries;
+  const cacheQueries = options.cacheQueries || false;
 
   return [page, limit, route, paginationType, countQueries, cacheQueries];
 }
