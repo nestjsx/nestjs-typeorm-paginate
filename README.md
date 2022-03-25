@@ -366,7 +366,7 @@ This will result links like `http://example.com/something?current-page=1&page-si
 
 ## Caching queries
 
-According to the (TypeORM documentation)[https://typeorm.io/caching]:
+According to the [TypeORM documentation](https://typeorm.io/caching):
 
 > You can cache results selected by these `QueryBuilder` methods: `getMany`, `getOne`, `getRawMany`, `getRawOne` and `getCount`.
 >
