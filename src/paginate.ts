@@ -248,7 +248,8 @@ const countQuery = async <T>(
     .skip(undefined)
     .limit(undefined)
     .offset(undefined)
-    .take(undefined);
+    .take(undefined)
+    .orderBy(undefined);
 
   const { value } = await queryBuilder.connection
     .createQueryBuilder()
