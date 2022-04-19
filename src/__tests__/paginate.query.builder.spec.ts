@@ -28,7 +28,10 @@ describe('Paginate with queryBuilder', () => {
     await runner.startTransaction();
 
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
-    testRelatedQueryBuilder = runner.manager.createQueryBuilder(TestRelatedEntity, 'tr');
+    testRelatedQueryBuilder = runner.manager.createQueryBuilder(
+      TestRelatedEntity,
+      'tr',
+    );
   });
 
   afterEach(() => {
@@ -103,8 +106,7 @@ describe('Paginate with queryBuilder', () => {
       ])
       .execute();
 
-    const qb = queryBuilder
-      .leftJoinAndSelect('t.related', 'r');
+    const qb = queryBuilder.leftJoinAndSelect('t.related', 'r');
 
     const result = await paginate(qb, { limit: 5, page: 1 });
 
