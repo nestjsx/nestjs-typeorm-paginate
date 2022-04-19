@@ -13,6 +13,7 @@ describe('Paginate with queryBuilder', () => {
   let connection: Connection;
   let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
+  let testRelatedQueryBuilder: SelectQueryBuilder<TestRelatedEntity>;
 
   beforeEach(async () => {
     app = await Test.createTestingModule({
@@ -27,6 +28,7 @@ describe('Paginate with queryBuilder', () => {
     await runner.startTransaction();
 
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
+    testRelatedQueryBuilder = runner.manager.createQueryBuilder(TestRelatedEntity, 'tr');
   });
 
   afterEach(() => {
@@ -90,7 +92,7 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can paginate with joins', async () => {
-    await connection
+    await testRelatedQueryBuilder
       .createQueryBuilder()
       .insert()
       .into(TestRelatedEntity)
@@ -101,13 +103,10 @@ describe('Paginate with queryBuilder', () => {
       ])
       .execute();
 
-    const qb = connection
-      .createQueryBuilder(TestEntity, 't')
-      .leftJoin('t.related', 'r');
+    const qb = queryBuilder
+      .leftJoinAndSelect('t.related', 'r');
 
     const result = await paginate(qb, { limit: 5, page: 1 });
-
-    await connection.manager.delete(TestRelatedEntity, {});
 
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toEqual(10);
