@@ -14,8 +14,6 @@
 
 <h1 align="center">Nestjs Typeorm paginate</h1>
 
-> [Please vote on your prefered method of querying! Take+Skip vs Limit+Offset](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/576)
-
 Pagination helper method for TypeORM repositories or queryBuilders with strict typings
 
 ## Install
