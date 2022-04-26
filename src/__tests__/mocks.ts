@@ -1,9 +1,9 @@
-import { Repository, FindManyOptions } from 'typeorm';
+import { Repository, FindManyOptions, EntityTarget, EntityManager } from 'typeorm';
 
 export class MockRepository extends Repository<any> {
   items = [];
   constructor(entityAmount: number) {
-    super();
+    super({} as EntityTarget<{}>, {} as EntityManager);
     for (let i = 0; i < entityAmount; i++) this.items.push(new Entity());
   }
 
