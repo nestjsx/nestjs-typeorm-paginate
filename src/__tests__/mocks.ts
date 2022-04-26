@@ -1,4 +1,9 @@
-import { Repository, FindManyOptions, EntityTarget, EntityManager } from 'typeorm';
+import {
+  Repository,
+  FindManyOptions,
+  EntityTarget,
+  EntityManager,
+} from 'typeorm';
 
 export class MockRepository extends Repository<any> {
   items = [];
