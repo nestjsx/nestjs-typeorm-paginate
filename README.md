@@ -26,6 +26,9 @@ or
 $ npm i nestjs-typeorm-paginate
 ```
 
+> If you're using typeorm^0.2.6 please use nestjs-typeorm-paginate^3.2.0
+> For typeorm^0.3.0 please use nestjs-typeorm-paginate^4.0.0
+
 ## Usage
 
 ##### Service
