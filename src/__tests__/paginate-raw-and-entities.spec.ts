@@ -4,6 +4,7 @@ import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRawAndEntities } from '../paginate';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
+import { TestPivotEntity } from './test-pivot.entity';
 import { TestEntity } from './test.entity';
 
 describe('Test paginateRawAndEntities function', () => {
@@ -41,6 +42,16 @@ describe('Test paginateRawAndEntities function', () => {
       await queryBuilder
         .insert()
         .into(TestEntity)
+        .values({
+          id: i,
+        })
+        .execute();
+    }
+
+    for (let i = 1; i <= 3; i++) {
+      await queryBuilder
+        .insert()
+        .into(TestPivotEntity)
         .values({
           id: i,
         })

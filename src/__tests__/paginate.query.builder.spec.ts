@@ -5,8 +5,9 @@ import { paginate } from './../paginate';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
 import { TestEntity } from './test.entity';
-import { PaginationTypeEnum } from '../interfaces';
+import { CountQueryTypeEnum, PaginationTypeEnum } from '../interfaces';
 import { TestRelatedEntity } from './test-related.entity';
+import { TestPivotEntity } from './test-pivot.entity';
 
 describe('Paginate with queryBuilder', () => {
   let app: TestingModule;
@@ -14,6 +15,7 @@ describe('Paginate with queryBuilder', () => {
   let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
   let testRelatedQueryBuilder: SelectQueryBuilder<TestRelatedEntity>;
+  let testPivotQueryBuilder: SelectQueryBuilder<TestPivotEntity>;
 
   beforeEach(async () => {
     app = await Test.createTestingModule({
@@ -32,6 +34,10 @@ describe('Paginate with queryBuilder', () => {
       TestRelatedEntity,
       'tr',
     );
+    testPivotQueryBuilder = runner.manager.createQueryBuilder(
+      TestPivotEntity,
+      'tp',
+    );
   });
 
   afterEach(() => {
@@ -48,7 +54,7 @@ describe('Paginate with queryBuilder', () => {
     const result = await paginate(queryBuilder, {
       limit: 10,
       page: 1,
-      paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
+      paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     });
     expect(result).toBeInstanceOf(Pagination);
   });
@@ -112,5 +118,44 @@ describe('Paginate with queryBuilder', () => {
 
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toEqual(10);
+  });
+
+  it('Can paginate with countQueryType set to ENTITY', async () => {
+    const pivot = (await testPivotQueryBuilder
+      .where('tp.id = :id', { id: 1 })
+      .getOne()) as TestPivotEntity;
+
+    const testOne = await runner.manager
+      .getRepository(TestEntity)
+      .findOne({ where: { id: 1 } });
+    const testTwo = await runner.manager
+      .getRepository(TestEntity)
+      .findOne({ where: { id: 2 } });
+
+    if (testOne) {
+      testOne.testPivots = [pivot];
+    }
+
+    if (testTwo) {
+      testTwo.testPivots = [pivot];
+    }
+
+    await runner.manager.save([testOne, testTwo]);
+
+    const qb = queryBuilder.innerJoinAndSelect(
+      't.testPivots',
+      'tp',
+      't_tp.testPivotId = :id',
+      { id: 1 },
+    );
+
+    const result = await paginate(qb, {
+      limit: 10,
+      page: 1,
+      countQueryType: CountQueryTypeEnum.ENTITY,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toEqual(2);
   });
 });
