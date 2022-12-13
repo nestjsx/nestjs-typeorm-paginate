@@ -73,13 +73,15 @@ export function createPaginationObject<
     currentPage: currentPage,
   };
 
+  const links = route ? routes : undefined;
+
   if (metaTransformer)
     return new Pagination<T, CustomMetaType>(
       items,
       metaTransformer(meta),
-      route && routes,
+      links,
     );
 
   // @ts-ignore
-  return new Pagination<T, CustomMetaType>(items, meta, route && routes);
+  return new Pagination<T, CustomMetaType>(items, meta, links);
 }
