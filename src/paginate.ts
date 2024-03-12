@@ -251,7 +251,7 @@ const countQuery = async <T>(
     .take(undefined)
     .orderBy(undefined);
 
-  const { value } = await queryBuilder.connection
+    const { value } = await queryBuilder.connection
     .createQueryBuilder()
     .select('COUNT(*)', 'value')
     .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
