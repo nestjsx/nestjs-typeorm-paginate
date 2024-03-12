@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
 import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
-import { paginate } from './../paginate';
+import { paginate } from './../index';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
 import { TestEntity } from './test.entity';

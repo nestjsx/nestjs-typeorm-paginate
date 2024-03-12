@@ -62,14 +62,14 @@ describe('Test paginate function', () => {
       route: 'http://example.com/something',
     });
 
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?page=1&limit=4',
     );
-    expect(results.links.next).toBe(
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=3&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
   });
@@ -87,16 +87,16 @@ describe('Test paginate function', () => {
       },
     });
 
-    expect(results.links.first).toBe(
+    expect(results?.links?.first).toBe(
       'http://example.com/something?page-size=4',
     );
-    expect(results.links.previous).toBe(
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?current-page=1&page-size=4',
     );
-    expect(results.links.next).toBe(
+    expect(results?.links?.next).toBe(
       'http://example.com/something?current-page=3&page-size=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?current-page=3&page-size=4',
     );
   });
@@ -113,14 +113,14 @@ describe('Test paginate function', () => {
       },
     });
 
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?current-page=1&limit=4',
     );
-    expect(results.links.next).toBe(
+    expect(results?.links?.next).toBe(
       'http://example.com/something?current-page=3&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?current-page=3&limit=4',
     );
   });
@@ -137,16 +137,16 @@ describe('Test paginate function', () => {
       },
     });
 
-    expect(results.links.first).toBe(
+    expect(results?.links?.first).toBe(
       'http://example.com/something?page-size=4',
     );
-    expect(results.links.previous).toBe(
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?page=1&page-size=4',
     );
-    expect(results.links.next).toBe(
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=3&page-size=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&page-size=4',
     );
   });
@@ -160,12 +160,12 @@ describe('Test paginate function', () => {
       route: 'http://example.com/something',
     });
 
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
   });
@@ -179,12 +179,12 @@ describe('Test paginate function', () => {
       route: 'http://example.com/something',
     });
 
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.next).toBe('');
-    expect(results.links.last).toBe(
+    expect(results?.links?.next).toBe('');
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
   });
@@ -198,12 +198,12 @@ describe('Test paginate function', () => {
       route: 'http://example.com/something',
     });
 
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
   });
@@ -222,12 +222,12 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(5);
-    expect(results.links.first).toBe('http://example.com/something?limit=10');
-    expect(results.links.previous).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=10');
+    expect(results?.links?.previous).toBe(
       'http://example.com/something?page=1&limit=10',
     );
-    expect(results.links.next).toBe('');
-    expect(results.links.last).toBe(
+    expect(results?.links?.next).toBe('');
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=2&limit=10',
     );
     expect(consoleMock).toHaveBeenCalledWith(
@@ -249,12 +249,12 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(4);
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
     expect(consoleMock).toHaveBeenCalledWith(
@@ -276,12 +276,12 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(4);
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
     expect(consoleMock).toHaveBeenCalledWith(
@@ -303,12 +303,12 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(4);
-    expect(results.links.first).toBe('http://example.com/something?limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe(
+    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe(
       'http://example.com/something?page=2&limit=4',
     );
-    expect(results.links.last).toBe(
+    expect(results?.links?.last).toBe(
       'http://example.com/something?page=3&limit=4',
     );
     expect(consoleMock).toHaveBeenCalledWith(
@@ -375,7 +375,7 @@ describe('Test paginate function', () => {
       route: '/test?test=test',
     });
 
-    expect(results.links.next).toBe('/test?test=test&page=2&limit=4');
+    expect(results?.links?.next).toBe('/test?test=test&page=2&limit=4');
   });
 
   it('when page is 0, return empty pagination object', async () => {
@@ -388,10 +388,10 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(0);
-    expect(results.links.first).toBe('/test?test=test&limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe('');
-    expect(results.links.last).toBe('');
+    expect(results?.links?.first).toBe('/test?test=test&limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe('');
+    expect(results?.links?.last).toBe('');
   });
 
   it('Can use skip and take', async () => {
@@ -405,10 +405,10 @@ describe('Test paginate function', () => {
     });
 
     expect(results.items.length).toBe(0);
-    expect(results.links.first).toBe('/test?test=test&limit=4');
-    expect(results.links.previous).toBe('');
-    expect(results.links.next).toBe('');
-    expect(results.links.last).toBe('');
+    expect(results?.links?.first).toBe('/test?test=test&limit=4');
+    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.next).toBe('');
+    expect(results?.links?.last).toBe('');
   });
 
   it('Can call paginate with no count queries', async () => {

@@ -1,4 +1,4 @@
-import { paginate } from '../paginate';
+import { paginate } from '../index';
 import { Pagination } from '../pagination';
 import { MockRepository } from './mocks';
 
