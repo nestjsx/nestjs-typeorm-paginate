@@ -1,14 +1,14 @@
-import { paginate } from './../index';
-import { Pagination } from '../pagination';
-import { PaginationTypeEnum } from '../interfaces';
-import { Entity, MockRepository } from './mocks';
+import { paginate } from "./../index";
+import { Pagination } from "../pagination";
+import { PaginationTypeEnum } from "../interfaces";
+import { Entity, MockRepository } from "./mocks";
 
-describe('Test paginate function', () => {
+describe("Test paginate function", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('Can call method', async () => {
+  it("Can call method", async () => {
     const mockRepository = new MockRepository(0);
 
     const results = await paginate<any>(mockRepository, {
@@ -19,7 +19,7 @@ describe('Test paginate function', () => {
     expect(results).toBeInstanceOf(Pagination);
   });
 
-  it('Item length should be correct', async () => {
+  it("Item length should be correct", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
@@ -31,7 +31,7 @@ describe('Test paginate function', () => {
     expect(results.meta.itemCount).toBe(4);
   });
 
-  it('Page count should be correct', async () => {
+  it("Page count should be correct", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
@@ -42,7 +42,7 @@ describe('Test paginate function', () => {
     expect(results.meta.totalPages).toBe(3);
   });
 
-  it('Particular page count should be correct', async () => {
+  it("Particular page count should be correct", async () => {
     const mockRepository = new MockRepository(5);
 
     const results = await paginate<Entity>(mockRepository, {
@@ -53,139 +53,139 @@ describe('Test paginate function', () => {
     expect(results.meta.totalPages).toBe(2);
   });
 
-  it('Routes return successfully', async () => {
+  it("Routes return successfully", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
     });
 
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?page=1&limit=4',
+      "http://example.com/something?page=1&limit=4",
     );
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
   });
 
-  it('Routes return successfully using custom pageLabel and limitLabel', async () => {
+  it("Routes return successfully using custom pageLabel and limitLabel", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
       routingLabels: {
-        limitLabel: 'page-size',
-        pageLabel: 'current-page',
+        limitLabel: "page-size",
+        pageLabel: "current-page",
       },
     });
 
     expect(results?.links?.first).toBe(
-      'http://example.com/something?page-size=4',
+      "http://example.com/something?page-size=4",
     );
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?current-page=1&page-size=4',
+      "http://example.com/something?current-page=1&page-size=4",
     );
     expect(results?.links?.next).toBe(
-      'http://example.com/something?current-page=3&page-size=4',
+      "http://example.com/something?current-page=3&page-size=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?current-page=3&page-size=4',
+      "http://example.com/something?current-page=3&page-size=4",
     );
   });
 
-  it('Routes return successfully using custom pageLabel', async () => {
+  it("Routes return successfully using custom pageLabel", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
       routingLabels: {
-        pageLabel: 'current-page',
+        pageLabel: "current-page",
       },
     });
 
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?current-page=1&limit=4',
+      "http://example.com/something?current-page=1&limit=4",
     );
     expect(results?.links?.next).toBe(
-      'http://example.com/something?current-page=3&limit=4',
+      "http://example.com/something?current-page=3&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?current-page=3&limit=4',
+      "http://example.com/something?current-page=3&limit=4",
     );
   });
 
-  it('Routes return successfully using custom limitLabel', async () => {
+  it("Routes return successfully using custom limitLabel", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
       routingLabels: {
-        limitLabel: 'page-size',
+        limitLabel: "page-size",
       },
     });
 
     expect(results?.links?.first).toBe(
-      'http://example.com/something?page-size=4',
+      "http://example.com/something?page-size=4",
     );
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?page=1&page-size=4',
+      "http://example.com/something?page=1&page-size=4",
     );
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=3&page-size=4',
+      "http://example.com/something?page=3&page-size=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&page-size=4',
+      "http://example.com/something?page=3&page-size=4",
     );
   });
 
-  it('Route previous return successfully blank', async () => {
+  it("Route previous return successfully blank", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 1,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
     });
 
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
-    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
+    expect(results?.links?.previous).toBe("");
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
   });
 
-  it('Route next return successfully blank', async () => {
+  it("Route next return successfully blank", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 3,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
     });
 
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
-    expect(results?.links?.next).toBe('');
+    expect(results?.links?.next).toBe("");
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
   });
 
@@ -193,130 +193,130 @@ describe('Test paginate function', () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<Entity>(mockRepository, {
-      limit: '4',
-      page: '1',
-      route: 'http://example.com/something',
+      limit: "4",
+      page: "1",
+      route: "http://example.com/something",
     });
 
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
-    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
+    expect(results?.links?.previous).toBe("");
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
   });
 
-  it('replaces a bad limit with the default of 10', async () => {
+  it("replaces a bad limit with the default of 10", async () => {
     const mockRepository = new MockRepository(15);
 
     const consoleMock = jest
-      .spyOn(console, 'warn')
+      .spyOn(console, "warn")
       .mockImplementationOnce(() => {});
 
     const results = await paginate<Entity>(mockRepository, {
-      limit: 'x',
+      limit: "x",
       page: 2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
     });
 
     expect(results.items.length).toBe(5);
-    expect(results?.links?.first).toBe('http://example.com/something?limit=10');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=10");
     expect(results?.links?.previous).toBe(
-      'http://example.com/something?page=1&limit=10',
+      "http://example.com/something?page=1&limit=10",
     );
-    expect(results?.links?.next).toBe('');
+    expect(results?.links?.next).toBe("");
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=2&limit=10',
+      "http://example.com/something?page=2&limit=10",
     );
     expect(consoleMock).toHaveBeenCalledWith(
       'Query parameter "limit" with value "x" was resolved as "NaN", please validate your query input! Falling back to default "10".',
     );
   });
 
-  it('replaces an alphabetic page with the default of 1', async () => {
+  it("replaces an alphabetic page with the default of 1", async () => {
     const mockRepository = new MockRepository(10);
 
     const consoleMock = jest
-      .spyOn(console, 'warn')
+      .spyOn(console, "warn")
       .mockImplementationOnce(() => {});
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: 'x',
-      route: 'http://example.com/something',
+      page: "x",
+      route: "http://example.com/something",
     });
 
     expect(results.items.length).toBe(4);
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
-    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
+    expect(results?.links?.previous).toBe("");
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
     expect(consoleMock).toHaveBeenCalledWith(
       'Query parameter "page" with value "x" was resolved as "NaN", please validate your query input! Falling back to default "1".',
     );
   });
 
-  it('replaces a decimal page with the default of 1', async () => {
+  it("replaces a decimal page with the default of 1", async () => {
     const mockRepository = new MockRepository(10);
 
     const consoleMock = jest
-      .spyOn(console, 'warn')
+      .spyOn(console, "warn")
       .mockImplementationOnce(() => {});
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 2.2,
-      route: 'http://example.com/something',
+      route: "http://example.com/something",
     });
 
     expect(results.items.length).toBe(4);
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
-    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
+    expect(results?.links?.previous).toBe("");
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
     expect(consoleMock).toHaveBeenCalledWith(
       'Query parameter "page" with value "2.2" was resolved as "2.2", please validate your query input! Falling back to default "1".',
     );
   });
 
-  it('replaces a negative page with the default of 1', async () => {
+  it("replaces a negative page with the default of 1", async () => {
     const mockRepository = new MockRepository(10);
 
     const consoleMock = jest
-      .spyOn(console, 'warn')
+      .spyOn(console, "warn")
       .mockImplementationOnce(() => {});
 
     const results = await paginate<Entity>(mockRepository, {
       limit: 4,
-      page: '-2',
-      route: 'http://example.com/something',
+      page: "-2",
+      route: "http://example.com/something",
     });
 
     expect(results.items.length).toBe(4);
-    expect(results?.links?.first).toBe('http://example.com/something?limit=4');
-    expect(results?.links?.previous).toBe('');
+    expect(results?.links?.first).toBe("http://example.com/something?limit=4");
+    expect(results?.links?.previous).toBe("");
     expect(results?.links?.next).toBe(
-      'http://example.com/something?page=2&limit=4',
+      "http://example.com/something?page=2&limit=4",
     );
     expect(results?.links?.last).toBe(
-      'http://example.com/something?page=3&limit=4',
+      "http://example.com/something?page=3&limit=4",
     );
     expect(consoleMock).toHaveBeenCalledWith(
       'Query parameter "page" with value "-2" was resolved as "-2", please validate your query input! Falling back to default "1".',
     );
   });
 
-  it('Can pass FindConditions', async () => {
+  it("Can pass FindConditions", async () => {
     const mockRepository = new MockRepository(2);
 
     const results = await paginate<Entity>(
@@ -335,7 +335,7 @@ describe('Test paginate function', () => {
     expect(results).toBeTruthy();
   });
 
-  it('Correctly paginates through the results', async () => {
+  it("Correctly paginates through the results", async () => {
     const mockRepository = new MockRepository(10);
 
     // get first page
@@ -366,52 +366,52 @@ describe('Test paginate function', () => {
     expect(results.meta.itemsPerPage).toBe(4);
   });
 
-  it('Can resolve correct path', async () => {
+  it("Can resolve correct path", async () => {
     const mockRepository = new MockRepository(10);
 
     let results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 1,
-      route: '/test?test=test',
+      route: "/test?test=test",
     });
 
-    expect(results?.links?.next).toBe('/test?test=test&page=2&limit=4');
+    expect(results?.links?.next).toBe("/test?test=test&page=2&limit=4");
   });
 
-  it('when page is 0, return empty pagination object', async () => {
+  it("when page is 0, return empty pagination object", async () => {
     const mockRepository = new MockRepository(10);
 
     let results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 0,
-      route: '/test?test=test',
+      route: "/test?test=test",
     });
 
     expect(results.items.length).toBe(0);
-    expect(results?.links?.first).toBe('/test?test=test&limit=4');
-    expect(results?.links?.previous).toBe('');
-    expect(results?.links?.next).toBe('');
-    expect(results?.links?.last).toBe('');
+    expect(results?.links?.first).toBe("/test?test=test&limit=4");
+    expect(results?.links?.previous).toBe("");
+    expect(results?.links?.next).toBe("");
+    expect(results?.links?.last).toBe("");
   });
 
-  it('Can use skip and take', async () => {
+  it("Can use skip and take", async () => {
     const mockRepository = new MockRepository(10);
 
     let results = await paginate<Entity>(mockRepository, {
       limit: 4,
       page: 0,
-      route: '/test?test=test',
+      route: "/test?test=test",
       paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     });
 
     expect(results.items.length).toBe(0);
-    expect(results?.links?.first).toBe('/test?test=test&limit=4');
-    expect(results?.links?.previous).toBe('');
-    expect(results?.links?.next).toBe('');
-    expect(results?.links?.last).toBe('');
+    expect(results?.links?.first).toBe("/test?test=test&limit=4");
+    expect(results?.links?.previous).toBe("");
+    expect(results?.links?.next).toBe("");
+    expect(results?.links?.last).toBe("");
   });
 
-  it('Can call paginate with no count queries', async () => {
+  it("Can call paginate with no count queries", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<any>(mockRepository, {
@@ -426,7 +426,7 @@ describe('Test paginate function', () => {
     expect(results.meta.totalPages).toBe(undefined);
   });
 
-  it('Can call paginate with query caching set to true', async () => {
+  it("Can call paginate with query caching set to true", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<any>(mockRepository, {
@@ -439,7 +439,7 @@ describe('Test paginate function', () => {
     expect(results.items.length).toBe(10);
   });
 
-  it('Can call paginate with query caching set to a number (milliseconds)', async () => {
+  it("Can call paginate with query caching set to a number (milliseconds)", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<any>(mockRepository, {
@@ -452,14 +452,14 @@ describe('Test paginate function', () => {
     expect(results.items.length).toBe(10);
   });
 
-  it('Can call paginate with query caching set to an object', async () => {
+  it("Can call paginate with query caching set to an object", async () => {
     const mockRepository = new MockRepository(10);
 
     const results = await paginate<any>(mockRepository, {
       limit: 10,
       page: 1,
       cacheQueries: {
-        id: 'test',
+        id: "test",
         milliseconds: 60000, // 1 min
       },
     });

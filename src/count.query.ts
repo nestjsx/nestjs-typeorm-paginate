@@ -1,5 +1,5 @@
-import { SelectQueryBuilder } from 'typeorm';
-import { TypeORMCacheType } from './interfaces';
+import { SelectQueryBuilder } from "typeorm";
+import { TypeORMCacheType } from "./interfaces";
 
 export const countQuery = async <T>(
   queryBuilder: SelectQueryBuilder<T>,
@@ -16,8 +16,8 @@ export const countQuery = async <T>(
 
   const { value } = await queryBuilder.connection
     .createQueryBuilder()
-    .select('COUNT(*)', 'value')
-    .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
+    .select("COUNT(*)", "value")
+    .from(`(${totalQueryBuilder.getQuery()})`, "uniqueTableAlias")
     .cache(cacheOption)
     .setParameters(queryBuilder.getParameters())
     .getRawOne<{ value: string }>();

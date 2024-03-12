@@ -1,15 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
-import { paginateRawAndEntities } from '../index';
-import { Pagination } from '../pagination';
-import { baseOrmConfigs } from './base-orm-config';
-import { TestEntity } from './test.entity';
+import { Test, TestingModule } from "@nestjs/testing";
+import { getConnectionToken, TypeOrmModule } from "@nestjs/typeorm";
+import { Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
+import { paginateRawAndEntities } from "../index";
+import { Pagination } from "../pagination";
+import { baseOrmConfigs } from "./base-orm-config";
+import { TestEntity } from "./test.entity";
 
-describe('Test paginateRawAndEntities function', () => {
-  const TEST_ROUTE = 'https://testing.this/api/v1';
-  const RAW_ID_LABEL = 't_id';
-  const RAW_SUM_LABEL = 'sum';
+describe("Test paginateRawAndEntities function", () => {
+  const TEST_ROUTE = "https://testing.this/api/v1";
+  const RAW_ID_LABEL = "t_id";
+  const RAW_SUM_LABEL = "sum";
 
   let app: TestingModule;
   let connection: Connection;
@@ -34,7 +34,7 @@ describe('Test paginateRawAndEntities function', () => {
     connection = app.get(getConnectionToken());
     runner = connection.createQueryRunner();
 
-    queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
+    queryBuilder = runner.manager.createQueryBuilder(TestEntity, "t");
 
     // Insert some registries on database
     for (let i = 1; i <= totalItems; i++) {
@@ -65,8 +65,8 @@ describe('Test paginateRawAndEntities function', () => {
       },
       {
         first: `${TEST_ROUTE}?limit=10`,
-        previous: '',
-        next: '',
+        previous: "",
+        next: "",
         last: `${TEST_ROUTE}?page=1&limit=10`,
       },
     ],
@@ -90,7 +90,7 @@ describe('Test paginateRawAndEntities function', () => {
       {
         limit: 3,
         page: 2,
-        routingLabels: { limitLabel: 'page-size', pageLabel: 'current-page' },
+        routingLabels: { limitLabel: "page-size", pageLabel: "current-page" },
       },
       {
         itemCount: 3,
@@ -107,7 +107,7 @@ describe('Test paginateRawAndEntities function', () => {
       },
     ],
     [
-      { limit: 3, page: 2, routingLabels: { limitLabel: 'page-size' } },
+      { limit: 3, page: 2, routingLabels: { limitLabel: "page-size" } },
       {
         itemCount: 3,
         totalItems: 10,
@@ -123,7 +123,7 @@ describe('Test paginateRawAndEntities function', () => {
       },
     ],
     [
-      { limit: 3, page: 2, routingLabels: { pageLabel: 'current-page' } },
+      { limit: 3, page: 2, routingLabels: { pageLabel: "current-page" } },
       {
         itemCount: 3,
         totalItems: 10,
@@ -139,11 +139,11 @@ describe('Test paginateRawAndEntities function', () => {
       },
     ],
   ])(
-    'For options \n%j\n should return meta \n%j\n and links \n%j',
+    "For options \n%j\n should return meta \n%j\n and links \n%j",
     (options, meta, links) => {
       beforeAll(async () => {
-        const queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
-        queryBuilder.addSelect('SUM(t.id)', RAW_SUM_LABEL).groupBy('t.id');
+        const queryBuilder = runner.manager.createQueryBuilder(TestEntity, "t");
+        queryBuilder.addSelect("SUM(t.id)", RAW_SUM_LABEL).groupBy("t.id");
 
         [results, rawResults] = await paginateRawAndEntities(queryBuilder, {
           ...options,
@@ -151,23 +151,23 @@ describe('Test paginateRawAndEntities function', () => {
         });
       });
 
-      it('can call method and get results', () => {
+      it("can call method and get results", () => {
         expect(results).toBeInstanceOf(Pagination);
       });
 
-      it('shows correct meta object', () => {
+      it("shows correct meta object", () => {
         expect(results.meta).toStrictEqual(meta);
       });
 
-      it('shows correct links object', () => {
+      it("shows correct links object", () => {
         expect(results.links).toStrictEqual(links);
       });
 
-      it('gets items and raw items', async () => {
+      it("gets items and raw items", async () => {
         expect(results.items[0]).toBeInstanceOf(TestEntity);
         expect(Object.keys(rawResults[0])).toEqual(
           expect.arrayContaining([
-            RAW_ID_LABEL.replace('.', '_'),
+            RAW_ID_LABEL.replace(".", "_"),
             RAW_SUM_LABEL,
           ]),
         );
@@ -175,7 +175,7 @@ describe('Test paginateRawAndEntities function', () => {
     },
   );
 
-  it('Can call paginate with no count queries', async () => {
+  it("Can call paginate with no count queries", async () => {
     const [result] = await paginateRawAndEntities(queryBuilder, {
       limit: 10,
       page: 1,

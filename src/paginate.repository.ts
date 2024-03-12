@@ -1,8 +1,8 @@
-import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
-import { IPaginationMeta, IPaginationOptions } from './interfaces';
-import { Pagination } from './pagination';
-import { resolveOptions } from './resolve.options';
-import { createPaginationObject } from './create-pagination';
+import { FindManyOptions, FindOptionsWhere, Repository } from "typeorm";
+import { IPaginationMeta, IPaginationOptions } from "./interfaces";
+import { Pagination } from "./pagination";
+import { resolveOptions } from "./resolve.options";
+import { createPaginationObject } from "./create-pagination";
 
 export const paginateRepository = async <T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,

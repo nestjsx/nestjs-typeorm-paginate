@@ -1,13 +1,13 @@
-import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
+import { ObjectLiteral, SelectQueryBuilder } from "typeorm";
 import {
   IPaginationMeta,
   IPaginationOptions,
   PaginationTypeEnum,
-} from './interfaces';
-import { Pagination } from './pagination';
-import { resolveOptions } from './resolve.options';
-import { countQuery } from './count.query';
-import { createPaginationObject } from './create-pagination';
+} from "./interfaces";
+import { Pagination } from "./pagination";
+import { resolveOptions } from "./resolve.options";
+import { countQuery } from "./count.query";
+import { createPaginationObject } from "./create-pagination";
 
 export const paginateRaw = async <
   T,

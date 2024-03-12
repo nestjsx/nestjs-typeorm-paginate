@@ -1,4 +1,4 @@
-import { IPaginationLinks, IPaginationMeta, ObjectLiteral } from './interfaces';
+import { IPaginationLinks, IPaginationMeta, ObjectLiteral } from "./interfaces";
 
 export class Pagination<
   PaginationObject,

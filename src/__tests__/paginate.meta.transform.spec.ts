@@ -1,13 +1,13 @@
-import { paginate } from '../index';
-import { Pagination } from '../pagination';
-import { MockRepository } from './mocks';
+import { paginate } from "../index";
+import { Pagination } from "../pagination";
+import { MockRepository } from "./mocks";
 
-describe('Custom Pagination Transformer', () => {
+describe("Custom Pagination Transformer", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('Can return specific type when using custom meta type', async () => {
+  it("Can return specific type when using custom meta type", async () => {
     const mockRepository = new MockRepository(0);
 
     class TestPaginationMetaClass {
@@ -36,9 +36,9 @@ describe('Custom Pagination Transformer', () => {
 
     expect(results).toBeInstanceOf(Pagination);
     expect(results.meta).toBeInstanceOf(TestPaginationMetaClass);
-    expect(results.meta).toHaveProperty('count');
-    expect(results.meta).toHaveProperty('total');
-    expect(results.meta).toHaveProperty('perPage');
-    expect(results.meta).toHaveProperty('currentPage');
+    expect(results.meta).toHaveProperty("count");
+    expect(results.meta).toHaveProperty("total");
+    expect(results.meta).toHaveProperty("perPage");
+    expect(results.meta).toHaveProperty("currentPage");
   });
 });

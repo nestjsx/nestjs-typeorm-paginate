@@ -1,5 +1,5 @@
-import { PrimaryColumn, Entity, ManyToOne, Column } from 'typeorm';
-import { TestEntity } from './test.entity';
+import { PrimaryColumn, Entity, ManyToOne, Column } from "typeorm";
+import { TestEntity } from "./test.entity";
 
 @Entity()
 export class TestRelatedEntity {

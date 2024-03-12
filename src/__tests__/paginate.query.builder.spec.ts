@@ -1,14 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
-import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
-import { paginate } from './../index';
-import { Pagination } from '../pagination';
-import { baseOrmConfigs } from './base-orm-config';
-import { TestEntity } from './test.entity';
-import { PaginationTypeEnum } from '../interfaces';
-import { TestRelatedEntity } from './test-related.entity';
+import { Test, TestingModule } from "@nestjs/testing";
+import { TypeOrmModule, getConnectionToken } from "@nestjs/typeorm";
+import { Connection, QueryRunner, SelectQueryBuilder } from "typeorm";
+import { paginate } from "./../index";
+import { Pagination } from "../pagination";
+import { baseOrmConfigs } from "./base-orm-config";
+import { TestEntity } from "./test.entity";
+import { PaginationTypeEnum } from "../interfaces";
+import { TestRelatedEntity } from "./test-related.entity";
 
-describe('Paginate with queryBuilder', () => {
+describe("Paginate with queryBuilder", () => {
   let app: TestingModule;
   let connection: Connection;
   let runner: QueryRunner;
@@ -27,10 +27,10 @@ describe('Paginate with queryBuilder', () => {
     runner = connection.createQueryRunner();
     await runner.startTransaction();
 
-    queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
+    queryBuilder = runner.manager.createQueryBuilder(TestEntity, "t");
     testRelatedQueryBuilder = runner.manager.createQueryBuilder(
       TestRelatedEntity,
-      'tr',
+      "tr",
     );
   });
 
@@ -39,12 +39,12 @@ describe('Paginate with queryBuilder', () => {
     app.close();
   });
 
-  it('Can call paginate', async () => {
+  it("Can call paginate", async () => {
     const result = await paginate(queryBuilder, { limit: 10, page: 1 });
     expect(result).toBeInstanceOf(Pagination);
   });
 
-  it('Can use paginationType take', async () => {
+  it("Can use paginationType take", async () => {
     const result = await paginate(queryBuilder, {
       limit: 10,
       page: 1,
@@ -53,7 +53,7 @@ describe('Paginate with queryBuilder', () => {
     expect(result).toBeInstanceOf(Pagination);
   });
 
-  it('Can call paginate with no count queries', async () => {
+  it("Can call paginate with no count queries", async () => {
     const result = await paginate(queryBuilder, {
       limit: 10,
       page: 1,
@@ -66,8 +66,8 @@ describe('Paginate with queryBuilder', () => {
     expect(result.meta.totalPages).toBe(undefined);
   });
 
-  it('Can count with params', async () => {
-    queryBuilder.where('id = :id', { id: 1 });
+  it("Can count with params", async () => {
+    queryBuilder.where("id = :id", { id: 1 });
 
     const result = await paginate(queryBuilder, {
       limit: 10,
@@ -80,8 +80,8 @@ describe('Paginate with queryBuilder', () => {
     expect(result.meta.totalPages).toBe(1);
   });
 
-  it('Can count with having', async () => {
-    queryBuilder.having('id > 1');
+  it("Can count with having", async () => {
+    queryBuilder.having("id > 1");
 
     const result = await paginate(queryBuilder, {
       limit: 10,
@@ -94,7 +94,7 @@ describe('Paginate with queryBuilder', () => {
     expect(result.meta.totalPages).toBe(1);
   });
 
-  it('Can paginate with joins', async () => {
+  it("Can paginate with joins", async () => {
     await testRelatedQueryBuilder
       .createQueryBuilder()
       .insert()
@@ -106,7 +106,7 @@ describe('Paginate with queryBuilder', () => {
       ])
       .execute();
 
-    const qb = queryBuilder.leftJoinAndSelect('t.related', 'r');
+    const qb = queryBuilder.leftJoinAndSelect("t.related", "r");
 
     const result = await paginate(qb, { limit: 5, page: 1 });
 

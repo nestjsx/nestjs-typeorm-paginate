@@ -3,8 +3,8 @@ import {
   IPaginationMeta,
   IPaginationOptionsRoutingLabels,
   ObjectLiteral,
-} from './interfaces';
-import { Pagination } from './pagination';
+} from "./interfaces";
+import { Pagination } from "./pagination";
 
 export function createPaginationObject<
   T,
@@ -35,33 +35,33 @@ export function createPaginationObject<
     route && totalItems !== undefined && currentPage < totalPages;
   const hasLastPage = route && totalItems !== undefined && totalPages > 0;
 
-  const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
+  const symbol = route && new RegExp(/\?/).test(route) ? "&" : "?";
 
   const limitLabel =
     routingLabels && routingLabels.limitLabel
       ? routingLabels.limitLabel
-      : 'limit';
+      : "limit";
 
   const pageLabel =
-    routingLabels && routingLabels.pageLabel ? routingLabels.pageLabel : 'page';
+    routingLabels && routingLabels.pageLabel ? routingLabels.pageLabel : "page";
 
   const routes: IPaginationLinks =
     totalItems !== undefined
       ? {
-          first: hasFirstPage ? `${route}${symbol}${limitLabel}=${limit}` : '',
+          first: hasFirstPage ? `${route}${symbol}${limitLabel}=${limit}` : "",
           previous: hasPreviousPage
             ? `${route}${symbol}${pageLabel}=${
                 currentPage - 1
               }&${limitLabel}=${limit}`
-            : '',
+            : "",
           next: hasNextPage
             ? `${route}${symbol}${pageLabel}=${
                 currentPage + 1
               }&${limitLabel}=${limit}`
-            : '',
+            : "",
           last: hasLastPage
             ? `${route}${symbol}${pageLabel}=${totalPages}&${limitLabel}=${limit}`
-            : '',
+            : "",
         }
       : undefined;
 

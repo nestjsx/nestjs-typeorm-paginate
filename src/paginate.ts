@@ -3,11 +3,11 @@ import {
   FindManyOptions,
   SelectQueryBuilder,
   FindOptionsWhere,
-} from 'typeorm';
-import { Pagination } from './pagination';
-import { IPaginationMeta, IPaginationOptions } from './interfaces';
-import { paginateRepository } from './paginate.repository';
-import { paginateQueryBuilder } from './paginate.query.builder';
+} from "typeorm";
+import { Pagination } from "./pagination";
+import { IPaginationMeta, IPaginationOptions } from "./interfaces";
+import { paginateRepository } from "./paginate.repository";
+import { paginateQueryBuilder } from "./paginate.query.builder";
 
 export async function paginate<T, CustomMetaType = IPaginationMeta>(
   repository: Repository<T>,

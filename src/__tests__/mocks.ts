@@ -3,7 +3,7 @@ import {
   FindManyOptions,
   EntityTarget,
   EntityManager,
-} from 'typeorm';
+} from "typeorm";
 
 export class MockRepository extends Repository<any> {
   items = [];
