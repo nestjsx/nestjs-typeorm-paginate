@@ -27,7 +27,7 @@ describe('Custom Pagination Transformer', () => {
         metaTransformer: (meta): TestPaginationMetaClass =>
           new TestPaginationMetaClass(
             meta.itemCount,
-            meta.totalItems,
+            meta.totalItems || 0,
             meta.itemsPerPage,
             meta.currentPage,
           ),
