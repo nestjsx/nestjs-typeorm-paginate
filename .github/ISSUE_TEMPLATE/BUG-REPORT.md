@@ -21,6 +21,22 @@ body:
       placeholder: ex. https://github.com/USERNAME/REPO-NAME
     validations:
       required: true
+  - type: input
+    id: version
+    attributes:
+      label: "nestjs-typeorm-paginate version"
+      description: Please enter the version of nestjs-typeorm-paginate you are having an issue with
+      placeholder: 4.0.1
+    validations:
+      required: true
+ - type: input
+    id: code
+    attributes:
+      label: "Code example"
+      description: Please provide us with a example of your entity and paginate func usage
+      placeholder: class MyEntity {}...
+    validations:
+      required: false
   - type: textarea
     id: reprod
     attributes:
