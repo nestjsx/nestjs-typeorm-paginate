@@ -3,6 +3,11 @@ export enum PaginationTypeEnum {
   TAKE_AND_SKIP = 'take',
 }
 
+export enum CountQueryTypeEnum {
+  RAW = 'raw',
+  ENTITY = 'entity',
+}
+
 export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
   /**
    * @default 10
@@ -42,6 +47,12 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    * Turn off pagination count total queries. itemCount, totalItems, itemsPerPage and totalPages will be undefined
    */
   countQueries?: boolean;
+
+  /**
+   * @default CountQueryTypeEnum.RAW
+   * Used for count query with countQuery(builder, cacheOptions) which is RAW or builder.getCount() which is ENTITY
+   */
+  countQueryType?: CountQueryTypeEnum;
 
   /**
    * @default false
