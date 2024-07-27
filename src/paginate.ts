@@ -191,7 +191,13 @@ async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
     });
   }
 
-  const [items, total] = await Promise.all(promises);
+  //const [items, total] = await Promise.all(promises);
+  let items, total;
+  try {
+    [items, total] = await Promise.all(promises);
+  } catch (error) {
+    throw new Error(error);
+  }
 
   return createPaginationObject<T, CustomMetaType>({
     items,
@@ -225,7 +231,13 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
     promises[1] = countQuery(queryBuilder, cacheOption);
   }
 
-  const [items, total] = await Promise.all(promises);
+  //const [items, total] = await Promise.all(promises);
+  let items, total;
+  try {
+    [items, total] = await Promise.all(promises);
+  } catch (error) {
+    throw new Error(error);
+  }
 
   return createPaginationObject<T, CustomMetaType>({
     items,
