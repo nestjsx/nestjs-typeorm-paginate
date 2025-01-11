@@ -50,6 +50,12 @@ export interface IPaginationOptions<CustomMetaType = IPaginationMeta> {
    * Enables or disables query result caching.
    */
   cacheQueries?: TypeORMCacheType;
+
+  /**
+   * @default false
+   * Enables or disables routing to the latest page have items
+   */
+  routingLatest?: boolean;
 }
 
 export type TypeORMCacheType =
