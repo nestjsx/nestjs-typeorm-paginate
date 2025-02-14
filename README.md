@@ -1,33 +1,33 @@
 <p align="center"><img src="https://avatars1.githubusercontent.com/u/43827489?s=400&u=45ac0ac47d40b6d8f277c96bdf00244c10508aef&v=4"/></p>
 <p align="center">
-  <img src="https://github.com/nestjsx/nestjs-typeorm-paginate/workflows/Tests/badge.svg"/>
-  <a href="https://www.npmjs.com/package/nestjs-typeorm-paginate"><img src="https://img.shields.io/npm/v/nestjs-typeorm-paginate.svg"/></a>
-  <a href='https://coveralls.io/github/nestjsx/nestjs-typeorm-paginate?branch=master'><img src='https://coveralls.io/repos/github/nestjsx/nestjs-typeorm-paginate/badge.svg?branch=master' alt='Coverage Status' /></a>
+  <img src="https://github.com/nestjsx/tekvo-nest-typeorm-paginate/workflows/Tests/badge.svg"/>
+  <a href="https://www.npmjs.com/package/tekvo-nest-typeorm-paginate"><img src="https://img.shields.io/npm/v/tekvo-nest-typeorm-paginate.svg"/></a>
+  <a href='https://coveralls.io/github/nestjsx/tekvo-nest-typeorm-paginate?branch=master'><img src='https://coveralls.io/repos/github/nestjsx/tekvo-nest-typeorm-paginate/badge.svg?branch=master' alt='Coverage Status' /></a>
   <img src="https://camo.githubusercontent.com/a34cfbf37ba6848362bf2bee0f3915c2e38b1cc1/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5052732d77656c636f6d652d627269676874677265656e2e7376673f7374796c653d666c61742d737175617265" />
   <a href="https://github.com/juliandavidmr/awesome-nestjs#components--libraries"><img src="https://raw.githubusercontent.com/nestjsx/crud/master/img/awesome-nest.svg?sanitize=true" alt="Awesome Nest" /></a>
   <a href="https://github.com/nestjs/nest"><img src="https://raw.githubusercontent.com/nestjsx/crud/master/img/nest-powered.svg?sanitize=true" alt="Nest Powered" /></a>
-  <a href="https://packagequality.com/#?package=nestjs-typeorm-paginate"><img src="https://packagequality.com/shield/nestjs-typeorm-paginate.svg" /></a>
+  <a href="https://packagequality.com/#?package=tekvo-nest-typeorm-paginate"><img src="https://packagequality.com/shield/tekvo-nest-typeorm-paginate.svg" /></a>
   <a href="https://www.npmjs.com/org/nestjsx">
-    <img src="https://img.shields.io/npm/dt/nestjs-typeorm-paginate.svg" alt="npm downloads" />
+    <img src="https://img.shields.io/npm/dt/tekvo-nest-typeorm-paginate.svg" alt="npm downloads" />
   </a>
 </p>
 
-<h1 align="center">Nestjs Typeorm paginate</h1>
+<h1 align="center">Tekvo - Nestjs Typeorm paginate</h1>
 
 Pagination helper method for TypeORM repositories or queryBuilders with strict typings
 
 ## Install
 
 ```bash
-$ yarn add nestjs-typeorm-paginate
+$ yarn add tekvo-nest-typeorm-paginate
 ```
 or
 ```bash
-$ npm i nestjs-typeorm-paginate
+$ npm i tekvo-nest-typeorm-paginate
 ```
 
-> If you're using typeorm^0.2.6 please use nestjs-typeorm-paginate^3.2.0
-> For typeorm^0.3.0 please use nestjs-typeorm-paginate^4.0.0
+> If you're using typeorm^0.2.6 please use tekvo-nest-typeorm-paginate^3.2.0
+> For typeorm^0.3.0 please use tekvo-nest-typeorm-paginate^4.0.4
 
 ## Usage
 
@@ -44,7 +44,7 @@ import {
   paginate,
   Pagination,
   IPaginationOptions,
-} from 'nestjs-typeorm-paginate';
+} from 'tekvo-nest-typeorm-paginate';
 
 @Injectable()
 export class CatService {
@@ -70,7 +70,7 @@ import {
   paginate,
   Pagination,
   IPaginationOptions,
-} from 'nestjs-typeorm-paginate';
+} from 'tekvo-nest-typeorm-paginate';
 
 @Injectable()
 export class CatService {
@@ -94,7 +94,7 @@ export class CatService {
 import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatEntity } from './cat.entity';
-import { Pagination } from 'nestjs-typeorm-paginate';
+import { Pagination } from 'tekvo-nest-typeorm-paginate';
 
 @Controller('cats')
 export class CatsController {
@@ -114,7 +114,7 @@ export class CatsController {
 }
 ```
 
-> If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/nestjs-typeorm-paginate/issues/517) for more info.
+> If you use `ParseIntPipe` on the query params (as in the example), don't forget to also add `DefaultValuePipe`. See [issue 517](https://github.com/nestjsx/tekvo-nest-typeorm-paginate/issues/517) for more info.
 
 > the `route` property of the paginate options can also be the short version of an absolute path , In this case, it would be `/cats` instead of `http://cats.com/cats`
 
