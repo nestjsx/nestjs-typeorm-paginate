@@ -32,7 +32,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: build docker db
-        run: docker-compose up -d
+        run: docker compose up -d
       
       - name: install
         run: yarn install --ignore-scripts
@@ -41,10 +41,10 @@ jobs:
         run: yarn build
 
       - name: check docker
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: docker logs
-        run: docker-compose logs && docker-compose ps
+        run: docker compose logs && docker compose ps
 
       # Runs a set of commands using the runners shell
       - name: tests
