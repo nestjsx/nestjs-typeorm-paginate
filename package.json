@@ -18,10 +18,10 @@
     "paginate"
   ],
   "devDependencies": {
-    "@nestjs/common": "^9.0.5",
-    "@nestjs/core": "9.4.3",
-    "@nestjs/testing": "^9.0.5",
-    "@nestjs/typeorm": "^7.1.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.0",
     "@types/jest": "^27.0.0",
     "@types/node": "^20.9.0",
     "coveralls": "^3.0.5",
@@ -29,7 +29,7 @@
     "mysql": "^2.17.1",
     "prettier": "^3.1.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.2",
+    "rxjs": "^7.8.2",
     "ts-jest": "^26.4.4",
     "ts-node": "^10.0.0",
     "typeorm": "0.3.17",
