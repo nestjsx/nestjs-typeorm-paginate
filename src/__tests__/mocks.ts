@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 
 export class MockRepository extends Repository<any> {
-  items = [];
+  items: Entity[] = [];
   constructor(entityAmount: number) {
     super({} as EntityTarget<{}>, {} as EntityManager);
     for (let i = 0; i < entityAmount; i++) this.items.push(new Entity());
@@ -19,7 +19,7 @@ export class MockRepository extends Repository<any> {
   };
 
   find = async (options?: FindManyOptions<any>): Promise<any[]> => {
-    const startIndex = options.skip;
+    const startIndex = options?.skip;
     const endIndex = startIndex + options.take;
 
     const localItems = this.items.slice(startIndex, endIndex);
