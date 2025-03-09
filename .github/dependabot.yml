@@ -1,49 +1,121 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: "@types/node"
-    versions:
-    - 14.14.26
-    - 14.14.32
-    - 14.14.33
-    - 14.14.34
-    - 14.14.35
-    - 14.14.36
-    - 14.14.37
-    - 14.14.39
-    - 14.14.41
-    - 15.0.0
-  - dependency-name: y18n
-    versions:
-    - 4.0.1
-    - 4.0.2
-  - dependency-name: "@types/jest"
-    versions:
-    - 26.0.21
-    - 26.0.22
-  - dependency-name: ts-jest
-    versions:
-    - 26.5.4
-  - dependency-name: "@nestjs/core"
-    versions:
-    - 7.6.12
-    - 7.6.14
-    - 7.6.9
-  - dependency-name: "@nestjs/common"
-    versions:
-    - 7.6.12
-    - 7.6.14
-    - 7.6.9
-  - dependency-name: "@nestjs/testing"
-    versions:
-    - 7.6.12
-    - 7.6.14
-    - 7.6.9
-  - dependency-name: typescript
-    versions:
-    - 4.1.5
+  - package-ecosystem: npm
+    directory: "/"
+    
+    # Update schedule: Run checks for dependency updates every Monday at 08:00 UTC
+    schedule:
+      interval: weekly # Changed from daily to weekly for stability
+      day: monday # Ensure updates happen at the beginning of the week
+      time: "08:00" # Time (UTC) to trigger dependency checks
+
+    # Limits the number of open PRs from Dependabot to avoid excessive PRs
+    open-pull-requests-limit: 5 
+
+    # Labels to categorize Dependabot PRs
+    labels:
+      - "dependencies"
+      - "security"
+      - "automerge"
+
+    # Dependencies to ignore (prevents unnecessary updates to specific versions)
+    ignore:
+      - dependency-name: "@types/node"
+        versions:
+          - 14.14.26
+          - 14.14.32
+          - 14.14.33
+          - 14.14.34
+          - 14.14.35
+          - 14.14.36
+          - 14.14.37
+          - 14.14.39
+          - 14.14.41
+          - 15.0.0
+      - dependency-name: y18n
+        versions:
+          - 4.0.1
+          - 4.0.2
+      - dependency-name: "@types/jest"
+        versions:
+          - 26.0.21
+          - 26.0.22
+      - dependency-name: ts-jest
+        versions:
+          - 26.5.4
+          - 29.2.5
+      - dependency-name: "@nestjs/core"
+        versions:
+          - 7.6.12
+          - 7.6.14
+          - 7.6.9
+          - 9.4.3
+      - dependency-name: "@nestjs/common"
+        versions:
+          - 7.6.12
+          - 7.6.14
+          - 7.6.9
+          - 9.0.5
+      - dependency-name: "@nestjs/testing"
+        versions:
+          - 7.6.12
+          - 7.6.14
+          - 7.6.9
+          - 9.0.5
+      - dependency-name: typescript
+        versions:
+          - 4.1.5
+          - 4.0.5 # Older version before upgrade
+          - 5.7.3 # Ignore outdated versions after upgrade
+      - dependency-name: typeorm
+        versions:
+          - 0.3.17
+          - 0.3.20
+      - dependency-name: rxjs
+        versions:
+          - 6.5.2
+          - 7.1.0
+      - dependency-name: sqlite3
+        versions:
+          - 5.1.7
+      - dependency-name: cross-env
+        versions:
+          - 7.0.3
+      - dependency-name: npm-run-all2
+        versions:
+          - 7.0.2
+
+    # Group minor and patch updates to reduce the number of PRs
+    groups:
+      minor-dependencies:
+        patterns:
+          - "*" # Applies to all dependencies
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Customize commit messages for better PR descriptions
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope # Adds dependency scope (e.g., "chore(deps): bump jest from X to Y")
+
+    # Automatically rebase PRs when conflicts occur
+    rebase-strategy: "auto"
+
+    # Only update direct and development dependencies
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "development"
+
+    # Prefer increasing versions rather than using version ranges
+    versioning-strategy: increase
+
+    # Assign reviewers and assignees to Dependabot PRs
+    reviewers:
+      - "@bashleigh" # Replace with actual GitHub user/team
+    assignees:
+      - "@bashleigh"
+
+    # Enable automatic security updates for dependencies
+    security-updates:
+      enable: true
