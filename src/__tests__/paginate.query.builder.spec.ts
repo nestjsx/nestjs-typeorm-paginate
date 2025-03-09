@@ -23,9 +23,29 @@ describe('Paginate with queryBuilder', () => {
         }),
       ],
     }).compile();
+
     connection = app.get(getConnectionToken());
     runner = connection.createQueryRunner();
     await runner.startTransaction();
+
+    // Insert test data
+    await runner.manager
+      .createQueryBuilder()
+      .insert()
+      .into(TestEntity)
+      .values([
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+        { id: 8 },
+        { id: 9 },
+        { id: 10 },
+      ])
+      .execute();
 
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
     testRelatedQueryBuilder = runner.manager.createQueryBuilder(
@@ -34,9 +54,10 @@ describe('Paginate with queryBuilder', () => {
     );
   });
 
-  afterEach(() => {
-    runner.rollbackTransaction();
-    app.close();
+  afterEach(async () => {
+    await runner.rollbackTransaction();
+    await runner.release();
+    await app.close();
   });
 
   it('Can call paginate', async () => {
@@ -67,9 +88,7 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can count with params', async () => {
-    queryBuilder.where('id = :id', { id: 1 });
-
-    const result = await paginate(queryBuilder, {
+    const result = await paginate(queryBuilder.where('t.id = :id', { id: 1 }), {
       limit: 10,
       page: 1,
       paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
@@ -81,13 +100,18 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can count with having', async () => {
-    queryBuilder.having('id > 1');
-
-    const result = await paginate(queryBuilder, {
-      limit: 10,
-      page: 1,
-      paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
-    });
+    const result = await paginate(
+      queryBuilder
+        .select('t.id')
+        .addSelect('COUNT(t.id)', 'count')
+        .groupBy('t.id')
+        .having('t.id > :id', { id: 1 }),
+      {
+        limit: 10,
+        page: 1,
+        paginationType: PaginationTypeEnum.LIMIT_AND_OFFSET,
+      },
+    );
 
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toBe(9);
@@ -95,7 +119,8 @@ describe('Paginate with queryBuilder', () => {
   });
 
   it('Can paginate with joins', async () => {
-    await testRelatedQueryBuilder
+    // First create the test entities
+    await runner.manager
       .createQueryBuilder()
       .insert()
       .into(TestRelatedEntity)
@@ -106,11 +131,15 @@ describe('Paginate with queryBuilder', () => {
       ])
       .execute();
 
-    const qb = queryBuilder.leftJoinAndSelect('t.related', 'r');
+    const qb = queryBuilder
+      .select('DISTINCT t.id') // Apply DISTINCT here
+      .leftJoin('t.related', 'r')
+      .orderBy('t.id', 'ASC');
 
     const result = await paginate(qb, { limit: 5, page: 1 });
 
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toEqual(10);
+    expect(result.items.length).toBeLessThanOrEqual(5);
   });
 });
