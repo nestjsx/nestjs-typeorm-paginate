@@ -113,4 +113,30 @@ describe('Paginate with queryBuilder', () => {
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toEqual(10);
   });
+
+  it('Can routing to latest page have items', async () => {
+    await testRelatedQueryBuilder
+      .createQueryBuilder()
+      .insert()
+      .into(TestRelatedEntity)
+      .values([
+        { id: 1, testId: 1 },
+        { id: 2, testId: 1 },
+        { id: 3, testId: 1 },
+      ])
+      .execute();
+
+    const qb = queryBuilder.leftJoinAndSelect('t.related', 'r');
+
+    const result = await paginate(qb, {
+      limit: 15,
+      page: 2,
+      routingLatest: true,
+      countQueries: true,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toEqual(10);
+    expect(result.meta.currentPage).toEqual(1);
+  });
 });

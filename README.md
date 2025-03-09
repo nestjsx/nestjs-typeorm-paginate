@@ -21,7 +21,9 @@ Pagination helper method for TypeORM repositories or queryBuilders with strict t
 ```bash
 $ yarn add nestjs-typeorm-paginate
 ```
+
 or
+
 ```bash
 $ npm i nestjs-typeorm-paginate
 ```
@@ -91,7 +93,13 @@ export class CatService {
 ##### Controller
 
 ```ts
-import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  DefaultValuePipe,
+  Get,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatEntity } from './cat.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -180,7 +188,6 @@ export class CatsController {
 `links.next`: A URL for the next page to call | `""` (blank) if no page to call
 `links.last`: A URL for the last page to call | `""` (blank) if no `route` is defined
 
-
 > Do note that `links.first` may not have the 'page' query param defined
 
 ## Find Parameters
@@ -210,7 +217,7 @@ import { Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class CatEntity {
-  @OneToMany(t => TigerKingEntity, tigerKing.cats, {
+  @OneToMany((t) => TigerKingEntity, tigerKing.cats, {
     eager: true,
   })
   tigerKings: TigerKingEntity[];
@@ -268,12 +275,11 @@ Let's assume there's a joined table that matches each cat with its cat toys.
 And we want to bring how many toys each cat has.
 
 ```typescript
-
 const queryBuilder = this.repository
   .createQueryBuilder<{ type: string; totalLives: string }>('cat')
-    .leftJoinAndSelect('cat.toys', 'toys')
-    .addSelect('COUNT(toys)::INTEGER', 'toyCount')
-    .groupBy('cat.name');
+  .leftJoinAndSelect('cat.toys', 'toys')
+  .addSelect('COUNT(toys)::INTEGER', 'toyCount')
+  .groupBy('cat.name');
 ```
 
 This will allow us to get the paginated cats information with the additional raw query to build our actual response value.
@@ -329,7 +335,6 @@ The rawResults array will look something like this:
 If you wanted to alter the meta data that is returned from the pagination object. Then use the `metaTransformer` in the options like so
 
 ```ts
-
 class CustomPaginationMeta {
   constructor(
     public readonly count: number,
@@ -337,33 +342,41 @@ class CustomPaginationMeta {
   ) {}
 }
 
-return paginate<MyEntity, CustomPaginationMeta>(this.repository, { 
+return paginate<MyEntity, CustomPaginationMeta>(this.repository, {
   page,
   limit,
-  metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta => new CustomPaginationMeta(
-    meta.itemCount,
-    meta.totalItems,
-  ),
- });
+  metaTransformer: (meta: IPaginationMeta): CustomPaginationMeta =>
+    new CustomPaginationMeta(meta.itemCount, meta.totalItems),
+});
 ```
 
 This will result in the above returning `CustomPaginationMeta` in the `meta` property instead of the default `IPaginationMeta`.
-
 
 ## Custom links query params labels
 
 If you want to alter the `limit` and/or `page` labels in meta links, then use `routingLabels` in the options like so
 
 ```ts
-
-return paginate<MyEntity>(this.repository, { 
+return paginate<MyEntity>(this.repository, {
   page,
   limit,
   routingLabels: {
     limitLabel: 'page-size', // default: limit
     pageLabel: 'current-page', //default: page
-  }
- });
+  },
+});
 ```
 
 This will result links like `http://example.com/something?current-page=1&page-size=3`.
+
+## Custom re-routing latest page have items
+
+If you just want to return latest has items when the parameter `page` was over than `page` calculated in the database at the moment, then use `routingLatest` as the options. Make sure you not set countQueries to `false`. It will be ignored when pagination is disabled and `routingLatest` option won't be affect anymore.
+
+```ts
+return paginate<MyEntity>(this.repository, {
+  page,
+  limit,
+  routingLatest: true,
+});
+```
