@@ -44,31 +44,22 @@ export async function paginate<T, CustomMetaType = IPaginationMeta>(
       );
 }
 
-export async function paginateRaw<
-  T,
-  CustomMetaType extends ObjectLiteral = IPaginationMeta,
->(
+export async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
   const [page, limit, route, paginationType, countQueries, cacheOption] =
     resolveOptions(options);
 
-  const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getRawMany<T>(),
-    undefined,
-  ];
+  const itemsPromise = (PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
+    ? queryBuilder.limit(limit).offset((page - 1) * limit)
+    : queryBuilder.take(limit).skip((page - 1) * limit))
+    .cache(cacheOption)
+    .getMany();
 
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
-  }
+  const countPromise = countQueries ? queryBuilder.cache(cacheOption).getCount() : Promise.resolve(0);
 
-  const [items, total] = await Promise.all(promises);
+  const [items, total] = await Promise.all([itemsPromise, countPromise]);
 
   return createPaginationObject<T, CustomMetaType>({
     items,
@@ -81,49 +72,50 @@ export async function paginateRaw<
   });
 }
 
-export async function paginateRawAndEntities<
-  T,
-  CustomMetaType = IPaginationMeta,
->(
+/**
+ * @deprecated paginateRaw() is now integrated into paginateQueryBuilder().
+ * Please use paginateQueryBuilder() directly for raw queries.
+ */
+export async function paginateRaw<T, CustomMetaType = IPaginationMeta>(
+  queryBuilder: SelectQueryBuilder<T>,
+  options: IPaginationOptions<CustomMetaType>,
+): Promise<Pagination<T, CustomMetaType>> {
+  console.warn("DEPRECATION WARNING: paginateRaw() is deprecated. Use paginateQueryBuilder() instead.");
+  return paginateQueryBuilder(queryBuilder, options);
+}
+
+/**
+ * @deprecated paginateRawAndEntities() is now handled within paginateQueryBuilder().
+ * Please use paginateQueryBuilder() and manually fetch raw results using getRawMany().
+ */
+export async function paginateRawAndEntities<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
-  const [page, limit, route, paginationType, countQueries, cacheOption] =
-    resolveOptions(options);
-
-  const promises: [
-    Promise<{ entities: T[]; raw: T[] }>,
-    Promise<number> | undefined,
-  ] = [
-    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getRawAndEntities<T>(),
-    undefined,
-  ];
-
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
-  }
-
-  const [itemObject, total] = await Promise.all(promises);
-
-  return [
-    createPaginationObject<T, CustomMetaType>({
-      items: itemObject.entities,
-      totalItems: total,
-      currentPage: page,
-      limit,
-      route,
-      metaTransformer: options.metaTransformer,
-      routingLabels: options.routingLabels,
-    }),
-    itemObject.raw,
-  ];
+  console.warn("DEPRECATION WARNING: paginateRawAndEntities() is deprecated. Use paginateQueryBuilder() and getRawMany() instead.");
+  const paginationResult = await paginateQueryBuilder(queryBuilder, options);
+  const rawResults = await queryBuilder.getRawMany();
+  return [paginationResult, rawResults];
 }
 
+/**
+ * @deprecated paginateRepository() is now handled within paginateQueryBuilder().
+ * Please use paginateQueryBuilder() with a repository's queryBuilder.
+ */
+export async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
+  repository: Repository<T>,
+  options: IPaginationOptions<CustomMetaType>,
+  searchOptions?: FindOptionsWhere<T> | FindManyOptions<T>,
+): Promise<Pagination<T, CustomMetaType>> {
+  console.warn("DEPRECATION WARNING: paginateRepository() is deprecated. Use paginateQueryBuilder() instead.");
+  const queryBuilder = repository.createQueryBuilder("entity");
+  if (searchOptions) {
+    queryBuilder.where(searchOptions);
+  }
+  return paginateQueryBuilder(queryBuilder, options);
+}
+
+// Helper function to resolve pagination options
 function resolveOptions(
   options: IPaginationOptions<any>,
 ): [number, number, string, PaginationTypeEnum, boolean, TypeORMCacheType] {
@@ -139,6 +131,7 @@ function resolveOptions(
   return [page, limit, route, paginationType, countQueries, cacheQueries];
 }
 
+// Helper function to handle numeric pagination parameters
 function resolveNumericOption(
   options: IPaginationOptions<any>,
   key: 'page' | 'limit',
@@ -155,109 +148,3 @@ function resolveNumericOption(
   );
   return defaultValue;
 }
-
-async function paginateRepository<T, CustomMetaType = IPaginationMeta>(
-  repository: Repository<T>,
-  options: IPaginationOptions<CustomMetaType>,
-  searchOptions?: FindOptionsWhere<T> | FindManyOptions<T>,
-): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries] =
-    resolveOptions(options);
-
-  if (page < 1) {
-    return createPaginationObject<T, CustomMetaType>({
-      items: [],
-      totalItems: 0,
-      currentPage: page,
-      limit,
-      route,
-      metaTransformer: options.metaTransformer,
-      routingLabels: options.routingLabels,
-    });
-  }
-
-  const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    repository.find({
-      skip: limit * (page - 1),
-      take: limit,
-      ...searchOptions,
-    }),
-    undefined,
-  ];
-
-  if (countQueries) {
-    promises[1] = repository.count({
-      ...searchOptions,
-    });
-  }
-
-  const [items, total] = await Promise.all(promises);
-
-  return createPaginationObject<T, CustomMetaType>({
-    items,
-    totalItems: total,
-    currentPage: page,
-    limit,
-    route,
-    metaTransformer: options.metaTransformer,
-    routingLabels: options.routingLabels,
-  });
-}
-
-async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
-  queryBuilder: SelectQueryBuilder<T>,
-  options: IPaginationOptions<CustomMetaType>,
-): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries, cacheOption] =
-    resolveOptions(options);
-
-  const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    (PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getMany(),
-    undefined,
-  ];
-
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
-  }
-
-  const [items, total] = await Promise.all(promises);
-
-  return createPaginationObject<T, CustomMetaType>({
-    items,
-    totalItems: total,
-    currentPage: page,
-    limit,
-    route,
-    metaTransformer: options.metaTransformer,
-    routingLabels: options.routingLabels,
-  });
-}
-
-const countQuery = async <T>(
-  queryBuilder: SelectQueryBuilder<T>,
-  cacheOption: TypeORMCacheType,
-): Promise<number> => {
-  const totalQueryBuilder = queryBuilder.clone();
-
-  totalQueryBuilder
-    .skip(undefined)
-    .limit(undefined)
-    .offset(undefined)
-    .take(undefined)
-    .orderBy(undefined);
-
-  const { value } = await queryBuilder.connection
-    .createQueryBuilder()
-    .select('COUNT(*)', 'value')
-    .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
-    .cache(cacheOption)
-    .setParameters(queryBuilder.getParameters())
-    .getRawOne<{ value: string }>();
-
-  return Number(value);
-};
