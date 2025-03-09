@@ -112,9 +112,9 @@ updates:
 
     # Assign reviewers and assignees to Dependabot PRs
     reviewers:
-      - "@your-team" # Replace with actual GitHub user/team
+      - "@bashleigh" # Replace with actual GitHub user/team
     assignees:
-      - "@your-team"
+      - "@bashleigh"
 
     # Enable automatic security updates for dependencies
     security-updates:
