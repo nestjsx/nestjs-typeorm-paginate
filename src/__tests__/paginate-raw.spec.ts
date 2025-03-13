@@ -51,7 +51,7 @@ describe('Test paginateRaw function', () => {
   });
 
   afterAll(async () => {
-    await queryBuilder.delete();
+    queryBuilder.delete();
     await app.close();
   });
 
@@ -179,5 +179,18 @@ describe('Test paginateRaw function', () => {
     expect(result).toBeInstanceOf(Pagination);
     expect(result.meta.totalItems).toBe(undefined);
     expect(result.meta.totalPages).toBe(undefined);
+  });
+
+  it('Can routing to latest page have items', async () => {
+    const result = await paginateRaw(queryBuilder, {
+      limit: 10,
+      page: 2,
+      countQueries: true,
+      routingLatest: true,
+    });
+
+    expect(result).toBeInstanceOf(Pagination);
+    expect(result.meta.totalItems).toEqual(10);
+    expect(result.meta.currentPage).toEqual(1);
   });
 });

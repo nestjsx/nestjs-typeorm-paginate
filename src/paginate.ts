@@ -51,24 +51,48 @@ export async function paginateRaw<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries, cacheOption] =
-    resolveOptions(options);
+  let [
+    page,
+    limit,
+    route,
+    paginationType,
+    countQueries,
+    cacheOption,
+    routingLatest,
+  ] = resolveOptions(options);
 
-  const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getRawMany<T>(),
+  const promises: [Promise<number> | undefined | number, Promise<T[]>] = [
     undefined,
+    Promise.resolve([]),
   ];
 
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
+  // To re-routing latest page have items need to set countQueries & routingLabels to true
+  if (routingLatest && countQueries) {
+    let total = await countQuery(queryBuilder, cacheOption);
+
+    // Recalculate the latest page that have items
+    page =
+      total / Number(limit) < Number(page)
+        ? Math.ceil(total / Number(limit))
+        : +page;
+
+    promises[0] = Promise.resolve(total);
   }
 
-  const [items, total] = await Promise.all(promises);
+  // Avoid duplicate count query
+  if (countQueries && !routingLatest) {
+    promises[0] = countQuery(queryBuilder, cacheOption);
+  }
+
+  promises[1] = (
+    paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+  )
+    .cache(cacheOption)
+    .getRawMany<T>();
+
+  const [total, items] = await Promise.all(promises);
 
   return createPaginationObject<T, CustomMetaType>({
     items,
@@ -88,27 +112,54 @@ export async function paginateRawAndEntities<
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<[Pagination<T, CustomMetaType>, Partial<T>[]]> {
-  const [page, limit, route, paginationType, countQueries, cacheOption] =
-    resolveOptions(options);
+  let [
+    page,
+    limit,
+    route,
+    paginationType,
+    countQueries,
+    cacheOption,
+    routingLatest,
+  ] = resolveOptions(options);
 
   const promises: [
-    Promise<{ entities: T[]; raw: T[] }>,
     Promise<number> | undefined,
+    Promise<{ entities: T[]; raw: T[] }>,
   ] = [
-    (paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getRawAndEntities<T>(),
     undefined,
+    Promise.resolve({
+      entities: [],
+      raw: [],
+    }),
   ];
 
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
+  // To re-routing latest page have items need to set countQueries & routingLabels to true
+  if (routingLatest && countQueries) {
+    let total = await countQuery(queryBuilder, cacheOption);
+
+    // Recalculate the latest page that have items
+    page =
+      total / Number(limit) < Number(page)
+        ? Math.ceil(total / Number(limit))
+        : +page;
+
+    promises[0] = Promise.resolve(total);
   }
 
-  const [itemObject, total] = await Promise.all(promises);
+  // Avoid duplicate count query
+  if (countQueries && !routingLatest) {
+    promises[0] = countQuery(queryBuilder, cacheOption);
+  }
+
+  promises[1] = (
+    paginationType === PaginationTypeEnum.LIMIT_AND_OFFSET
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+  )
+    .cache(cacheOption)
+    .getRawAndEntities<T>();
+
+  const [total, itemObject] = await Promise.all(promises);
 
   return [
     createPaginationObject<T, CustomMetaType>({
@@ -126,7 +177,15 @@ export async function paginateRawAndEntities<
 
 function resolveOptions(
   options: IPaginationOptions<any>,
-): [number, number, string, PaginationTypeEnum, boolean, TypeORMCacheType] {
+): [
+  number,
+  number,
+  string,
+  PaginationTypeEnum,
+  boolean,
+  TypeORMCacheType,
+  boolean,
+] {
   const page = resolveNumericOption(options, 'page', DEFAULT_PAGE);
   const limit = resolveNumericOption(options, 'limit', DEFAULT_LIMIT);
   const route = options.route;
@@ -135,8 +194,17 @@ function resolveOptions(
   const countQueries =
     typeof options.countQueries !== 'undefined' ? options.countQueries : true;
   const cacheQueries = options.cacheQueries || false;
+  const routingLatest = options.routingLatest || false;
 
-  return [page, limit, route, paginationType, countQueries, cacheQueries];
+  return [
+    page,
+    limit,
+    route,
+    paginationType,
+    countQueries,
+    cacheQueries,
+    routingLatest,
+  ];
 }
 
 function resolveNumericOption(
@@ -208,24 +276,48 @@ async function paginateQueryBuilder<T, CustomMetaType = IPaginationMeta>(
   queryBuilder: SelectQueryBuilder<T>,
   options: IPaginationOptions<CustomMetaType>,
 ): Promise<Pagination<T, CustomMetaType>> {
-  const [page, limit, route, paginationType, countQueries, cacheOption] =
-    resolveOptions(options);
+  let [
+    page,
+    limit,
+    route,
+    paginationType,
+    countQueries,
+    cacheOption,
+    routingLatest,
+  ] = resolveOptions(options);
 
-  const promises: [Promise<T[]>, Promise<number> | undefined] = [
-    (PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
-      ? queryBuilder.limit(limit).offset((page - 1) * limit)
-      : queryBuilder.take(limit).skip((page - 1) * limit)
-    )
-      .cache(cacheOption)
-      .getMany(),
+  const promises: [Promise<number> | undefined | number, Promise<T[]>] = [
     undefined,
+    Promise.resolve([]),
   ];
 
-  if (countQueries) {
-    promises[1] = countQuery(queryBuilder, cacheOption);
+  // To re-routing latest page have items need to set countQueries & routingLabels to true
+  if (routingLatest && countQueries) {
+    let total = await countQuery(queryBuilder, cacheOption);
+
+    // Recalculate the latest page that have items
+    page =
+      total / Number(limit) < Number(page)
+        ? Math.ceil(total / Number(limit))
+        : +page;
+
+    promises[0] = Promise.resolve(total);
   }
 
-  const [items, total] = await Promise.all(promises);
+  // Avoid duplicate count query
+  if (countQueries && !routingLatest) {
+    promises[0] = countQuery(queryBuilder, cacheOption);
+  }
+
+  promises[1] = (
+    PaginationTypeEnum.LIMIT_AND_OFFSET === paginationType
+      ? queryBuilder.limit(limit).offset((page - 1) * limit)
+      : queryBuilder.take(limit).skip((page - 1) * limit)
+  )
+    .cache(cacheOption)
+    .getMany();
+
+  const [total, items] = await Promise.all(promises);
 
   return createPaginationObject<T, CustomMetaType>({
     items,
