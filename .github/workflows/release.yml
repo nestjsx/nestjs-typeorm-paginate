@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+env:
+  NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get Tag
+        uses: olegtarasov/get-tag@v2.1
+        id: tagName
+        with:
+          tagRegex: '(?<version>.*)'
+      - name: Set Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install
+        run: yarn
+
+      - name: Build
+        run: |
+          yarn build
+
+      - name: Package Version Bump
+        run: |
+          yarn version ${{ steps.tagName.outputs.version }}
+
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'chore: bump version'
+          branch: master
+            
+      - name: Publish
+        run: |
+          yarn publish --tag latest
