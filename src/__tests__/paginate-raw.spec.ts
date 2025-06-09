@@ -1,6 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
+import { DataSource, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRaw } from '../paginate';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
@@ -12,8 +10,7 @@ interface RawQueryResult {
 }
 
 describe('Test paginateRaw function', () => {
-  let app: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<RawQueryResult>;
 
@@ -22,17 +19,14 @@ describe('Test paginateRaw function', () => {
   const totalItems = 10;
 
   beforeAll(async () => {
-    app = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          ...baseOrmConfigs,
-          dropSchema: true,
-          synchronize: true,
-        }),
-      ],
-    }).compile();
-    connection = app.get(getConnectionToken());
-    runner = connection.createQueryRunner();
+    dataSource = new DataSource({
+      ...baseOrmConfigs,
+      dropSchema: true,
+      synchronize: true,
+    });
+    await dataSource.initialize();
+
+    runner = dataSource.createQueryRunner();
     queryBuilder = runner.manager.createQueryBuilder<RawQueryResult>(
       TestEntity,
       't',
@@ -52,7 +46,7 @@ describe('Test paginateRaw function', () => {
 
   afterAll(async () => {
     await queryBuilder.delete();
-    await app.close();
+    await dataSource.destroy();
   });
 
   describe.each([

@@ -1,6 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getConnectionToken, TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
+import { DataSource, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginateRawAndEntities } from '../paginate';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
@@ -11,8 +9,7 @@ describe('Test paginateRawAndEntities function', () => {
   const RAW_ID_LABEL = 't_id';
   const RAW_SUM_LABEL = 'sum';
 
-  let app: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
 
@@ -22,18 +19,14 @@ describe('Test paginateRawAndEntities function', () => {
   const totalItems = 10;
 
   beforeAll(async () => {
-    app = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          ...baseOrmConfigs,
-          dropSchema: true,
-          synchronize: true,
-        }),
-      ],
-    }).compile();
-    connection = app.get(getConnectionToken());
-    runner = connection.createQueryRunner();
+    dataSource = new DataSource({
+      ...baseOrmConfigs,
+      dropSchema: true,
+      synchronize: true,
+    });
+    await dataSource.initialize();
 
+    runner = dataSource.createQueryRunner();
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
 
     // Insert some registries on database
@@ -50,7 +43,7 @@ describe('Test paginateRawAndEntities function', () => {
 
   afterAll(async () => {
     await queryBuilder.delete();
-    await app.close();
+    await dataSource.destroy();
   });
 
   describe.each([
