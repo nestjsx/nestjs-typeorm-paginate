@@ -35,8 +35,6 @@ export function createPaginationObject<
     route && totalItems !== undefined && currentPage < totalPages;
   const hasLastPage = route && totalItems !== undefined && totalPages > 0;
 
-  const symbol = route && new RegExp(/\?/).test(route) ? '&' : '?';
-
   const limitLabel =
     routingLabels && routingLabels.limitLabel
       ? routingLabels.limitLabel
@@ -45,22 +43,21 @@ export function createPaginationObject<
   const pageLabel =
     routingLabels && routingLabels.pageLabel ? routingLabels.pageLabel : 'page';
 
+  const isAbsoluteRoute = URL.canParse(route)
+  const baseUrl = new URL(route, 'https://example.test')
+
   const routes: IPaginationLinks =
     totalItems !== undefined
       ? {
-          first: hasFirstPage ? `${route}${symbol}${limitLabel}=${limit}` : '',
+          first: hasFirstPage ? buildPageUrl(baseUrl, {page: 0, pageLabel, limitLabel, limit, isRelative: !isAbsoluteRoute }) : '',
           previous: hasPreviousPage
-            ? `${route}${symbol}${pageLabel}=${
-                currentPage - 1
-              }&${limitLabel}=${limit}`
+            ? buildPageUrl(baseUrl, { page: currentPage - 1, pageLabel, limit, limitLabel, isRelative: !isAbsoluteRoute})
             : '',
           next: hasNextPage
-            ? `${route}${symbol}${pageLabel}=${
-                currentPage + 1
-              }&${limitLabel}=${limit}`
+            ? buildPageUrl(baseUrl, { page: currentPage + 1, pageLabel, limit, limitLabel, isRelative: !isAbsoluteRoute})
             : '',
           last: hasLastPage
-            ? `${route}${symbol}${pageLabel}=${totalPages}&${limitLabel}=${limit}`
+            ? buildPageUrl(baseUrl, { page: totalPages, pageLabel, limit, limitLabel, isRelative: !isAbsoluteRoute})
             : '',
         }
       : undefined;
@@ -84,4 +81,15 @@ export function createPaginationObject<
 
   // @ts-ignore
   return new Pagination<T, CustomMetaType>(items, meta, links);
+}
+
+function buildPageUrl(base: URL, params: { pageLabel: string, page: number, limitLabel: string, limit: number, isRelative: boolean}): string {
+  const workingUrl = new URL(base);
+  if (params.page < 1) {
+    workingUrl.searchParams.delete(params.pageLabel)
+  } else {
+    workingUrl.searchParams.set(params.pageLabel, params.page.toString())
+  }
+  workingUrl.searchParams.set(params.limitLabel, params.limit.toString())
+  return params.isRelative ? `${workingUrl.pathname}${workingUrl.search}${workingUrl.hash}` : workingUrl.toString();
 }

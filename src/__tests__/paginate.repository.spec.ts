@@ -316,6 +316,31 @@ describe('Test paginate function', () => {
     );
   });
 
+
+  it('replaces page and limit params if present in route', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 2,
+      route: 'http://example.com/something?page=32&limit=100',
+    });
+
+    expect(results.items.length).toBe(4);
+    expect(results.links?.first).toBe('http://example.com/something?limit=4');
+    expect(results.links?.previous).toBe('http://example.com/something?page=1&limit=4');
+    expect(results.links?.next).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+    expect(results.links?.last).toBe(
+      'http://example.com/something?page=3&limit=4',
+    );
+  });
+
   it('Can pass FindConditions', async () => {
     const mockRepository = new MockRepository(2);
 
