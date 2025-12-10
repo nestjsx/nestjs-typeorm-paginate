@@ -249,15 +249,10 @@ const countQuery = async <T>(
     .limit(undefined)
     .offset(undefined)
     .take(undefined)
-    .orderBy(undefined);
+    .orderBy(undefined)
+    .cache(cacheOption);
 
-  const { value } = await queryBuilder.connection
-    .createQueryBuilder()
-    .select('COUNT(*)', 'value')
-    .from(`(${totalQueryBuilder.getQuery()})`, 'uniqueTableAlias')
-    .cache(cacheOption)
-    .setParameters(queryBuilder.getParameters())
-    .getRawOne<{ value: string }>();
-
-  return Number(value);
+  // Use TypeORM's built-in counting logic so joined queries de-duplicate
+  // on the primary key the same way `getMany` does.
+  return totalQueryBuilder.getCount();
 };
