@@ -147,7 +147,12 @@ function resolveNumericOption(
   const value = options[key];
   const resolvedValue = Number(value);
 
-  if (Number.isInteger(resolvedValue) && resolvedValue >= 0)
+  // A `page` of 0 is meaningful — paginate resolves it to an empty page — but
+  // a `limit` of 0 makes totalPages a division by zero, which surfaces as
+  // `Infinity` (or `NaN` with no results) and serialises to null over JSON.
+  const minimum = key === 'limit' ? 1 : 0;
+
+  if (Number.isInteger(resolvedValue) && resolvedValue >= minimum)
     return resolvedValue;
 
   console.warn(

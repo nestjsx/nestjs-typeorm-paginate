@@ -235,6 +235,57 @@ describe('Test paginate function', () => {
     );
   });
 
+  it('replaces a limit of 0 with the default of 10', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const consoleMock = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {});
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 0,
+      page: 1,
+      route: 'http://example.com/something',
+    });
+
+    expect(results.items.length).toBe(10);
+    expect(results.meta.itemsPerPage).toBe(10);
+    expect(results.meta.totalPages).toBe(1);
+    expect(results.links?.last).toBe(
+      'http://example.com/something?page=1&limit=10',
+    );
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Query parameter "limit" with value "0" was resolved as "0", please validate your query input! Falling back to default "10".',
+    );
+  });
+
+  it('keeps totalPages serialisable when limit is 0', async () => {
+    const mockRepository = new MockRepository(10);
+
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {});
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 0,
+      page: 1,
+    });
+
+    // Dividing by a limit of 0 used to yield Infinity, which JSON.stringify
+    // turns into null by the time it reaches an API consumer.
+    expect(JSON.parse(JSON.stringify(results.meta)).totalPages).toBe(1);
+  });
+
+  it('still accepts a page of 0', async () => {
+    const mockRepository = new MockRepository(10);
+
+    const results = await paginate<Entity>(mockRepository, {
+      limit: 4,
+      page: 0,
+    });
+
+    expect(results.items.length).toBe(0);
+    expect(results.meta.currentPage).toBe(0);
+  });
+
   it('replaces an alphabetic page with the default of 1', async () => {
     const mockRepository = new MockRepository(10);
 
