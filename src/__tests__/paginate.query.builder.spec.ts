@@ -1,6 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
-import { Connection, QueryRunner, SelectQueryBuilder } from 'typeorm';
+import { DataSource, QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { paginate } from './../paginate';
 import { Pagination } from '../pagination';
 import { baseOrmConfigs } from './base-orm-config';
@@ -9,22 +7,16 @@ import { PaginationTypeEnum } from '../interfaces';
 import { TestRelatedEntity } from './test-related.entity';
 
 describe('Paginate with queryBuilder', () => {
-  let app: TestingModule;
-  let connection: Connection;
+  let dataSource: DataSource;
   let runner: QueryRunner;
   let queryBuilder: SelectQueryBuilder<TestEntity>;
   let testRelatedQueryBuilder: SelectQueryBuilder<TestRelatedEntity>;
 
   beforeEach(async () => {
-    app = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          ...baseOrmConfigs,
-        }),
-      ],
-    }).compile();
-    connection = app.get(getConnectionToken());
-    runner = connection.createQueryRunner();
+    dataSource = new DataSource({ ...baseOrmConfigs });
+    runner = dataSource.createQueryRunner();
+
+    await dataSource.initialize();
     await runner.startTransaction();
 
     queryBuilder = runner.manager.createQueryBuilder(TestEntity, 't');
@@ -34,9 +26,9 @@ describe('Paginate with queryBuilder', () => {
     );
   });
 
-  afterEach(() => {
-    runner.rollbackTransaction();
-    app.close();
+  afterEach(async () => {
+    await runner.rollbackTransaction();
+    await dataSource.destroy();
   });
 
   it('Can call paginate', async () => {
